@@ -266,20 +266,20 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.jpg"):
 <meta name="twitter:title" content="{htmllib.escape(title)}">
 <meta name="twitter:description" content="{htmllib.escape(desc)}">
 <meta name="twitter:image" content="{BASE_URL}{og_image}">
-<link rel="icon" href="/assets/logo.jpg" type="image/jpeg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="assets/logo.jpg" type="image/jpeg">
+<link rel="stylesheet" href="assets/style.css">
 {ld}
 </head>"""
 
 def header(active):
     def a(href, label, key):
         cls = ' class="active"' if key == active else ""
-        return f'<a href="{href}"{cls}>{label}</a>'
+        return f'<a href="{href.lstrip("/")}"{cls}>{label}</a>'
     return f"""<body>
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a class="brand" href="/index.html" aria-label="AR Plastic Surgery home">
-      <img src="/assets/logo.jpg" alt="AR Plastic Surgery logo" width="52" height="52">
+    <a class="brand" href="index.html" aria-label="AR Plastic Surgery home">
+      <img src="assets/logo.jpg" alt="AR Plastic Surgery logo" width="52" height="52">
       <span><span class="brand-name">AR Plastic Surgery</span><br><span class="brand-tag">Precision and Perfection</span></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -298,23 +298,23 @@ def header(active):
 
 def footer():
     town_links = "\n".join(
-        f'<li><a href="/{t.lower()}-plastic-surgeon.html">Plastic Surgeon in {t}</a></li>'
+        f'<li><a href="{t.lower()}-plastic-surgeon.html">Plastic Surgeon in {t}</a></li>'
         for t in ["Siddipet", "Sircilla", "Peddapalli", "Vemulawada"]
     )
     return f"""<footer>
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <img src="/assets/logo.jpg" alt="AR Plastic Surgery logo" width="56" height="56">
+      <img src="assets/logo.jpg" alt="AR Plastic Surgery logo" width="56" height="56">
       <h4>AR Plastic Surgery</h4>
       <p style="font-size:.93rem">Precision and Perfection. Full-scope plastic, cosmetic, hand &amp; microvascular surgery in Karimnagar, Telangana — led by {CLINIC['doctor']}, {CLINIC['credentials']}.</p>
     </div>
     <div>
       <h4>Explore</h4>
       <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/about.html">About {CLINIC['doctor']}</a></li>
-        <li><a href="/services.html">All Services</a></li>
-        <li><a href="/contact.html">Contact &amp; Directions</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About {CLINIC['doctor']}</a></li>
+        <li><a href="services.html">All Services</a></li>
+        <li><a href="contact.html">Contact &amp; Directions</a></li>
         <li><a href="{CLINIC['booking']}" target="_blank" rel="noopener">Book Online</a></li>
       </ul>
     </div>
@@ -459,13 +459,13 @@ def page_index():
     svc_cards = [
         ("✂️", "Aesthetic Surgery",
          "Hair transplant, gynecomastia surgery, liposuction, rhinoplasty, breast surgery and tummy tuck — planned and performed by a qualified plastic surgeon.",
-         "/services.html#fue-hair-transplant"),
+         "services.html#fue-hair-transplant"),
         ("🤲", "Reconstructive & Hand Surgery",
          "Burn reconstruction, cleft repair, scar revision, hand trauma, tendon & nerve repair and microsurgery — restoring form and function.",
-         "/services.html#scar-keloid"),
+         "services.html#scar-keloid"),
         ("✨", "Non-Surgical Aesthetics",
          "Botox, dermal fillers, PRP, chemical peels and laser treatments — subtle, doctor-led rejuvenation without surgery.",
-         "/services.html#botox"),
+         "services.html#botox"),
     ]
     cards = "\n".join(
         f'<article class="card"><div class="icon" aria-hidden="true">{i}</div><h3>{t}</h3><p>{p}</p>'
@@ -473,7 +473,7 @@ def page_index():
         for i, t, p, l in svc_cards
     )
     town_cards = "\n".join(
-        f'<a class="town-card" href="/{t.lower()}-plastic-surgeon.html"><h3>{t}</h3><p>Plastic surgeon for {t} patients</p></a>'
+        f'<a class="town-card" href="{t.lower()}-plastic-surgeon.html"><h3>{t}</h3><p>Plastic surgeon for {t} patients</p></a>'
         for t in ["Siddipet", "Sircilla", "Peddapalli", "Vemulawada"]
     )
     body = f"""
@@ -494,7 +494,7 @@ def page_index():
     </div>
   </div>
   <figure class="hero-photo">
-    <img src="/assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
+    <img src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
     <figcaption>{CLINIC['doctor']} — {CLINIC['credentials']}</figcaption>
   </figure>
 </div></section>
@@ -514,7 +514,7 @@ def page_index():
 </div></section>
 
 <section style="background:var(--bg-soft)"><div class="wrap split">
-  <img class="doc" src="/assets/dr-ashok-reddy.jpg" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
+  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
   <div>
     <span class="eyebrow">Meet your surgeon</span>
     <h2>{CLINIC['doctor']}</h2>
@@ -525,7 +525,7 @@ def page_index():
       <li>Full-scope expertise: cosmetic, reconstructive, hand &amp; microvascular</li>
       <li>Strict confidentiality for every patient</li>
     </ul>
-    <a class="btn btn-solid" href="/about.html">More about {CLINIC['doctor']} →</a>
+    <a class="btn btn-solid" href="about.html">More about {CLINIC['doctor']} →</a>
   </div>
 </div></section>
 
@@ -548,13 +548,13 @@ def page_about():
             "cosmetic, hand & microvascular surgery at AR Plastic Surgery, Karimnagar.")
     body = f"""
 <main><section><div class="wrap">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/index.html">Home</a> › About</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › About</nav>
   <span class="eyebrow">About the clinic</span>
   <h1>{CLINIC['doctor']} &amp; AR Plastic Surgery</h1>
   <p class="lede">A surgeon-led practice built on a simple standard: precision and perfection — in planning, in technique, and in aftercare.</p>
 </div></section>
 <section style="padding-top:0"><div class="wrap split">
-  <img class="doc" src="/assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
+  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
   <div>
     <h2>{CLINIC['doctor']}</h2>
     <p><strong>{CLINIC['credentials']}</strong></p>
@@ -581,8 +581,8 @@ def page_about():
   <span class="eyebrow">Visit us</span>
   <h2>The clinic</h2>
   <p>AR Plastic Surgery is located at {CLINIC['address']}, open <strong>{CLINIC['hours']}</strong>. Patients travel to us from {", ".join(TOWNS[:-1])} and {TOWNS[-1]}, and nearby districts.</p>
-  <p style="margin-top:1rem"><a class="btn btn-solid" href="/contact.html">Directions &amp; contact →</a>
-  <a class="btn btn-outline" href="/services.html" style="margin-left:.6rem">View services →</a></p>
+  <p style="margin-top:1rem"><a class="btn btn-solid" href="contact.html">Directions &amp; contact →</a>
+  <a class="btn btn-outline" href="services.html" style="margin-left:.6rem">View services →</a></p>
 </div></section>
 {cta_band()}
 </main>"""
@@ -595,7 +595,7 @@ def page_services():
             "gynecomastia, liposuction, rhinoplasty, hand surgery, Botox, lasers & more.")
     body = f"""
 <main><section><div class="wrap">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/index.html">Home</a> › Services</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Services</nav>
   <span class="eyebrow">Our services</span>
   <h1>Plastic, cosmetic &amp; reconstructive surgery services</h1>
   <p class="lede">Nineteen treatments across aesthetic surgery, reconstructive &amp; hand surgery, and non-surgical aesthetics — each described plainly, so you know what to expect. Every plan starts with a consultation at our Karimnagar clinic.</p>
@@ -609,12 +609,12 @@ def page_services():
 # ---------------------------------------------------------------- town pages
 def town_page(town, title, desc, h1_intro, sections_html, faqs):
     town_links = " · ".join(
-        f'<a href="/{t.lower()}-plastic-surgeon.html">{t}</a>'
+        f'<a href="{t.lower()}-plastic-surgeon.html">{t}</a>'
         for t in ["Siddipet", "Sircilla", "Peddapalli", "Vemulawada"] if t != town
     )
     body = f"""
 <main><section><div class="wrap">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/index.html">Home</a> › Plastic surgeon for {town} patients</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Plastic surgeon for {town} patients</nav>
   <span class="eyebrow">{town} · Telangana</span>
   <h1>Plastic Surgeon for {town} Patients</h1>
   <p class="lede">{h1_intro}</p>
@@ -627,7 +627,7 @@ def town_page(town, title, desc, h1_intro, sections_html, faqs):
   <strong>Hours:</strong> {CLINIC['hours']}<br>
   <strong>Phone:</strong> <a href="tel:{CLINIC['phone_tel']}">{CLINIC['phone_display']}</a></p>
   <p style="margin-top:.8rem"><a class="btn btn-gold" href="{CLINIC['booking']}" target="_blank" rel="noopener">Book Online</a>
-  <a class="btn btn-outline" href="/contact.html" style="margin-left:.6rem">Directions →</a></p>
+  <a class="btn btn-outline" href="contact.html" style="margin-left:.6rem">Directions →</a></p>
 </div>
 <p style="margin-top:1.4rem;font-size:.93rem;color:var(--muted)">Also serving: {town_links}</p>
 </div></section>
@@ -655,7 +655,7 @@ def page_siddipet():
 <li><strong>Scar revision, skin grafting, facial trauma</strong> — reconstructive procedures that need a plastic surgeon's planning.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Surgeon-led cosmetic care</h2>
-<p>For <a href="/services.html#fue-hair-transplant">hair transplant</a>, <a href="/services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href="/services.html#liposuction">liposuction</a> and <a href="/services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential. <strong>Free OP consultations are available every Wednesday.</strong></p>
+<p>For <a href=services.html#fue-hair-transplant">hair transplant</a>, <a href=services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href=services.html#liposuction">liposuction</a> and <a href=services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential. <strong>Free OP consultations are available every Wednesday.</strong></p>
 <p>Many Siddipet patients combine their consultation with a single day trip. Call or book online to reserve your slot.</p>""",
         [
          ("Do you treat patients from Siddipet?",
@@ -678,10 +678,10 @@ def page_sircilla():
          "microvascular surgery clinic, not a skin clinic and not a listing page."),
         """<h2>Procedures Sircilla patients ask about most</h2>
 <ul class="checklist">
-<li><strong><a href="/services.html#gynecomastia-surgery">Gynecomastia surgery</a></strong> — confidential consultations and a scar-minimal approach, performed by a gold-medalist plastic surgeon.</li>
-<li><strong><a href="/services.html#liposuction">Liposuction &amp; body contouring</a></strong> — targeted fat removal through small, discreet incisions, planned around your frame.</li>
-<li><strong><a href="/services.html#lipoma-removal">Lipoma removal</a> &amp; scar revision</strong> — small procedures, done precisely, with attention to the final scar.</li>
-<li><strong><a href="/services.html#fue-hair-transplant">Hair transplant (FUE)</a></strong> — surgeon-led, planned by Dr Reddy personally.</li>
+<li><strong><a href=services.html#gynecomastia-surgery">Gynecomastia surgery</a></strong> — confidential consultations and a scar-minimal approach, performed by a gold-medalist plastic surgeon.</li>
+<li><strong><a href=services.html#liposuction">Liposuction &amp; body contouring</a></strong> — targeted fat removal through small, discreet incisions, planned around your frame.</li>
+<li><strong><a href=services.html#lipoma-removal">Lipoma removal</a> &amp; scar revision</strong> — small procedures, done precisely, with attention to the final scar.</li>
+<li><strong><a href=services.html#fue-hair-transplant">Hair transplant (FUE)</a></strong> — surgeon-led, planned by Dr Reddy personally.</li>
 <li><strong>Hand surgery, burn reconstruction, skin grafting</strong> — reconstructive care with no dedicated local provider in Sircilla.</li>
 </ul>
 <h2 style="margin-top:1.8rem">What to expect</h2>
@@ -710,10 +710,10 @@ def page_peddapalli():
 <p>If you live in Peddapalli and need any of these, the genuine specialist option is Dr Ashok Reddy's practice in Karimnagar — led by <strong>Dr Ashok Reddy, MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>, plastic, cosmetic, hand &amp; microvascular surgeon.</p>
 <h2 style="margin-top:1.6rem">Procedures worth the trip from Peddapalli</h2>
 <ul class="checklist">
-<li><strong><a href="/services.html#rhinoplasty">Rhinoplasty</a></strong> — functional and aesthetic nose correction, planned for your face.</li>
+<li><strong><a href=services.html#rhinoplasty">Rhinoplasty</a></strong> — functional and aesthetic nose correction, planned for your face.</li>
 <li><strong>Facelift &amp; blepharoplasty</strong> — facial rejuvenation with natural-looking results as the goal.</li>
-<li><strong><a href="/services.html#burn-reconstruction">Burn reconstruction</a> &amp; skin grafting</strong> — staged rebuilding after burns and complex wounds.</li>
-<li><strong><a href="/services.html#cleft-lip-palate">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
+<li><strong><a href=services.html#burn-reconstruction">Burn reconstruction</a> &amp; skin grafting</strong> — staged rebuilding after burns and complex wounds.</li>
+<li><strong><a href=services.html#cleft-lip-palate">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, tummy tuck, scar revision</strong> — the full cosmetic and reconstructive range, all surgeon-led.</li>
 </ul>
 <p style="margin-top:1.2rem"><strong>Free OP consultations every Wednesday.</strong> One trip covers consultation and planning; surgery and follow-ups are scheduled around you. Before choosing any clinic, check who actually performs the surgery — AR's procedures are done by a qualified plastic surgeon at a real clinic you can visit.</p>""",
@@ -739,10 +739,10 @@ def page_vemulawada():
 <p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained <strong>hand &amp; microvascular surgeon</strong>: tendon and nerve repair, fractures, and microsurgical reconstruction. Across every town we studied, hand surgery has no local competition. If you are in Vemulawada with a hand injury or deformity, this is the closest specialist care — without the trip to Hyderabad.</p>
 <h2 style="margin-top:1.8rem">Procedures Vemulawada patients travel for</h2>
 <ul class="checklist">
-<li><strong><a href="/services.html#hand-trauma">Hand &amp; microvascular surgery</a></strong> — tendon, nerve and artery repair under magnification.</li>
-<li><strong><a href="/services.html#breast-surgery">Breast reduction &amp; augmentation</a></strong> — surgeon-led breast surgery with full aftercare.</li>
-<li><strong><a href="/services.html#burn-reconstruction">Burn reconstruction</a>, skin grafting, scar revision</strong> — staged, specialist care.</li>
-<li><strong>Facelift, <a href="/services.html#cleft-lip-palate">cleft repair</a></strong> — genuine expertise a short trip away.</li>
+<li><strong><a href=services.html#hand-trauma">Hand &amp; microvascular surgery</a></strong> — tendon, nerve and artery repair under magnification.</li>
+<li><strong><a href=services.html#breast-surgery">Breast reduction &amp; augmentation</a></strong> — surgeon-led breast surgery with full aftercare.</li>
+<li><strong><a href=services.html#burn-reconstruction">Burn reconstruction</a>, skin grafting, scar revision</strong> — staged, specialist care.</li>
+<li><strong>Facelift, <a href=services.html#cleft-lip-palate">cleft repair</a></strong> — genuine expertise a short trip away.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, rhinoplasty</strong> — cosmetic procedures planned and performed by the surgeon himself.</li>
 </ul>
 <p style="margin-top:1.2rem">The clinic holds a <strong>4.9-star Google rating</strong> and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. <strong>Free OP consultations every Wednesday.</strong> Many patients complete consultation and planning in a single visit.</p>""",
@@ -763,7 +763,7 @@ def page_contact():
     map_q = "AR+Plastic+Surgery+Karimnagar+Telangana"
     body = f"""
 <main><section><div class="wrap">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/index.html">Home</a> › Contact</nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Contact</nav>
   <span class="eyebrow">Get in touch</span>
   <h1>Contact &amp; book your appointment</h1>
   <p class="lede">Call, book online, or walk in during clinic hours — every consultation starts with an honest conversation.</p>
@@ -789,7 +789,7 @@ def page_contact():
     </div>
     <div class="info-card">
       <h3>🗺️ Areas we serve</h3>
-      <p>{", ".join(TOWNS)} and nearby districts. <a href="/siddipet-plastic-surgeon.html">Siddipet</a> · <a href="/sircilla-plastic-surgeon.html">Sircilla</a> · <a href="/peddapalli-plastic-surgeon.html">Peddapalli</a> · <a href="/vemulawada-plastic-surgeon.html">Vemulawada</a> patients — see your town guide.</p>
+      <p>{", ".join(TOWNS)} and nearby districts. <a href="siddipet-plastic-surgeon.html">Siddipet</a> · <a href="sircilla-plastic-surgeon.html">Sircilla</a> · <a href="peddapalli-plastic-surgeon.html">Peddapalli</a> · <a href="vemulawada-plastic-surgeon.html">Vemulawada</a> patients — see your town guide.</p>
     </div>
   </div>
   <div>
@@ -811,9 +811,9 @@ def page_404():
 <span class="eyebrow">404</span>
 <h1>That page isn't here</h1>
 <p class="lede" style="margin:0 auto 1.6rem">The page you were looking for may have moved. Here are some useful places instead:</p>
-<p><a class="btn btn-solid" href="/index.html">Home</a>
-<a class="btn btn-outline" href="/services.html" style="margin-left:.6rem">Services</a>
-<a class="btn btn-outline" href="/contact.html" style="margin-left:.6rem">Contact</a></p>
+<p><a class="btn btn-solid" href="index.html">Home</a>
+<a class="btn btn-outline" href="services.html" style="margin-left:.6rem">Services</a>
+<a class="btn btn-outline" href="contact.html" style="margin-left:.6rem">Contact</a></p>
 </div></section></main>"""
     return head(title, desc, "/404.html") + header("") + body + footer()
 
