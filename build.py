@@ -494,7 +494,7 @@ def page_index():
     </div>
   </div>
   <figure class="hero-photo">
-    <img src="assets/dr-ashok-reddy.png" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
+    <img src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
     <figcaption>{CLINIC['doctor']} — {CLINIC['credentials']}</figcaption>
   </figure>
 </div></section>
@@ -514,7 +514,7 @@ def page_index():
 </div></section>
 
 <section style="background:var(--bg-soft)"><div class="wrap split">
-  <img class="doc" src="assets/dr-ashok-reddy.png" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
+  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
   <div>
     <span class="eyebrow">Meet your surgeon</span>
     <h2>{CLINIC['doctor']}</h2>
@@ -554,7 +554,7 @@ def page_about():
   <p class="lede">A surgeon-led practice built on a simple standard: precision and perfection — in planning, in technique, and in aftercare.</p>
 </div></section>
 <section style="padding-top:0"><div class="wrap split">
-  <img class="doc" src="assets/dr-ashok-reddy.png" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
+  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
   <div>
     <h2>{CLINIC['doctor']}</h2>
     <p><strong>{CLINIC['credentials']}</strong></p>
