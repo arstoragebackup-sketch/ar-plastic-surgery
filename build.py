@@ -200,7 +200,7 @@ def clinic_jsonld(page_url, description):
         "description": description,
         "url": page_url,
         "telephone": CLINIC["phone_tel"],
-        "image": f"{BASE_URL}/assets/logo.jpg",
+        "image": f"{BASE_URL}/assets/logo.png",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": CLINIC["address"],
@@ -237,7 +237,7 @@ def faq_jsonld(faqs):
         ],
     }
 
-def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.jpg"):
+def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png"):
     import json
     url = BASE_URL + path
     schemas = [clinic_jsonld(url, desc)]
@@ -266,7 +266,7 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.jpg"):
 <meta name="twitter:title" content="{htmllib.escape(title)}">
 <meta name="twitter:description" content="{htmllib.escape(desc)}">
 <meta name="twitter:image" content="{BASE_URL}{og_image}">
-<link rel="icon" href="assets/logo.jpg" type="image/jpeg">
+<link rel="icon" href="assets/logo.png" type="image/png">
 <link rel="stylesheet" href="assets/style.css">
 {ld}
 </head>"""
@@ -279,8 +279,7 @@ def header(active):
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
     <a class="brand" href="index.html" aria-label="AR Plastic Surgery home">
-      <img src="assets/logo.jpg" alt="AR Plastic Surgery logo" width="52" height="52">
-      <span><span class="brand-name">AR Plastic Surgery</span><br><span class="brand-tag">Precision and Perfection</span></span>
+      <img src="assets/logo.png" alt="AR Plastic Surgery — Precision and Perfection" width="164" height="48">
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
     <nav class="main-nav" id="mainNav" aria-label="Primary">
@@ -304,7 +303,7 @@ def footer():
     return f"""<footer>
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <img src="assets/logo.jpg" alt="AR Plastic Surgery logo" width="56" height="56">
+      <img src="assets/logo.png" alt="AR Plastic Surgery logo" width="184" height="54">
       <h4>AR Plastic Surgery</h4>
       <p style="font-size:.93rem">Precision and Perfection. Full-scope plastic, cosmetic, hand &amp; microvascular surgery in Karimnagar, Telangana — led by {CLINIC['doctor']}, {CLINIC['credentials']}.</p>
     </div>
@@ -494,7 +493,7 @@ def page_index():
     </div>
   </div>
   <figure class="hero-photo">
-    <img src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
+    <img src="assets/dr-ashok-reddy.png" alt="{CLINIC['doctor']}, plastic surgeon at AR Plastic Surgery Karimnagar" width="640" height="704" fetchpriority="high">
     <figcaption>{CLINIC['doctor']} — {CLINIC['credentials']}</figcaption>
   </figure>
 </div></section>
@@ -514,7 +513,7 @@ def page_index():
 </div></section>
 
 <section style="background:var(--bg-soft)"><div class="wrap split">
-  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
+  <img class="doc" src="assets/dr-ashok-reddy.png" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
   <div>
     <span class="eyebrow">Meet your surgeon</span>
     <h2>{CLINIC['doctor']}</h2>
@@ -554,7 +553,7 @@ def page_about():
   <p class="lede">A surgeon-led practice built on a simple standard: precision and perfection — in planning, in technique, and in aftercare.</p>
 </div></section>
 <section style="padding-top:0"><div class="wrap split">
-  <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
+  <img class="doc" src="assets/dr-ashok-reddy.png" alt="{CLINIC['doctor']}, {CLINIC['specialties']}, AR Plastic Surgery Karimnagar" width="540" height="648">
   <div>
     <h2>{CLINIC['doctor']}</h2>
     <p><strong>{CLINIC['credentials']}</strong></p>
