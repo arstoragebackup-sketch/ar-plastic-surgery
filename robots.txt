@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arstoragebackup-sketch.github.io/ar-plastic-surgery/sitemap.xml
