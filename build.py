@@ -6,6 +6,14 @@ Run: python3 build.py
 import os, re, html as htmllib
 from html.parser import HTMLParser
 
+from content_proc_a import PROCEDURES_A
+from content_proc_b import PROCEDURES_B
+from content_blog import POSTS
+
+PROCEDURES = PROCEDURES_A + PROCEDURES_B
+PROC_BY_SLUG = {p["slug"]: p for p in PROCEDURES}
+POST_BY_SLUG = {p["slug"]: p for p in POSTS}
+
 # ---------------------------------------------------------------- config
 # PLACEHOLDER: replace with the real GitHub Pages URL once the repo is created,
 # e.g. https://<username>.github.io/<repo>/  (keep trailing slash off)
@@ -166,6 +174,18 @@ footer a:hover{color:#fff}
 /* breadcrumb */
 .crumb{font-size:.85rem;color:var(--muted);margin-bottom:1rem}
 .crumb a{color:var(--navy-2)}
+/* blog */
+.byline{color:var(--muted);font-size:.92rem;margin:.4rem 0 1.6rem}
+.post-list{display:grid;gap:1.1rem;margin-top:1.6rem}
+.post-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;transition:.18s}
+.post-card:hover{box-shadow:0 12px 30px rgba(15,42,74,.1)}
+.post-card .post-date{font-size:.82rem;color:var(--gold);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.post-card h3{margin:.35rem 0 .4rem;font-size:1.25rem}
+.post-card p{color:var(--muted);font-size:.96rem}
+.rel-box{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.6rem;margin-top:2.2rem}
+.rel-box h3{margin-bottom:.6rem}
+.rel-box ul{list-style:none;display:grid;gap:.4rem}
+.rel-box a{font-weight:600}
 /* 404 */
 .center{text-align:center;padding:4rem 0}
 /* responsive */
@@ -237,7 +257,8 @@ def faq_jsonld(faqs):
         ],
     }
 
-def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png"):
+def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png",
+         asset_prefix="assets/", og_type="website"):
     import json
     url = BASE_URL + path
     schemas = [clinic_jsonld(url, desc)]
@@ -256,7 +277,7 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png"):
 <meta name="description" content="{htmllib.escape(desc)}">
 <link rel="canonical" href="{url}">
 <meta name="robots" content="index, follow">
-<meta property="og:type" content="website">
+<meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="AR Plastic Surgery">
 <meta property="og:title" content="{htmllib.escape(title)}">
 <meta property="og:description" content="{htmllib.escape(desc)}">
@@ -266,20 +287,20 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png"):
 <meta name="twitter:title" content="{htmllib.escape(title)}">
 <meta name="twitter:description" content="{htmllib.escape(desc)}">
 <meta name="twitter:image" content="{BASE_URL}{og_image}">
-<link rel="icon" href="assets/logo.png" type="image/png">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="{asset_prefix}logo.png" type="image/png">
+<link rel="stylesheet" href="{asset_prefix}style.css">
 {ld}
 </head>"""
 
-def header(active):
+def header(active, root=""):
     def a(href, label, key):
         cls = ' class="active"' if key == active else ""
-        return f'<a href="{href.lstrip("/")}"{cls}>{label}</a>'
+        return f'<a href="{root}{href.lstrip("/")}"{cls}>{label}</a>'
     return f"""<body>
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a class="brand" href="index.html" aria-label="AR Plastic Surgery home">
-      <img src="assets/logo.png" alt="Dr. Ashok Reddy — Plastic Surgery" width="52" height="52">
+    <a class="brand" href="{root}index.html" aria-label="AR Plastic Surgery home">
+      <img src="{root}assets/logo.png" alt="Dr. Ashok Reddy — Plastic Surgery" width="52" height="52">
       <span><span class="brand-name">AR Plastic Surgery</span><br><span class="brand-tag">Precision and Perfection</span></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -287,6 +308,8 @@ def header(active):
       {a('/index.html','Home','home')}
       {a('/about.html','About','about')}
       {a('/services.html','Services','services')}
+      {a('/procedures/index.html','Procedures','procedures')}
+      {a('/blog/index.html','Blog','blog')}
       {a('/contact.html','Contact','contact')}
     </nav>
     <div class="header-cta">
@@ -296,25 +319,27 @@ def header(active):
   </div>
 </header>"""
 
-def footer():
+def footer(root=""):
     town_links = "\n".join(
-        f'<li><a href="{t.lower()}-plastic-surgeon.html">Plastic Surgeon in {t}</a></li>'
+        f'<li><a href="{root}{t.lower()}-plastic-surgeon.html">Plastic Surgeon in {t}</a></li>'
         for t in ["Siddipet", "Sircilla", "Peddapalli", "Vemulawada"]
     )
     return f"""<footer>
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <img src="assets/logo.png" alt="AR Plastic Surgery logo" width="60" height="60">
+      <img src="{root}assets/logo.png" alt="AR Plastic Surgery logo" width="60" height="60">
       <h4>AR Plastic Surgery</h4>
       <p style="font-size:.93rem">Precision and Perfection. Full-scope plastic, cosmetic, hand &amp; microvascular surgery in Karimnagar, Telangana — led by {CLINIC['doctor']}, {CLINIC['credentials']}.</p>
     </div>
     <div>
       <h4>Explore</h4>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About {CLINIC['doctor']}</a></li>
-        <li><a href="services.html">All Services</a></li>
-        <li><a href="contact.html">Contact &amp; Directions</a></li>
+        <li><a href="{root}index.html">Home</a></li>
+        <li><a href="{root}about.html">About {CLINIC['doctor']}</a></li>
+        <li><a href="{root}services.html">All Services</a></li>
+        <li><a href="{root}procedures/index.html">Procedures</a></li>
+        <li><a href="{root}blog/index.html">Blog</a></li>
+        <li><a href="{root}contact.html">Contact &amp; Directions</a></li>
         <li><a href="{CLINIC['booking']}" target="_blank" rel="noopener">Book Online</a></li>
       </ul>
     </div>
@@ -353,7 +378,7 @@ def footer():
 </body>
 </html>"""
 
-def cta_band():
+def cta_band(root=""):
     return f"""<div class="wrap"><div class="cta-band">
   <h2>Not sure which treatment is right for you?</h2>
   <p>Every plan at AR Plastic Surgery starts with an honest consultation — what surgery can and cannot do, explained before anything is decided.</p>
@@ -372,6 +397,239 @@ def faq_block(faqs):
 <span class="eyebrow">FAQ</span><h2>Common questions</h2>
 <div style="margin-top:1.2rem;max-width:52rem">{items}</div>
 </div></section>"""
+
+# ---------------------------------------------------------------- procedures & blog framework
+PROC_CATS = [
+    ("Cosmetic Surgery", "cosmetic-surgery",
+     ["fue-hair-transplant", "gynecomastia-surgery", "liposuction", "rhinoplasty",
+      "breast-augmentation", "breast-reduction", "tummy-tuck", "facelift",
+      "eyelid-surgery-blepharoplasty", "lipoma-removal"]),
+    ("Reconstructive Surgery", "reconstructive-surgery",
+     ["breast-reconstruction", "burn-reconstruction", "scar-keloid-treatment",
+      "cleft-lip-palate-repair"]),
+    ("Hand & Microvascular Surgery", "hand-microvascular-surgery",
+     ["hand-trauma-surgery", "tendon-repair", "nerve-repair-microsurgery",
+      "carpal-tunnel-release", "microsurgery-free-flap", "fingertip-replantation"]),
+    ("Non-Surgical Aesthetics", "non-surgical-aesthetics",
+     ["botox-treatment", "dermal-fillers", "prp-therapy", "chemical-peels",
+      "laser-treatments"]),
+]
+
+# service id (services.html) -> procedure page (relative to site root)
+PROC_LINK = {
+    "fue-hair-transplant": "procedures/fue-hair-transplant.html",
+    "gynecomastia-surgery": "procedures/gynecomastia-surgery.html",
+    "liposuction": "procedures/liposuction.html",
+    "rhinoplasty": "procedures/rhinoplasty.html",
+    "breast-surgery": "procedures/index.html#cosmetic-surgery",
+    "tummy-tuck": "procedures/tummy-tuck.html",
+    "scar-keloid": "procedures/scar-keloid-treatment.html",
+    "burn-reconstruction": "procedures/burn-reconstruction.html",
+    "cleft-lip-palate": "procedures/cleft-lip-palate-repair.html",
+    "hand-trauma": "procedures/hand-trauma-surgery.html",
+    "tendon-nerve-repair": "procedures/tendon-repair.html",
+    "microsurgery": "procedures/microsurgery-free-flap.html",
+    "artery-repair": "procedures/index.html#hand-microvascular-surgery",
+    "lipoma-removal": "procedures/lipoma-removal.html",
+    "botox": "procedures/botox-treatment.html",
+    "dermal-fillers": "procedures/dermal-fillers.html",
+    "prp": "procedures/prp-therapy.html",
+    "chemical-peels": "procedures/chemical-peels.html",
+    "laser-treatments": "procedures/laser-treatments.html",
+}
+
+def procedure_jsonld(proc, url):
+    return {
+        "@context": "https://schema.org",
+        "@type": "MedicalProcedure",
+        "name": proc["name"],
+        "description": proc["desc"],
+        "url": url,
+        "procedureType": ("Non-surgical" if proc["category"] == "Non-Surgical Aesthetics"
+                          else "Surgical"),
+        "performer": {
+            "@type": "Physician",
+            "name": CLINIC["doctor"],
+            "medicalSpecialty": ["PlasticSurgery"],
+            "description": f"{CLINIC['doctor']}, {CLINIC['credentials']}; {CLINIC['specialties']}.",
+        },
+    }
+
+def blogposting_jsonld(post, url):
+    return {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post["h1"],
+        "description": post["desc"],
+        "url": url,
+        "image": f"{BASE_URL}/assets/logo.png",
+        "author": {
+            "@type": "Person",
+            "name": CLINIC["doctor"],
+            "jobTitle": CLINIC["specialties"],
+            "description": f"{CLINIC['doctor']}, {CLINIC['credentials']}.",
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": CLINIC["name"],
+            "logo": {"@type": "ImageObject", "url": f"{BASE_URL}/assets/logo.png"},
+        },
+        "datePublished": "2026-10-04",
+        "mainEntityOfPage": {"@type": "WebPage", "@id": url},
+    }
+
+def esc_paras(paras):
+    return "\n".join(f"<p>{htmllib.escape(p)}</p>" for p in paras)
+
+def page_procedure(proc):
+    slug = proc["slug"]
+    path = f"/procedures/{slug}.html"
+    url = BASE_URL + path
+    faqs = proc["faqs"]
+    rel_cards = []
+    for r in proc["related"]:
+        rp = PROC_BY_SLUG.get(r)
+        if not rp:
+            continue
+        teaser = htmllib.escape(rp["desc"][:120]).rsplit(" ", 1)[0] + "…"
+        rel_cards.append(
+            f'<article class="card"><h3>{htmllib.escape(rp["name"])}</h3><p>{teaser}</p>'
+            f'<a class="more" href="{r}.html">Learn more →</a></article>'
+        )
+    town_links = " · ".join(
+        f'<a href="../{t.lower()}-plastic-surgeon.html">Plastic surgeon for {t} patients</a>'
+        for t in proc["towns"]
+    )
+    journey = "\n".join(
+        f"<h3>{htmllib.escape(step)}</h3><p>{htmllib.escape(text)}</p>"
+        for step, text in proc["journey"]
+    )
+    risks = "\n".join(f"<li>{htmllib.escape(r)}</li>" for r in proc["risks"])
+    body = f"""
+<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> › <a href="index.html">Procedures</a> › {htmllib.escape(proc["name"])}</nav>
+  <span class="eyebrow">{htmllib.escape(proc["category"])}</span>
+  <h1>{htmllib.escape(proc["name"])} in Karimnagar</h1>
+  <p class="lede">{htmllib.escape(proc["lede"])}</p>
+</div></section>
+<section style="padding-top:0"><div class="wrap">
+  <h2>Overview</h2>
+  {esc_paras(proc["overview"])}
+  <h2 style="margin-top:2rem">Our approach</h2>
+  {esc_paras(proc["approach"])}
+  <h2 style="margin-top:2rem">What to expect</h2>
+  {journey}
+  <h2 style="margin-top:2rem">Risks and limitations — stated honestly</h2>
+  <p>Every procedure carries trade-offs. Before you decide, {CLINIC["doctor"]} will discuss these with you directly:</p>
+  <ul class="checklist">
+  {risks}
+  </ul>
+  <h2 style="margin-top:2.2rem">Related procedures</h2>
+  <div class="card-grid">{"".join(rel_cards)}</div>
+  <div class="rel-box">
+    <h3>Visiting from nearby?</h3>
+    <p>{town_links}</p>
+  </div>
+</div></section>
+{faq_block(faqs)}
+{cta_band(root="../")}
+</main>"""
+    return (head(proc["title"], proc["desc"], path,
+                 [procedure_jsonld(proc, url), faq_jsonld(faqs)],
+                 asset_prefix="../assets/")
+            + header("procedures", root="../") + body + footer(root="../"))
+
+def page_procedures_index():
+    title = "All Procedures | Plastic, Cosmetic & Hand Surgery Karimnagar"
+    desc = ("Browse every procedure at AR Plastic Surgery, Karimnagar: cosmetic surgery, reconstruction, "
+            "hand & microvascular surgery and non-surgical aesthetics.")
+    sections = []
+    for cat_name, cat_id, slugs in PROC_CATS:
+        cards = []
+        for s in slugs:
+            p = PROC_BY_SLUG.get(s)
+            if not p:
+                continue
+            teaser = htmllib.escape(p["desc"][:120]).rsplit(" ", 1)[0] + "…"
+            cards.append(
+                f'<article class="card"><h3>{htmllib.escape(p["name"])}</h3><p>{teaser}</p>'
+                f'<a class="more" href="{s}.html">Learn more →</a></article>'
+            )
+        sections.append(
+            f'<div class="svc-cat" id="{cat_id}"><h2 style="font-size:1.4rem">{htmllib.escape(cat_name)}</h2>'
+            f'<div class="card-grid">{"".join(cards)}</div></div>'
+        )
+    body = f"""
+<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Procedures</nav>
+  <span class="eyebrow">Procedures A–Z</span>
+  <h1>Every procedure, explained plainly</h1>
+  <p class="lede">Twenty-five detailed guides across cosmetic surgery, reconstruction, hand &amp; microvascular surgery and non-surgical aesthetics — each written to answer the questions patients actually ask. Results vary from person to person; your consultation is where your plan takes shape.</p>
+  <div style="margin-top:2rem">{"".join(sections)}</div>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/procedures/index.html", asset_prefix="../assets/")
+            + header("procedures", root="../") + body + footer(root="../"))
+
+def page_blog_index():
+    title = "Blog | Patient Education | AR Plastic Surgery Karimnagar"
+    desc = ("Patient-education articles by Dr Ashok Reddy, Karimnagar: hair transplant questions, gynecomastia "
+            "facts, hand surgery guidance, Botox myths and recovery guides.")
+    cards = []
+    for post in POSTS:
+        cards.append(
+            f'<article class="post-card"><div class="post-date">{htmllib.escape(post["date"])}</div>'
+            f'<h3>{htmllib.escape(post["h1"])}</h3><p>{htmllib.escape(post["desc"])}</p>'
+            f'<a class="more" style="font-weight:700;font-size:.92rem" href="{post["slug"]}.html">Read the article →</a></article>'
+        )
+    body = f"""
+<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Blog</nav>
+  <span class="eyebrow">Patient education</span>
+  <h1>The AR Plastic Surgery blog</h1>
+  <p class="lede">Honest, jargon-free guides by {CLINIC["doctor"]} — written to help you understand your options before you ever step into the clinic.</p>
+  <div class="post-list">{"".join(cards)}</div>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/blog/index.html", asset_prefix="../assets/")
+            + header("blog", root="../") + body + footer(root="../"))
+
+def page_blog_post(post):
+    slug = post["slug"]
+    path = f"/blog/{slug}.html"
+    url = BASE_URL + path
+    faqs = post.get("faqs", [])
+    sections = "\n".join(
+        f"<h2>{htmllib.escape(h)}</h2>\n{esc_paras(paras)}"
+        for h, paras in post["sections"]
+    )
+    rel_items = "\n".join(
+        f'<li><a href="../procedures/{r}.html">{htmllib.escape(PROC_BY_SLUG[r]["name"])}</a></li>'
+        for r in post["related_procedures"] if r in PROC_BY_SLUG
+    )
+    body = f"""
+<main><section><div class="wrap" style="max-width:46rem">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> › <a href="index.html">Blog</a> › Article</nav>
+  <span class="eyebrow">Patient education · {htmllib.escape(post["date"])}</span>
+  <h1>{htmllib.escape(post["h1"])}</h1>
+  <p class="lede">{htmllib.escape(post["lede"])}</p>
+  <p class="byline">By {CLINIC["doctor"]}, {CLINIC["credentials"]} — {CLINIC["specialties"]}</p>
+  {sections}
+  <div class="rel-box">
+    <h3>Related procedures</h3>
+    <ul>{rel_items}</ul>
+  </div>
+</div></section>
+{faq_block(faqs) if faqs else ""}
+{cta_band(root="../")}
+</main>"""
+    extra = [blogposting_jsonld(post, url)]
+    if faqs:
+        extra.append(faq_jsonld(faqs))
+    return (head(post["title"], post["desc"], path, extra, asset_prefix="../assets/", og_type="article")
+            + header("blog", root="../") + body + footer(root="../"))
 
 # ---------------------------------------------------------------- services data
 SERVICES = [
@@ -397,7 +655,7 @@ SERVICES = [
   ("cleft-lip-palate", "Cleft Lip & Palate Repair",
    "Staged surgical correction of cleft lip and palate, planned from the earliest months of life as part of long-term team care. Early assessment helps map the full journey ahead."),
   ("hand-trauma", "Hand Trauma Surgery",
-   "Care for fractures, cuts, crush injuries and dislocations of the hand and wrist. The goal is to restore movement, strength and sensation — and timely assessment gives the best chance of a good recovery."),
+   "Care for fractures, cuts, crush injuries and dislocations of the hand and wrist. The goal is to restore movement, strength and sensation — and timely assessment offers the greatest chance of a good recovery."),
   ("tendon-nerve-repair", "Tendon & Nerve Repair",
    "Delicate repair of divided or damaged tendons and nerves, followed by guided rehabilitation. Recovery takes patience and structured hand therapy, which your surgeon will coordinate."),
   ("microsurgery", "Microsurgery",
@@ -428,8 +686,11 @@ def services_grid(ids=None, link_contact=True):
         for sid, name, desc in items:
             if ids and sid not in ids:
                 continue
+            learn = ""
+            if sid in PROC_LINK:
+                learn = f'<a class="more" href="{PROC_LINK[sid]}">Learn more →</a>'
             cards.append(
-                f'<article class="svc" id="{sid}"><h3>{htmllib.escape(name)}</h3><p>{desc}</p></article>'
+                f'<article class="svc" id="{sid}"><h3>{htmllib.escape(name)}</h3><p>{desc}</p>{learn}</article>'
             )
         if cards:
             out.append(f'<div class="svc-cat"><h2 style="font-size:1.4rem">{cat}</h2>'
@@ -655,7 +916,7 @@ def page_siddipet():
 <li><strong>Scar revision, skin grafting, facial trauma</strong> — reconstructive procedures that need a plastic surgeon's planning.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Surgeon-led cosmetic care</h2>
-<p>For <a href=services.html#fue-hair-transplant">hair transplant</a>, <a href=services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href=services.html#liposuction">liposuction</a> and <a href=services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential. <strong>Free OP consultations are available every Wednesday.</strong></p>
+<p>For <a href="services.html#fue-hair-transplant">hair transplant</a>, <a href="services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href="services.html#liposuction">liposuction</a> and <a href="services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential. <strong>Free OP consultations are available every Wednesday.</strong></p>
 <p>Many Siddipet patients combine their consultation with a single day trip. Call or book online to reserve your slot.</p>""",
         [
          ("Do you treat patients from Siddipet?",
@@ -678,10 +939,10 @@ def page_sircilla():
          "microvascular surgery clinic, not a skin clinic and not a listing page."),
         """<h2>Procedures Sircilla patients ask about most</h2>
 <ul class="checklist">
-<li><strong><a href=services.html#gynecomastia-surgery">Gynecomastia surgery</a></strong> — confidential consultations and a scar-minimal approach, performed by a gold-medalist plastic surgeon.</li>
-<li><strong><a href=services.html#liposuction">Liposuction &amp; body contouring</a></strong> — targeted fat removal through small, discreet incisions, planned around your frame.</li>
-<li><strong><a href=services.html#lipoma-removal">Lipoma removal</a> &amp; scar revision</strong> — small procedures, done precisely, with attention to the final scar.</li>
-<li><strong><a href=services.html#fue-hair-transplant">Hair transplant (FUE)</a></strong> — surgeon-led, planned by Dr Reddy personally.</li>
+<li><strong><a href="services.html#gynecomastia-surgery">Gynecomastia surgery</a></strong> — confidential consultations and a scar-minimal approach, performed by a gold-medalist plastic surgeon.</li>
+<li><strong><a href="services.html#liposuction">Liposuction &amp; body contouring</a></strong> — targeted fat removal through small, discreet incisions, planned around your frame.</li>
+<li><strong><a href="services.html#lipoma-removal">Lipoma removal</a> &amp; scar revision</strong> — small procedures, done precisely, with attention to the final scar.</li>
+<li><strong><a href="services.html#fue-hair-transplant">Hair transplant (FUE)</a></strong> — surgeon-led, planned by Dr Reddy personally.</li>
 <li><strong>Hand surgery, burn reconstruction, skin grafting</strong> — reconstructive care with no dedicated local provider in Sircilla.</li>
 </ul>
 <h2 style="margin-top:1.8rem">What to expect</h2>
@@ -710,10 +971,10 @@ def page_peddapalli():
 <p>If you live in Peddapalli and need any of these, the genuine specialist option is Dr Ashok Reddy's practice in Karimnagar — led by <strong>Dr Ashok Reddy, MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>, plastic, cosmetic, hand &amp; microvascular surgeon.</p>
 <h2 style="margin-top:1.6rem">Procedures worth the trip from Peddapalli</h2>
 <ul class="checklist">
-<li><strong><a href=services.html#rhinoplasty">Rhinoplasty</a></strong> — functional and aesthetic nose correction, planned for your face.</li>
+<li><strong><a href="services.html#rhinoplasty">Rhinoplasty</a></strong> — functional and aesthetic nose correction, planned for your face.</li>
 <li><strong>Facelift &amp; blepharoplasty</strong> — facial rejuvenation with natural-looking results as the goal.</li>
-<li><strong><a href=services.html#burn-reconstruction">Burn reconstruction</a> &amp; skin grafting</strong> — staged rebuilding after burns and complex wounds.</li>
-<li><strong><a href=services.html#cleft-lip-palate">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
+<li><strong><a href="services.html#burn-reconstruction">Burn reconstruction</a> &amp; skin grafting</strong> — staged rebuilding after burns and complex wounds.</li>
+<li><strong><a href="services.html#cleft-lip-palate">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, tummy tuck, scar revision</strong> — the full cosmetic and reconstructive range, all surgeon-led.</li>
 </ul>
 <p style="margin-top:1.2rem"><strong>Free OP consultations every Wednesday.</strong> One trip covers consultation and planning; surgery and follow-ups are scheduled around you. Before choosing any clinic, check who actually performs the surgery — AR's procedures are done by a qualified plastic surgeon at a real clinic you can visit.</p>""",
@@ -739,10 +1000,10 @@ def page_vemulawada():
 <p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained <strong>hand &amp; microvascular surgeon</strong>: tendon and nerve repair, fractures, and microsurgical reconstruction. Across every town we studied, hand surgery has no local competition. If you are in Vemulawada with a hand injury or deformity, this is the closest specialist care — without the trip to Hyderabad.</p>
 <h2 style="margin-top:1.8rem">Procedures Vemulawada patients travel for</h2>
 <ul class="checklist">
-<li><strong><a href=services.html#hand-trauma">Hand &amp; microvascular surgery</a></strong> — tendon, nerve and artery repair under magnification.</li>
-<li><strong><a href=services.html#breast-surgery">Breast reduction &amp; augmentation</a></strong> — surgeon-led breast surgery with full aftercare.</li>
-<li><strong><a href=services.html#burn-reconstruction">Burn reconstruction</a>, skin grafting, scar revision</strong> — staged, specialist care.</li>
-<li><strong>Facelift, <a href=services.html#cleft-lip-palate">cleft repair</a></strong> — genuine expertise a short trip away.</li>
+<li><strong><a href="services.html#hand-trauma">Hand &amp; microvascular surgery</a></strong> — tendon, nerve and artery repair under magnification.</li>
+<li><strong><a href="services.html#breast-surgery">Breast reduction &amp; augmentation</a></strong> — surgeon-led breast surgery with full aftercare.</li>
+<li><strong><a href="services.html#burn-reconstruction">Burn reconstruction</a>, skin grafting, scar revision</strong> — staged, specialist care.</li>
+<li><strong>Facelift, <a href="services.html#cleft-lip-palate">cleft repair</a></strong> — genuine expertise a short trip away.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, rhinoplasty</strong> — cosmetic procedures planned and performed by the surgeon himself.</li>
 </ul>
 <p style="margin-top:1.2rem">The clinic holds a <strong>4.9-star Google rating</strong> and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. <strong>Free OP consultations every Wednesday.</strong> Many patients complete consultation and planning in a single visit.</p>""",
@@ -819,16 +1080,24 @@ def page_404():
 
 # ---------------------------------------------------------------- build + validate
 PAGES = [
-    ("index.html", page_index),
-    ("about.html", page_about),
-    ("services.html", page_services),
-    ("siddipet-plastic-surgeon.html", page_siddipet),
-    ("sircilla-plastic-surgeon.html", page_sircilla),
-    ("peddapalli-plastic-surgeon.html", page_peddapalli),
-    ("vemulawada-plastic-surgeon.html", page_vemulawada),
-    ("contact.html", page_contact),
-    ("404.html", page_404),
+    ("index.html", page_index, 1.0),
+    ("about.html", page_about, 0.8),
+    ("services.html", page_services, 0.9),
+    ("siddipet-plastic-surgeon.html", page_siddipet, 0.8),
+    ("sircilla-plastic-surgeon.html", page_sircilla, 0.8),
+    ("peddapalli-plastic-surgeon.html", page_peddapalli, 0.8),
+    ("vemulawada-plastic-surgeon.html", page_vemulawada, 0.8),
+    ("contact.html", page_contact, 0.8),
+    ("404.html", page_404, 0.0),
+    ("procedures/index.html", page_procedures_index, 0.9),
+    ("blog/index.html", page_blog_index, 0.9),
 ]
+for _p in PROCEDURES:
+    PAGES.append((f"procedures/{_p['slug']}.html",
+                  (lambda pp: lambda: page_procedure(pp))(_p), 0.8))
+for _b in POSTS:
+    PAGES.append((f"blog/{_b['slug']}.html",
+                  (lambda bb: lambda: page_blog_post(bb))(_b), 0.7))
 
 class Checker(HTMLParser):
     def __init__(self):
@@ -854,9 +1123,10 @@ def main():
     with open(os.path.join(OUT, "assets", "style.css"), "w") as f:
         f.write(CSS)
     sitemap_urls = []
-    for fname, fn in PAGES:
+    for fname, fn, priority in PAGES:
         page_html = fn()
         path = os.path.join(OUT, fname)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(page_html)
         # validate
@@ -876,16 +1146,16 @@ def main():
                 flags.append(f"banned phrase: {pat}")
         status = "OK " if not flags else "WARN " + "; ".join(flags)
         print(f"{status} {fname} | title[{tl}] {c.title.strip()[:60]} | desc[{dl}]")
-        if fname != "404.html":
-            sitemap_urls.append(fname)
+        if fname != "404.html" and priority > 0:
+            sitemap_urls.append((fname, priority))
     # robots.txt
     with open(os.path.join(OUT, "robots.txt"), "w") as f:
         f.write(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\n")
     # sitemap.xml
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.0.9">']
-    for u in sitemap_urls:
-        sm.append(f"  <url><loc>{BASE_URL}/{u}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>")
+    for u, pr in sitemap_urls:
+        sm.append(f"  <url><loc>{BASE_URL}/{u}</loc><changefreq>monthly</changefreq><priority>{pr}</priority></url>")
     sm.append("</urlset>")
     with open(os.path.join(OUT, "sitemap.xml"), "w") as f:
         f.write("\n".join(sm))
