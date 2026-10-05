@@ -17,7 +17,7 @@ POST_BY_SLUG = {p["slug"]: p for p in POSTS}
 # ---------------------------------------------------------------- config
 # PLACEHOLDER: replace with the real GitHub Pages URL once the repo is created,
 # e.g. https://<username>.github.io/<repo>/  (keep trailing slash off)
-BASE_URL = "https://arstoragebackup-sketch.github.io/ar-plastic-surgery"
+BASE_URL = "https://surgery.arplasticsurgery.co.in"
 
 OUT = os.path.dirname(os.path.abspath(__file__))
 
@@ -1584,16 +1584,18 @@ def page_mulugu():
         ("Reconstructive and hand surgery access for Mulugu patients at AR Plastic Surgery, Karimnagar — "
          "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
         ("Mulugu's forests and tribal heartland are among Telangana's most beautiful — and most distant from "
-         "specialist care. For cleft conditions, burn scars and hand injuries, AR Plastic Surgery in Karimnagar "
-         "is the nearest full-scope plastic surgery practice for the district."),
-        """<h2>Bringing the specialty to the forest district</h2>
-<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+         "specialist care. When the Medaram jatara draws lakhs of pilgrims, or forest and farm work injures "
+         "a hand, the district needs a specialist within reach. AR Plastic Surgery in Karimnagar is the nearest "
+         "full-scope plastic surgery practice for Mulugu."),
+        """<h2>When crowds gather and work injures</h2>
+<p>Large gatherings and forest-based livelihoods both produce the same emergencies: deep cuts, crush injuries, fractures. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained hand &amp; microvascular surgeon, built for exactly these cases:</p>
 <ul class="checklist">
-<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
-<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — releasing contractures, restoring movement.</li>
-<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — specialist assessment before injuries become permanent disability.</li>
-<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — urgent specialist assessment before injuries become permanent disability.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon repair</a></strong> — restoring finger movement after cuts.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars after healed injuries.</li>
 </ul>
+<h2 style="margin-top:1.8rem">Reconstructive care for families</h2>
+<p><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a> — staged correction from the earliest months of life — and <a href="procedures/burn-reconstruction.html">burn reconstruction</a> for contractures that limit movement. These are the procedures that change a child's or a worker's daily life.</p>
 <h2 style="margin-top:1.8rem">One efficient trip</h2>
 <p><strong>Free OP consultations every Wednesday</strong> — assessment and a clear plan in a single visit, surgery scheduled to minimise return travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
