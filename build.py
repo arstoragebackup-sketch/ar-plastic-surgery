@@ -38,10 +38,33 @@ CLINIC = {
     "lon": "79.12475",
 }
 TOWNS = ["Karimnagar", "Jagtial", "Sircilla", "Warangal", "Siddipet", "Peddapalli", "Vemulawada",
-         "Nizamabad", "Khammam", "Mancherial", "Adilabad"]
-# district landing pages (also used for cross-linking between town/district guides)
-DISTRICTS = ["Siddipet", "Sircilla", "Peddapalli", "Vemulawada", "Warangal",
-             "Nizamabad", "Khammam", "Mancherial", "Jagtial", "Adilabad"]
+         "Nizamabad", "Khammam", "Mancherial", "Adilabad", "Bhadradri Kothagudem", "Hanamkonda",
+         "Hyderabad", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy",
+         "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Medak", "Medchal-Malkajgiri",
+         "Mulugu", "Nagarkurnool", "Nalgonda", "Narayanpet", "Nirmal", "Rangareddy", "Sangareddy",
+         "Suryapet", "Vikarabad", "Wanaparthy", "Yadadri Bhuvanagiri"]
+# (display name, url slug) for every town/district guide page
+DISTRICT_PAGES = [
+    ("Siddipet", "siddipet"), ("Sircilla", "sircilla"),
+    ("Peddapalli", "peddapalli"), ("Vemulawada", "vemulawada"),
+    ("Warangal", "warangal"), ("Nizamabad", "nizamabad"), ("Khammam", "khammam"),
+    ("Mancherial", "mancherial"), ("Jagtial", "jagtial"), ("Adilabad", "adilabad"),
+    ("Bhadradri Kothagudem", "bhadradri-kothagudem"), ("Hanamkonda", "hanamkonda"),
+    ("Hyderabad", "hyderabad"), ("Jangaon", "jangaon"),
+    ("Jayashankar Bhupalpally", "jayashankar-bhupalpally"),
+    ("Jogulamba Gadwal", "jogulamba-gadwal"), ("Kamareddy", "kamareddy"),
+    ("Komaram Bheem Asifabad", "komaram-bheem-asifabad"), ("Mahabubabad", "mahabubabad"),
+    ("Mahabubnagar", "mahabubnagar"), ("Medak", "medak"),
+    ("Medchal-Malkajgiri", "medchal-malkajgiri"), ("Mulugu", "mulugu"),
+    ("Nagarkurnool", "nagarkurnool"), ("Nalgonda", "nalgonda"), ("Narayanpet", "narayanpet"),
+    ("Nirmal", "nirmal"), ("Peddapalli District", "peddapalli-district"),
+    ("Rajanna Sircilla", "rajanna-sircilla"), ("Rangareddy", "rangareddy"),
+    ("Sangareddy", "sangareddy"), ("Siddipet District", "siddipet-district"),
+    ("Suryapet", "suryapet"), ("Vikarabad", "vikarabad"), ("Wanaparthy", "wanaparthy"),
+    ("Yadadri Bhuvanagiri", "yadadri-bhuvanagiri"),
+]
+# legacy alias kept for compatibility
+DISTRICTS = [d for d, _ in DISTRICT_PAGES]
 
 # ---------------------------------------------------------------- CSS
 CSS = r"""
@@ -325,8 +348,8 @@ def header(active, root=""):
 
 def footer(root=""):
     town_links = "\n".join(
-        f'<li><a href="{root}{t.lower()}-plastic-surgeon.html">Plastic Surgeon in {t}</a></li>'
-        for t in DISTRICTS
+        f'<li><a href="{root}{slug}-plastic-surgeon.html">Plastic Surgeon in {name}</a></li>'
+        for name, slug in DISTRICT_PAGES
     )
     return f"""<footer>
   <div class="wrap footer-grid">
@@ -844,7 +867,7 @@ def page_about():
 <section><div class="wrap">
   <span class="eyebrow">Visit us</span>
   <h2>The clinic</h2>
-  <p>AR Plastic Surgery is located at {CLINIC['address']}, open <strong>{CLINIC['hours']}</strong>. Patients travel to us from {", ".join(TOWNS[:-1])} and {TOWNS[-1]}, and nearby districts.</p>
+  <p>AR Plastic Surgery is located at {CLINIC['address']}, open <strong>{CLINIC['hours']}</strong>. Patients travel to us from Karimnagar, Warangal, Nizamabad, Khammam and districts across Telangana — see the <a href="contact.html">areas we serve</a>.</p>
   <p style="margin-top:1rem"><a class="btn btn-solid" href="contact.html">Directions &amp; contact →</a>
   <a class="btn btn-outline" href="services.html" style="margin-left:.6rem">View services →</a></p>
 </div></section>
@@ -879,16 +902,18 @@ def page_services():
     return head(title, desc, "/services.html") + header("services") + body + footer()
 
 # ---------------------------------------------------------------- town pages
-def town_page(town, title, desc, h1_intro, sections_html, faqs):
+def town_page(town, title, desc, h1_intro, sections_html, faqs, slug=None, h1_text=None):
+    slug = slug or town.lower().replace(" ", "-")
+    h1_text = h1_text or f"Plastic Surgeon for {town} Patients"
     town_links = " · ".join(
-        f'<a href="{t.lower()}-plastic-surgeon.html">{t}</a>'
-        for t in DISTRICTS if t != town
+        f'<a href="{s}-plastic-surgeon.html">{n}</a>'
+        for n, s in DISTRICT_PAGES if s != slug
     )
     body = f"""
 <main><section><div class="wrap">
   <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Plastic surgeon for {town} patients</nav>
   <span class="eyebrow">{town} · Telangana</span>
-  <h1>Plastic Surgeon for {town} Patients</h1>
+  <h1>{h1_text}</h1>
   <p class="lede">{h1_intro}</p>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
@@ -906,7 +931,7 @@ def town_page(town, title, desc, h1_intro, sections_html, faqs):
 {faq_block(faqs)}
 {cta_band()}
 </main>"""
-    return (head(title, desc, f"/{town.lower()}-plastic-surgeon.html", faq_jsonld(faqs))
+    return (head(title, desc, f"/{slug}-plastic-surgeon.html", faq_jsonld(faqs))
             + header("") + body + footer())
 
 def page_siddipet():
@@ -1207,12 +1232,771 @@ def page_adilabad():
           "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
         ])
 
+def page_bhadradri_kothagudem():
+    return town_page(
+        "Bhadradri Kothagudem",
+        "Plastic Surgeon for Bhadradri Kothagudem | AR Plastic Surgery",
+        ("Hand trauma and reconstructive surgery for Bhadradri Kothagudem patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Bhadradri Kothagudem pairs heavy industry — the Singareni coal belt around Kothagudem — with some of "
+         "Telangana's most remote mandals. Both realities point to the same need: when a hand is crushed, a burn "
+         "scar tightens, or a child needs cleft care, there should be a specialist within reach. AR Plastic "
+         "Surgery in Karimnagar is the nearest full-scope practice for the district."),
+        """<h2>Industrial injuries need a microvascular surgeon</h2>
+<p>Heavy work injures hands — crush injuries, deep lacerations, fractures. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained hand &amp; microvascular surgeon, equipped for what these injuries demand:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — urgent assessment of fractures, cuts and crush injuries.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon</a> &amp; <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a></strong> — reconstruction under magnification, with guided rehabilitation.</li>
+<li><strong><a href="procedures/microsurgery-free-flap.html">Microsurgical reconstruction</a></strong> — for complex tissue loss after trauma.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Reconstructive care for the district's families</h2>
+<p>Beyond the workplace: <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft lip &amp; palate repair</a> and <a href="procedures/scar-keloid-treatment.html">scar revision</a> — staged, specialist care that changes daily life. Cosmetic consultations (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) are private and pressure-free.</p>
+<h2 style="margin-top:1.8rem">Reaching us from the east</h2>
+<p>The district is large, so plan around <strong>free OP consultations every Wednesday</strong> — assessment and planning in one visit, surgery scheduled to minimise return trips. For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> at once; the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. You can also <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Bhadradri Kothagudem?",
+          "Yes — patients from Kothagudem, Bhadrachalam and across the district visit the Karimnagar clinic."),
+         ("A worker injured his hand — how urgent is it?",
+          "Very. Tendon, nerve and vessel injuries are time-sensitive — call +91 91826 56866 promptly for guidance."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_hanamkonda():
+    return town_page(
+        "Hanamkonda",
+        "Plastic Surgeon for Hanamkonda | AR Plastic Surgery",
+        ("Hanamkonda patients visit AR Plastic Surgery, Karimnagar for cosmetic, hand and non-surgical "
+         "treatments by Dr Ashok Reddy — MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Hanamkonda sits at the heart of the Warangal urban region — close enough that a specialist "
+         "consultation is a day trip, not an expedition. For working professionals and families here, "
+         "AR Plastic Surgery in Karimnagar offers the city's most personal route to cosmetic and hand care: "
+         "one surgeon, from first conversation to final follow-up."),
+        """<h2>The easy first step: a free Wednesday consultation</h2>
+<p>Considering <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> or <a href="procedures/liposuction.html">liposuction</a>? Start with a <strong>free OP consultation every Wednesday</strong> — meet <strong>Dr Ashok Reddy (MBBS, DNB Mumbai, M.Ch Delhi, Gold Medalist)</strong>, ask everything, and leave with an honest opinion. No pressure, no obligation.</p>
+<h2 style="margin-top:1.8rem">Non-surgical options, doctor-administered</h2>
+<p>Not everything needs an operating theatre. The clinic offers <a href="procedures/botox-treatment.html">Botox</a>, dermal fillers, <a href="procedures/prp-therapy.html">PRP therapy</a>, <a href="procedures/chemical-peels.html">chemical peels</a> and <a href="procedures/laser-treatments.html">laser treatments</a> — subtle rejuvenation planned by a plastic surgeon, with realistic expectations set upfront.</p>
+<h2 style="margin-top:1.8rem">Hand expertise on call</h2>
+<p>As a trained hand &amp; microvascular surgeon, Dr Reddy also manages <a href="procedures/hand-trauma-surgery.html">hand injuries</a>, <a href="procedures/tendon-repair.html">tendon problems</a> and <a href="procedures/carpal-tunnel-release.html">carpal tunnel</a> — the repetitive-strain complaints of desk and trade work alike. The clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>; call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Hanamkonda?",
+          "Yes — Hanamkonda is part of the Warangal urban region the clinic regularly serves."),
+         ("I want a consultation but not surgery yet — is that okay?",
+          "Absolutely. Many consultations end with advice, not an operation. Wednesday OP consultations are free."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_hyderabad():
+    return town_page(
+        "Hyderabad",
+        "Plastic Surgeon for Hyderabad | AR Plastic Surgery",
+        ("Why Hyderabad patients travel to AR Plastic Surgery, Karimnagar: one gold-medalist surgeon from "
+         "consultation to aftercare. Dr Ashok Reddy — MBBS, DNB, M.Ch."),
+        ("Hyderabad has no shortage of plastic surgeons — so why do patients from the city travel to Karimnagar? "
+         "Because at AR Plastic Surgery, your entire journey is with one person: <strong>Dr Ashok Reddy — MBBS, "
+         "DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — who consults, operates and follows up himself. "
+         "No hand-offs between departments, no unfamiliar face on the day of surgery."),
+        """<h2>Personal care, by design</h2>
+<p>Large hospital systems do excellent work — but many patients prefer a practice built around a single surgeon. At AR, the consultation is unhurried, the surgical plan is the surgeon's own, and aftercare is with the same doctor who operated. That continuity is the reason people make the trip.</p>
+<h2 style="margin-top:1.8rem">What Hyderabad patients come for</h2>
+<ul class="checklist">
+<li><strong>Surgeon-led cosmetic procedures</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a> — planned and performed by Dr Reddy personally.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand &amp; microvascular surgery</a></strong> — tendon, nerve and microsurgical reconstruction, a genuine subspecialty.</li>
+<li><strong>Reconstructive work</strong> — <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>.</li>
+<li><strong>Doctor-led aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels and lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Planned around a single trip</h2>
+<p><strong>Free OP consultations every Wednesday</strong> let you meet the surgeon before deciding anything. Surgery and follow-ups are then scheduled to minimise travel — many patients combine consultation and planning in one visit. The clinic holds a 4.9-star Google rating and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Why would I travel from Hyderabad to Karimnagar?",
+          "For continuity: one gold-medalist surgeon consults, operates and follows up with you personally — a different experience from a large hospital system."),
+         ("Do you treat Hyderabad patients?",
+          "Yes — patients from Hyderabad, Secunderabad and surrounding areas visit the clinic regularly."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_jangaon():
+    return town_page(
+        "Jangaon",
+        "Plastic Surgeon for Jangaon | AR Plastic Surgery",
+        ("Jangaon patients visit AR Plastic Surgery, Karimnagar for full-scope plastic, cosmetic and hand "
+         "surgery by Dr Ashok Reddy — MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Jangaon sits between Hyderabad and Warangal — well placed, but with no full-scope plastic surgery "
+         "practice of its own. For everything from hand injuries to hair transplant, the nearest dedicated "
+         "option is AR Plastic Surgery in Karimnagar, led by a gold-medalist surgeon."),
+        """<h2>Full-scope care, without the metro trip</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — practices plastic, cosmetic, hand &amp; microvascular surgery. For Jangaon, that means:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — injuries, tendon and nerve problems treated by a trained microvascular surgeon.</li>
+<li><strong>Cosmetic procedures</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant (FUE)</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — confidential, surgeon-led.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burns</a>, <a href="procedures/scar-keloid-treatment.html">scars</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, skin grafting.</li>
+<li><strong>Non-surgical</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">A straightforward visit</h2>
+<p>Jangaon's central location makes Karimnagar an easy trip. <strong>Free OP consultations every Wednesday</strong>, open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Jangaon?",
+          "Yes — Jangaon is within the clinic's service area across Telangana."),
+         ("Is a consultation worth the trip if I'm unsure about surgery?",
+          "Yes — many consultations end with advice rather than an operation, and Wednesday OP consultations are free."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_jayashankar_bhupalpally():
+    return town_page(
+        "Jayashankar Bhupalpally",
+        "Plastic Surgeon for Jayashankar Bhupalpally | AR Plastic Surgery",
+        ("Reconstructive and hand surgery for Jayashankar Bhupalpally patients at AR Plastic Surgery, Karimnagar "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Jayashankar Bhupalpally's forests and distance from the big cities shouldn't decide who gets specialist "
+         "care. For cleft conditions, burn scars, hand injuries and deformities, AR Plastic Surgery in Karimnagar "
+         "is the nearest full-scope plastic surgery practice — led by a gold-medalist surgeon."),
+        """<h2>Specialist care shouldn't depend on your pin code</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a plastic, cosmetic, hand &amp; microvascular surgeon. The procedures that matter most in remote districts:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — releasing contractures, restoring movement.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma</a> &amp; <a href="procedures/tendon-repair.html">tendon repair</a></strong> — injuries treated before they become permanent disability.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Cosmetic care too</h2>
+<p><a href="procedures/fue-hair-transplant.html">Hair transplant (FUE)</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a> and <a href="procedures/rhinoplasty.html">rhinoplasty</a> are available with the same confidential, pressure-free consultations.</p>
+<h2 style="margin-top:1.8rem">Planning a long journey</h2>
+<p>Because the trip is long, we plan efficiently: <strong>free OP consultations every Wednesday</strong> for assessment, then surgery scheduled to minimise return visits. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Jayashankar Bhupalpally?",
+          "Yes — patients from across this remote district visit the Karimnagar clinic."),
+         ("My child has a cleft lip — when should we come?",
+          "As early as possible — assessment can begin in the first months of life, with staged surgery planned from there."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_jogulamba_gadwal():
+    return town_page(
+        "Jogulamba Gadwal",
+        "Plastic Surgeon for Jogulamba Gadwal | AR Plastic Surgery",
+        ("Reconstructive, hand and cosmetic surgery for Jogulamba Gadwal patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Jogulamba Gadwal, on Telangana's southern border, is far from every metro — which is exactly why a "
+         "reachable full-scope practice matters. For burns, cleft care, hand injuries and honest cosmetic "
+         "consultations, AR Plastic Surgery in Karimnagar is the specialist option for the district."),
+        """<h2>What the district needs most</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — contracture release and staged rebuilding after burns heal.</li>
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from infancy.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — fractures, cuts and crush injuries assessed by a microvascular specialist.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for scars that restrict movement or draw stares.</li>
+</ul>
+<h2 style="margin-top:1.8rem">And for personal concerns</h2>
+<p>Hair loss, gynecomastia, body contour or nose shape — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a> and <a href="procedures/rhinoplasty.html">rhinoplasty</a> begin with a private consultation where you'll hear what surgery can and cannot do.</p>
+<h2 style="margin-top:1.8rem">Worth the journey south to north</h2>
+<p>It's a long trip, so make the first one count: <strong>free OP consultations every Wednesday</strong>. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Jogulamba Gadwal?",
+          "Yes — patients from Gadwal and surrounding areas visit the Karimnagar clinic."),
+         ("Is it worth travelling so far for a consultation?",
+          "Wednesday OP consultations are free, so your first visit is purely information — many patients find one trip enough to decide."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_kamareddy():
+    return town_page(
+        "Kamareddy",
+        "Plastic Surgeon for Kamareddy | AR Plastic Surgery",
+        ("Hand trauma, reconstructive and cosmetic surgery for Kamareddy patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Kamareddy's agricultural landscape means hands take the brunt of daily work — cuts, crush injuries, "
+         "fractures. When a hand injury needs more than a dressing, the nearest trained hand &amp; microvascular "
+         "surgeon is <strong>Dr Ashok Reddy</strong> at AR Plastic Surgery in Karimnagar."),
+        """<h2>Hands are a surgeon's most delicate work</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — specialises in hand &amp; microvascular surgery:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — urgent care for fractures, deep cuts and crush injuries.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon repair</a></strong> — restoring finger movement after division or injury.</li>
+<li><strong><a href="procedures/nerve-repair-microsurgery.html">Nerve repair</a></strong> — microsurgical reconnection for numbness and lost function.</li>
+<li><strong><a href="procedures/carpal-tunnel-release.html">Carpal tunnel release</a></strong> — for chronic numbness and night pain in the hand.</li>
+</ul>
+<h2 style="margin-top:1.8rem">The full practice, for everything else</h2>
+<p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — plus cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with confidential consultations.</p>
+<h2 style="margin-top:1.8rem">Visit us from Kamareddy</h2>
+<p>Well connected by road to Karimnagar. <strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> immediately — or <a href="contact.html">book online</a> for planned visits.</p>""",
+        [
+         ("Do you treat patients from Kamareddy?",
+          "Yes — Kamareddy is within the clinic's service area across northern Telangana."),
+         ("My finger was cut deeply — can it be saved?",
+          "It depends on the injury and timing — call +91 91826 56866 promptly; tendon and nerve injuries are time-sensitive."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_komaram_bheem_asifabad():
+    return town_page(
+        "Komaram Bheem Asifabad",
+        "Plastic Surgeon for Komaram Bheem Asifabad | AR Plastic Surgery",
+        ("Reconstructive and hand surgery access for Komaram Bheem Asifabad patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Komaram Bheem Asifabad's forests and tribal mandals are among Telangana's most remote — and distance "
+         "should never decide whether a child with a cleft lip or a worker with a hand injury sees a specialist. "
+         "AR Plastic Surgery in Karimnagar is the nearest full-scope plastic surgery practice for the district."),
+        """<h2>Care that reaches the far districts</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. For this district, the most needed procedures:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — releasing contractures, restoring movement and appearance.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — fractures, cuts and crush injuries with specialist assessment.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+</ul>
+<h2 style="margin-top:1.8rem">One planned trip</h2>
+<p>Long journeys demand efficient planning: <strong>free OP consultations every Wednesday</strong> cover assessment and a clear plan, with surgery scheduled to minimise return trips. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Komaram Bheem Asifabad?",
+          "Yes — patients from Asifabad and surrounding mandals visit the Karimnagar clinic."),
+         ("How do we plan treatment with such a long journey?",
+          "Start with a free Wednesday OP consultation — assessment and planning in one visit, then surgery scheduled around minimal travel."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_mahabubabad():
+    return town_page(
+        "Mahabubabad",
+        "Plastic Surgeon for Mahabubabad | AR Plastic Surgery",
+        ("Full-scope plastic, hand and cosmetic surgery for Mahabubabad patients at AR Plastic Surgery, Karimnagar "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Mahabubabad is rural central Telangana — the kind of district where specialist surgery has always meant "
+         "a metro trip. AR Plastic Surgery in Karimnagar changes that equation: a full-scope plastic, cosmetic, "
+         "hand &amp; microvascular practice led by a gold-medalist surgeon, within a manageable journey."),
+        """<h2>One practice, the complete specialty</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — covers the breadth of plastic surgery:</p>
+<ul class="checklist">
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>, skin grafting.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand &amp; microvascular</a></strong> — <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a>, fractures, microsurgical reconstruction.</li>
+<li><strong>Cosmetic</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — confidential and surgeon-led.</li>
+<li><strong>Non-surgical</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Start with a free Wednesday consultation</h2>
+<p>Every treatment begins with an honest conversation about what surgery can and cannot do. <strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Mahabubabad?",
+          "Yes — Mahabubabad is within the clinic's service area across Telangana."),
+         ("What does a first consultation involve?",
+          "An unhurried discussion of your concern, examination, and honest advice on options — free on Wednesdays."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_mahabubnagar():
+    return town_page(
+        "Mahabubnagar",
+        "Plastic Surgeon for Mahabubnagar | AR Plastic Surgery",
+        ("Mahabubnagar patients visit AR Plastic Surgery, Karimnagar for specialist plastic, hand and "
+         "cosmetic surgery — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Mahabubnagar — Palamuru — is one of Telangana's largest districts, yet dedicated plastic surgery "
+         "remains hard to access locally. Whether it's a hand injury, a child's cleft condition, or a personal "
+         "cosmetic concern, AR Plastic Surgery in Karimnagar offers the district a genuine specialist option."),
+        """<h2>A district-scale answer to specialist surgery</h2>
+<p>Led by <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>, plastic, cosmetic, hand &amp; microvascular surgeon, the clinic serves:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, tendon and nerve repair by a trained microvascular surgeon.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a> &amp; <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a></strong> — staged, life-changing reconstructive care.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for scars that restrict or distress.</li>
+<li><strong>Confidential cosmetic care</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/botox-treatment.html">Botox</a>.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Make the trip worthwhile</h2>
+<p><strong>Free OP consultations every Wednesday</strong> — meet the surgeon, get an honest opinion, plan everything in one visit. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Mahabubnagar?",
+          "Yes — patients from Mahabubnagar and the Palamuru region visit the clinic."),
+         ("Is cosmetic surgery confidential?",
+          "Completely. Consultations are private, and your information stays between you and the clinic."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_medak():
+    return town_page(
+        "Medak",
+        "Plastic Surgeon for Medak | AR Plastic Surgery",
+        ("Medak patients visit AR Plastic Surgery, Karimnagar for full-scope plastic, hand and cosmetic surgery "
+         "by Dr Ashok Reddy — MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Medak's historic towns sit close enough to Hyderabad to feel its pull — but a full-scope plastic "
+         "surgery practice doesn't require the metro. AR Plastic Surgery in Karimnagar offers Medak a closer "
+         "specialist option, led by a gold-medalist surgeon."),
+        """<h2>Closer than Hyderabad, fuller than a clinic</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. What Medak patients come for:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — injuries, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a> under magnification.</li>
+<li><strong>Cosmetic procedures</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a> — planned and performed by the surgeon himself.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burns</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">An easy decision to explore</h2>
+<p><strong>Free OP consultations every Wednesday</strong> — come, meet the surgeon, hear an honest opinion. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Medak?",
+          "Yes — Medak is within the clinic's service area."),
+         ("Do I need a referral?",
+          "No — call or book directly; walk-ins are welcome during clinic hours."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_medchal_malkajgiri():
+    return town_page(
+        "Medchal-Malkajgiri",
+        "Plastic Surgeon for Medchal-Malkajgiri | AR Plastic Surgery",
+        ("Medchal-Malkajgiri patients travel to AR Plastic Surgery, Karimnagar for personal, surgeon-led plastic "
+         "surgery — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Living in Hyderabad's urban sprawl means world-class hospitals on every corner — and also long queues, "
+         "rotating doctors, and ten-minute consultations. Many patients from Medchal-Malkajgiri travel to AR "
+         "Plastic Surgery in Karimnagar for the opposite experience: one gold-medalist surgeon, unhurried, from "
+         "first conversation to final follow-up."),
+        """<h2>An antidote to the hospital machine</h2>
+<p>At AR, <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — consults, operates and follows up himself. No hand-offs, no unfamiliar face on surgery day. For patients tired of being a file number, that continuity is worth the trip.</p>
+<h2 style="margin-top:1.8rem">What the trip covers</h2>
+<ul class="checklist">
+<li><strong>Cosmetic</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a>.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand &amp; microvascular</a></strong> — a true subspecialty: tendon, nerve, microsurgical reconstruction.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burns</a>, <a href="procedures/scar-keloid-treatment.html">scars</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Planned around your schedule</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; surgery scheduled to minimise travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Why travel from Medchal to Karimnagar?",
+          "For personal continuity — one surgeon handles your consultation, operation and aftercare, unlike a rotating hospital team."),
+         ("Do you treat patients from Medchal-Malkajgiri?",
+          "Yes — patients from across the Hyderabad urban region visit regularly."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_mulugu():
+    return town_page(
+        "Mulugu",
+        "Plastic Surgeon for Mulugu | AR Plastic Surgery",
+        ("Reconstructive and hand surgery access for Mulugu patients at AR Plastic Surgery, Karimnagar — "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Mulugu's forests and tribal heartland are among Telangana's most beautiful — and most distant from "
+         "specialist care. For cleft conditions, burn scars and hand injuries, AR Plastic Surgery in Karimnagar "
+         "is the nearest full-scope plastic surgery practice for the district."),
+        """<h2>Bringing the specialty to the forest district</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — releasing contractures, restoring movement.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — specialist assessment before injuries become permanent disability.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+</ul>
+<h2 style="margin-top:1.8rem">One efficient trip</h2>
+<p><strong>Free OP consultations every Wednesday</strong> — assessment and a clear plan in a single visit, surgery scheduled to minimise return travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Mulugu?",
+          "Yes — patients from Mulugu and surrounding mandals visit the Karimnagar clinic."),
+         ("The journey is long — how do we plan it?",
+          "Begin with a free Wednesday OP consultation: assessment and planning in one visit, then surgery scheduled around minimal travel."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_nagarkurnool():
+    return town_page(
+        "Nagarkurnool",
+        "Plastic Surgeon for Nagarkurnool | AR Plastic Surgery",
+        ("Reconstructive, hand and cosmetic surgery for Nagarkurnool patients at AR Plastic Surgery, Karimnagar "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Nagarkurnool's rural mandals and Nallamala fringe are far from specialist surgery — which matters when "
+         "the need is a child's cleft lip, a burn contracture, or a hand injury. AR Plastic Surgery in "
+         "Karimnagar is the reachable full-scope option for the district."),
+        """<h2>The procedures rural districts need most</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from infancy.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — restoring movement and appearance, step by step.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma</a> &amp; <a href="procedures/tendon-repair.html">tendon repair</a></strong> — timely specialist care for injuries.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for scars that restrict or distress.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Cosmetic concerns welcome too</h2>
+<p><a href="procedures/fue-hair-transplant.html">Hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — private consultations, honest opinions, surgeon-performed procedures.</p>
+<h2 style="margin-top:1.8rem">Planning your visit</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Nagarkurnool?",
+          "Yes — Nagarkurnool is within the clinic's service area across Telangana."),
+         ("My child's burn scar is tightening — can it be released?",
+          "Often, yes — but it needs an in-person assessment. A free Wednesday OP is the right first step."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_nalgonda():
+    return town_page(
+        "Nalgonda",
+        "Plastic Surgeon for Nalgonda | AR Plastic Surgery",
+        ("Nalgonda patients visit AR Plastic Surgery, Karimnagar for full-scope plastic, hand and cosmetic "
+         "surgery — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Nalgonda is one of Telangana's biggest districts — and a district this size deserves a genuine "
+         "specialist option. For hand injuries, reconstructive needs and cosmetic procedures, AR Plastic Surgery "
+         "in Karimnagar offers Nalgonda a full-scope practice led by a gold-medalist surgeon."),
+        """<h2>What Nalgonda patients come for</h2>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a> by a trained microvascular surgeon.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>.</li>
+<li><strong>Cosmetic, surgeon-led</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a>.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Led by Dr Ashok Reddy</h2>
+<p><strong>MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. Every case is planned and performed by the surgeon himself, starting with an honest consultation.</p>
+<h2 style="margin-top:1.8rem">Visit us</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Nalgonda?",
+          "Yes — patients from Nalgonda visit the Karimnagar clinic regularly."),
+         ("What should I bring to my first consultation?",
+          "Any previous medical records, prescriptions or photos related to your concern — and your questions."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_narayanpet():
+    return town_page(
+        "Narayanpet",
+        "Plastic Surgeon for Narayanpet | AR Plastic Surgery",
+        ("Hand care and specialist plastic surgery for Narayanpet patients at AR Plastic Surgery, Karimnagar "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Narayanpet's handlooms are famous — and hands that weave for a living deserve a hand specialist when "
+         "something goes wrong. For overuse injuries, carpal tunnel, cuts and fractures, AR Plastic Surgery in "
+         "Karimnagar offers the district a trained hand &amp; microvascular surgeon."),
+        """<h2>Hands that work hard need specialist care</h2>
+<p>Repetitive hand work — weaving, craft, farm labour — wears on tendons and nerves over time. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/carpal-tunnel-release.html">Carpal tunnel release</a></strong> — for numbness, tingling and night pain in the hand.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon repair</a></strong> — restoring finger movement after injury or division.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — fractures, deep cuts and crush injuries.</li>
+<li><strong><a href="procedures/nerve-repair-microsurgery.html">Nerve repair</a></strong> — microsurgical reconnection for lost sensation and function.</li>
+</ul>
+<h2 style="margin-top:1.8rem">The complete practice behind it</h2>
+<p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with private consultations.</p>
+<h2 style="margin-top:1.8rem">Visit us from Narayanpet</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("My hands go numb at night — what could it be?",
+          "It may be carpal tunnel or another nerve issue — but only an examination can tell. Book a Wednesday free OP for an assessment."),
+         ("Do you treat patients from Narayanpet?",
+          "Yes — Narayanpet is within the clinic's service area."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_nirmal():
+    return town_page(
+        "Nirmal",
+        "Plastic Surgeon for Nirmal | AR Plastic Surgery",
+        ("Hand trauma and full-scope plastic surgery for Nirmal patients at AR Plastic Surgery, Karimnagar — "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Nirmal's famed woodcraft is hand work — and hands that carve, cut and shape deserve specialist care "
+         "when injured. Beyond craft injuries, the district needs reconstructive and cosmetic expertise too. "
+         "AR Plastic Surgery in Karimnagar is the nearest full-scope practice."),
+        """<h2>For the district's working hands</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — trained hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — cuts, fractures and crush injuries, urgently assessed.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon</a> &amp; <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a></strong> — microsurgical reconstruction with guided rehabilitation.</li>
+<li><strong><a href="procedures/carpal-tunnel-release.html">Carpal tunnel release</a></strong> — for chronic hand numbness.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Reconstructive and cosmetic, under one roof</h2>
+<p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — plus <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> and <a href="procedures/botox-treatment.html">Botox</a>, all surgeon-led.</p>
+<h2 style="margin-top:1.8rem">Getting here</h2>
+<p>Well connected north to Karimnagar. <strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> at once — or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Nirmal?",
+          "Yes — Nirmal is within the clinic's service area across northern Telangana."),
+         ("A craft tool cut my finger deeply — can it be repaired?",
+          "Possibly — timing matters greatly with tendon and nerve injuries. Call +91 91826 56866 promptly."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_peddapalli_district():
+    return town_page(
+        "Peddapalli District",
+        "Plastic Surgeon for Peddapalli District | AR Plastic Surgery",
+        ("District-wide plastic, hand and cosmetic surgery for Peddapalli district — AR Plastic Surgery, "
+         "Karimnagar. Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("This is the district-level guide — for Peddapalli town itself, see our <a href=\"peddapalli-plastic-surgeon.html\">Peddapalli town guide</a>. "
+         "Across the wider district, from the Ramagundam industrial belt to its rural mandals, the pattern is the same: "
+         "hand injuries at work, and reconstructive and cosmetic needs with no local specialist. AR Plastic Surgery in "
+         "Karimnagar serves the whole district."),
+        """<h2>The district picture: industry + villages</h2>
+<p>Peddapalli district pairs thermal power and coal-linked industry around Ramagundam with farming villages — both produce hand injuries that need a specialist. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is a trained hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — industrial and agricultural injuries, urgently assessed.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon</a> &amp; <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a></strong> — microsurgical reconstruction.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — including workplace and household burns.</li>
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft repair</a> &amp; <a href="procedures/scar-keloid-treatment.html">scar revision</a></strong> — for families across the district.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Cosmetic care for the district</h2>
+<p><a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a> — confidential consultations, procedures performed by the surgeon himself. If you're in Peddapalli town, our <a href="peddapalli-plastic-surgeon.html">town guide</a> has town-specific detail.</p>
+<h2 style="margin-top:1.8rem">Visit us</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("How is this different from the Peddapalli town guide?",
+          "The town guide focuses on Peddapalli town; this page covers the wider district — Ramagundam, surrounding towns and rural mandals."),
+         ("Do you treat industrial hand injuries?",
+          "Yes — hand trauma, tendon and nerve injuries are a core specialty. Call +91 91826 56866 promptly for urgent injuries."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_rajanna_sircilla():
+    return town_page(
+        "Rajanna Sircilla",
+        "Plastic Surgeon for Rajanna Sircilla | AR Plastic Surgery",
+        ("District-wide plastic and hand surgery for Rajanna Sircilla — AR Plastic Surgery, Karimnagar. "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("This is the district guide — for Sircilla town itself, see our <a href=\"sircilla-plastic-surgeon.html\">Sircilla town guide</a>. "
+         "Rajanna Sircilla district is Telangana's textile heartland, and textile work is hand work: powerloom injuries, "
+         "repetitive strain, cuts. The district also needs reconstructive and cosmetic expertise. AR Plastic Surgery in "
+         "Karimnagar covers it all."),
+        """<h2>A textile district needs a hand surgeon</h2>
+<p>Powerlooms don't forgive inattention — and when they injure a hand, the difference between a dressing and a specialist decides the outcome. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — trained hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — loom and machinery injuries, urgently assessed.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon repair</a></strong> — restoring movement after cuts.</li>
+<li><strong><a href="procedures/carpal-tunnel-release.html">Carpal tunnel release</a></strong> — for chronic numbness from repetitive work.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — after healed workplace injuries.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Beyond the workplace</h2>
+<p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/liposuction.html">liposuction</a>) with confidential consultations. Sircilla town residents: see the <a href="sircilla-plastic-surgeon.html">town guide</a>.</p>
+<h2 style="margin-top:1.8rem">Close enough for easy follow-up</h2>
+<p>The district borders Karimnagar — follow-up visits are straightforward. <strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("How is this different from the Sircilla town guide?",
+          "The town guide focuses on Sircilla town; this page covers the whole Rajanna Sircilla district including Vemulawada and surrounding areas."),
+         ("Do you treat powerloom hand injuries?",
+          "Yes — hand trauma is a core specialty. For urgent injuries, call +91 91826 56866 immediately."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_rangareddy():
+    return town_page(
+        "Rangareddy",
+        "Plastic Surgeon for Rangareddy | AR Plastic Surgery",
+        ("Rangareddy patients travel to AR Plastic Surgery, Karimnagar for personal, surgeon-led plastic surgery "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Rangareddy rings Hyderabad — close to every big hospital, yet many of its residents travel to AR Plastic "
+         "Surgery in Karimnagar. The reason is the same one Hyderabad patients give: a practice built around one "
+         "gold-medalist surgeon, who consults, operates and follows up himself."),
+        """<h2>Continuity the city can't offer</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. At AR, your surgical plan is the surgeon's own, and aftercare is with the same doctor who operated — a contrast many patients actively seek out.</p>
+<h2 style="margin-top:1.8rem">What Rangareddy patients come for</h2>
+<ul class="checklist">
+<li><strong>Cosmetic, surgeon-performed</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a>.</li>
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand &amp; microvascular</a></strong> — tendon, nerve and microsurgical reconstruction, including industrial injuries from the district's pharma and manufacturing belt.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burns</a>, <a href="procedures/scar-keloid-treatment.html">scars</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Planned around minimal travel</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; surgery and follow-ups scheduled efficiently. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Why travel from Rangareddy to Karimnagar?",
+          "For one-surgeon continuity — consultation, operation and aftercare with the same gold-medalist surgeon, rather than a rotating hospital team."),
+         ("Do you treat industrial hand injuries?",
+          "Yes — hand trauma, tendon and nerve injuries are a core specialty. Call promptly for urgent injuries."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_sangareddy():
+    return town_page(
+        "Sangareddy",
+        "Plastic Surgeon for Sangareddy | AR Plastic Surgery",
+        ("Industrial hand trauma and full-scope plastic surgery for Sangareddy patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Sangareddy's industrial belt — Zaheerabad's factories and the district's manufacturing units — runs on "
+         "hands, and injured hands need a specialist fast. AR Plastic Surgery in Karimnagar is the nearest "
+         "practice with a trained hand &amp; microvascular surgeon, alongside full cosmetic and reconstructive care."),
+        """<h2>When the factory floor injures a hand</h2>
+<p>Machinery injuries are often the worst hand injuries — crush, degloving, amputation. <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — is trained for exactly this:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — urgent specialist assessment.</li>
+<li><strong><a href="procedures/microsurgery-free-flap.html">Microsurgical reconstruction</a></strong> — rejoining tiny vessels and nerves, rebuilding tissue.</li>
+<li><strong><a href="procedures/tendon-repair.html">Tendon</a> &amp; <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a></strong> — with structured rehabilitation.</li>
+<li><strong><a href="procedures/fingertip-replantation.html">Fingertip replantation</a></strong> — where salvage is possible.</li>
+</ul>
+<h2 style="margin-top:1.8rem">The wider practice</h2>
+<p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with confidential consultations.</p>
+<h2 style="margin-top:1.8rem">Act fast on injuries</h2>
+<p>For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> immediately — time decides outcomes. For planned care, <strong>free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. <a href="contact.html">Book online</a>.</p>""",
+        [
+         ("A machine injured a worker's hand — what now?",
+          "Keep the hand still, preserve any amputated tissue in a clean cool bag, and call +91 91826 56866 immediately — these injuries are time-critical."),
+         ("Do you treat patients from Sangareddy?",
+          "Yes — Sangareddy is within the clinic's service area."),
+         ("How do I book planned care?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_siddipet_district():
+    return town_page(
+        "Siddipet District",
+        "Plastic Surgeon for Siddipet District | AR Plastic Surgery",
+        ("District-wide plastic, hand and cosmetic surgery for Siddipet district — AR Plastic Surgery, Karimnagar. "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("This is the district guide — for Siddipet town itself, see our <a href=\"siddipet-plastic-surgeon.html\">Siddipet town guide</a>. "
+         "Beyond the town, Siddipet district's mandals have the same gap the town has: no dedicated plastic surgery "
+         "practice. For hand injuries, reconstructive needs and cosmetic procedures, the district's nearest "
+         "full-scope option is AR Plastic Surgery in Karimnagar."),
+        """<h2>Beyond the town: the district's needs</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve</a> care by a microvascular specialist.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a> &amp; <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a></strong> — staged reconstructive care for families.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+<li><strong>Cosmetic, confidential</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Siddipet town residents</h2>
+<p>See the <a href="siddipet-plastic-surgeon.html">Siddipet town guide</a> for town-specific detail. For everyone in the district: <strong>free OP consultations every Wednesday</strong>, open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("How is this different from the Siddipet town guide?",
+          "The town guide focuses on Siddipet town; this page serves the wider district's towns and mandals."),
+         ("Do you treat patients from rural mandals?",
+          "Yes — patients from across the district visit the Karimnagar clinic."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+        ])
+
+def page_suryapet():
+    return town_page(
+        "Suryapet",
+        "Plastic Surgeon for Suryapet | AR Plastic Surgery",
+        ("Full-scope plastic, hand and cosmetic surgery for Suryapet patients at AR Plastic Surgery, Karimnagar "
+         "— Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Suryapet sits on the highway network of southern Telangana — well travelled, but with no full-scope "
+         "plastic surgery practice of its own. For hand injuries, reconstructive needs and cosmetic procedures, "
+         "AR Plastic Surgery in Karimnagar is the specialist option for the district."),
+        """<h2>What Suryapet patients come for</h2>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a> by a trained microvascular surgeon.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>.</li>
+<li><strong>Cosmetic, surgeon-led</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Led by Dr Ashok Reddy</h2>
+<p><strong>MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. Every case planned and performed by the surgeon himself, beginning with an honest consultation.</p>
+<h2 style="margin-top:1.8rem">Visit us</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Suryapet?",
+          "Yes — Suryapet is within the clinic's service area across Telangana."),
+         ("Can consultation and planning happen in one visit?",
+          "Usually, yes — many patients complete assessment and planning in a single Wednesday free OP visit."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_vikarabad():
+    return town_page(
+        "Vikarabad",
+        "Plastic Surgeon for Vikarabad | AR Plastic Surgery",
+        ("Reconstructive, hand and cosmetic surgery for Vikarabad patients at AR Plastic Surgery, Karimnagar — "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Vikarabad's Ananthagiri forests draw weekend travellers — but for its residents, specialist surgery has "
+         "meant a Hyderabad trip. AR Plastic Surgery in Karimnagar offers the district a closer full-scope "
+         "alternative, led by a gold-medalist surgeon."),
+        """<h2>A closer specialist option</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a>.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a> &amp; <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a></strong> — staged reconstructive care.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
+<li><strong>Cosmetic, confidential</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/botox-treatment.html">Botox</a>.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Planning your visit</h2>
+<p><strong>Free OP consultations every Wednesday</strong> — assessment and planning in one trip. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Vikarabad?",
+          "Yes — Vikarabad is within the clinic's service area."),
+         ("Is it closer than Hyderabad for specialist care?",
+          "For most of the district, yes — and a Wednesday free OP makes the first visit easy to plan."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_wanaparthy():
+    return town_page(
+        "Wanaparthy",
+        "Plastic Surgeon for Wanaparthy | AR Plastic Surgery",
+        ("Reconstructive, hand and cosmetic surgery for Wanaparthy patients at AR Plastic Surgery, Karimnagar — "
+         "Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Wanaparthy's rural mandals are far from specialist surgery — which matters most when the need is urgent "
+         "or life-changing: a hand injury, a child's cleft lip, a burn contracture. AR Plastic Surgery in "
+         "Karimnagar is the reachable full-scope practice for the district."),
+        """<h2>What a rural district needs from a plastic surgeon</h2>
+<p><strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand trauma surgery</a></strong> — timely specialist care for injuries.</li>
+<li><strong><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a></strong> — staged correction from infancy.</li>
+<li><strong><a href="procedures/burn-reconstruction.html">Burn reconstruction</a></strong> — restoring movement and appearance.</li>
+<li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for scars that restrict or distress.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Personal concerns, privately handled</h2>
+<p><a href="procedures/fue-hair-transplant.html">Hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — confidential consultations and surgeon-performed procedures.</p>
+<h2 style="margin-top:1.8rem">Make the journey count</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Wanaparthy?",
+          "Yes — Wanaparthy is within the clinic's service area across Telangana."),
+         ("How do we minimise travel for treatment?",
+          "Start with a free Wednesday OP — assessment and planning in one visit, then surgery scheduled around minimal travel."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
+def page_yadadri_bhuvanagiri():
+    return town_page(
+        "Yadadri Bhuvanagiri",
+        "Plastic Surgeon for Yadadri Bhuvanagiri | AR Plastic Surgery",
+        ("Full-scope plastic, hand and cosmetic surgery for Yadadri Bhuvanagiri patients at AR Plastic Surgery, "
+         "Karimnagar — Dr Ashok Reddy, MBBS, DNB, M.Ch, Gold Medalist."),
+        ("Yadadri Bhuvanagiri is known across Telangana for its temple — but its residents need everyday specialist "
+         "care too. For hand injuries, reconstructive needs and cosmetic procedures, AR Plastic Surgery in "
+         "Karimnagar is the district's nearest full-scope practice."),
+        """<h2>Complete specialty, one roof</h2>
+<p>Led by <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>, plastic, cosmetic, hand &amp; microvascular surgeon:</p>
+<ul class="checklist">
+<li><strong><a href="procedures/hand-trauma-surgery.html">Hand surgery</a></strong> — trauma, <a href="procedures/tendon-repair.html">tendon</a> and <a href="procedures/nerve-repair-microsurgery.html">nerve repair</a>.</li>
+<li><strong>Reconstructive</strong> — <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>.</li>
+<li><strong>Cosmetic</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a> — confidential, surgeon-led.</li>
+<li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
+</ul>
+<h2 style="margin-top:1.8rem">Visit us</h2>
+<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+        [
+         ("Do you treat patients from Yadadri Bhuvanagiri?",
+          "Yes — the district is within the clinic's service area."),
+         ("What happens at a first consultation?",
+          "An unhurried discussion, examination, and honest advice on your options — free on Wednesdays."),
+         ("How do I book?",
+          "Call +91 91826 56866 or book online."),
+        ])
+
 # ---------------------------------------------------------------- contact.html
 def page_contact():
     title = "Contact & Book Appointment | AR Plastic Surgery"
     desc = ("Visit AR Plastic Surgery, Opp Reddy gari vantillu, Court Chowrasta, Karimnagar. "
             "Open Mon–Sun 10 AM–8 PM. Call +91 91826 56866 or book online.")
     map_q = "AR+Plastic+Surgery+Karimnagar+Telangana"
+    district_guide_links = " · ".join(
+        f'<a href="{slug}-plastic-surgeon.html">{name}</a>' for name, slug in DISTRICT_PAGES
+    )
     body = f"""
 <main><section><div class="wrap">
   <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Contact</nav>
@@ -1241,8 +2025,8 @@ def page_contact():
     </div>
     <div class="info-card">
       <h3>🗺️ Areas we serve</h3>
-      <p>{", ".join(TOWNS)} and nearby districts.</p>
-      <p style="margin-top:.6rem">Town &amp; district guides: <a href="siddipet-plastic-surgeon.html">Siddipet</a> · <a href="sircilla-plastic-surgeon.html">Sircilla</a> · <a href="peddapalli-plastic-surgeon.html">Peddapalli</a> · <a href="vemulawada-plastic-surgeon.html">Vemulawada</a> · <a href="warangal-plastic-surgeon.html">Warangal</a> · <a href="nizamabad-plastic-surgeon.html">Nizamabad</a> · <a href="khammam-plastic-surgeon.html">Khammam</a> · <a href="mancherial-plastic-surgeon.html">Mancherial</a> · <a href="jagtial-plastic-surgeon.html">Jagtial</a> · <a href="adilabad-plastic-surgeon.html">Adilabad</a></p>
+      <p>The clinic welcomes patients from across Telangana. Find your district guide:</p>
+      <p style="margin-top:.6rem">Town &amp; district guides: {district_guide_links}</p>
     </div>
   </div>
   <div>
@@ -1285,6 +2069,32 @@ PAGES = [
     ("mancherial-plastic-surgeon.html", page_mancherial, 0.8),
     ("jagtial-plastic-surgeon.html", page_jagtial, 0.8),
     ("adilabad-plastic-surgeon.html", page_adilabad, 0.8),
+    ("bhadradri-kothagudem-plastic-surgeon.html", page_bhadradri_kothagudem, 0.8),
+    ("hanamkonda-plastic-surgeon.html", page_hanamkonda, 0.8),
+    ("hyderabad-plastic-surgeon.html", page_hyderabad, 0.8),
+    ("jangaon-plastic-surgeon.html", page_jangaon, 0.8),
+    ("jayashankar-bhupalpally-plastic-surgeon.html", page_jayashankar_bhupalpally, 0.8),
+    ("jogulamba-gadwal-plastic-surgeon.html", page_jogulamba_gadwal, 0.8),
+    ("kamareddy-plastic-surgeon.html", page_kamareddy, 0.8),
+    ("komaram-bheem-asifabad-plastic-surgeon.html", page_komaram_bheem_asifabad, 0.8),
+    ("mahabubabad-plastic-surgeon.html", page_mahabubabad, 0.8),
+    ("mahabubnagar-plastic-surgeon.html", page_mahabubnagar, 0.8),
+    ("medak-plastic-surgeon.html", page_medak, 0.8),
+    ("medchal-malkajgiri-plastic-surgeon.html", page_medchal_malkajgiri, 0.8),
+    ("mulugu-plastic-surgeon.html", page_mulugu, 0.8),
+    ("nagarkurnool-plastic-surgeon.html", page_nagarkurnool, 0.8),
+    ("nalgonda-plastic-surgeon.html", page_nalgonda, 0.8),
+    ("narayanpet-plastic-surgeon.html", page_narayanpet, 0.8),
+    ("nirmal-plastic-surgeon.html", page_nirmal, 0.8),
+    ("peddapalli-district-plastic-surgeon.html", page_peddapalli_district, 0.8),
+    ("rajanna-sircilla-plastic-surgeon.html", page_rajanna_sircilla, 0.8),
+    ("rangareddy-plastic-surgeon.html", page_rangareddy, 0.8),
+    ("sangareddy-plastic-surgeon.html", page_sangareddy, 0.8),
+    ("siddipet-district-plastic-surgeon.html", page_siddipet_district, 0.8),
+    ("suryapet-plastic-surgeon.html", page_suryapet, 0.8),
+    ("vikarabad-plastic-surgeon.html", page_vikarabad, 0.8),
+    ("wanaparthy-plastic-surgeon.html", page_wanaparthy, 0.8),
+    ("yadadri-bhuvanagiri-plastic-surgeon.html", page_yadadri_bhuvanagiri, 0.8),
     ("contact.html", page_contact, 0.8),
     ("404.html", page_404, 0.0),
     ("procedures/index.html", page_procedures_index, 0.9),
