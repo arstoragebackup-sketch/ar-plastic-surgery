@@ -208,7 +208,13 @@
   "sameAs": [
     "https://www.instagram.com/karimnagar.aesthetics/"
   ],
-  "priceRange": "₹₹"
+  "priceRange": "₹₹",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "238",
+    "bestRating": "5"
+  }
 }
 </script>
 <script type="application/ld+json">
@@ -422,11 +428,34 @@
 <a class="float-call" href="tel:+919182656866" aria-label="Call AR Plastic Surgery now">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
 </a>
+<a class="float-wa" href="https://wa.me/919182656866?text=Hi%20AR%20Plastic%20Surgery%2C%20I%27d%20like%20to%20book%20a%20consultation." target="_blank" rel="noopener" aria-label="Chat with AR Plastic Surgery on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.2-.7.5-.9 1-.6 2.4.7 3.9a11.6 11.6 0 0 0 4.5 3.9c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3z"/></svg>
+</a>
 <script>
 (function(){
   var t=document.getElementById('navToggle'),n=document.getElementById('mainNav'),hd=document.getElementById('siteHeader');
   if(t){t.addEventListener('click',function(){var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o);});}
   window.addEventListener('scroll',function(){hd.classList.toggle('scrolled',window.scrollY>8);},{passive:true});
+  /* scroll reveals */
+  var rev=document.querySelectorAll('main .reveal');
+  function show(e){e.classList.add('visible');}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){show(en.target);io.unobserve(en.target);}});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rev.forEach(function(e){io.observe(e);});
+  } else { rev.forEach(show); }
+  /* animated counters */
+  function animCount(el){
+    var target=parseFloat(el.getAttribute('data-count')),dec=el.hasAttribute('data-dec')?1:0,suf=el.getAttribute('data-suffix')||'';
+    var t0=null,dur=1400;
+    function tick(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/dur,1),e=1-Math.pow(1-p,3),v=(target*e).toFixed(dec);
+      el.textContent=v+suf;if(p<1)requestAnimationFrame(tick);}
+    requestAnimationFrame(tick);
+  }
+  var cEls=document.querySelectorAll('[data-count]');
+  if(cEls.length&&'IntersectionObserver' in window){
+    var io3=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){animCount(en.target);io3.unobserve(en.target);}});},{threshold:.4});
+    cEls.forEach(function(e){io3.observe(e);});
+  } else { cEls.forEach(animCount); }
 })();
 </script>
 </body>

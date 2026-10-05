@@ -176,6 +176,45 @@ footer a:hover{color:#fff}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
 .reveal.visible{opacity:1;transform:none}
 @media(max-width:860px){.cert-grid{grid-template-columns:1fr;padding:2.6rem 0}.medal-seal{width:78px;height:78px;top:-22px;right:-8px}}
+/* ---- premium polish: floats, shine, reveals ---- */
+.float-wa{position:fixed;left:18px;bottom:18px;z-index:60;width:58px;height:58px;border-radius:50%;
+  background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .2s}
+.float-wa:hover{transform:scale(1.1) rotate(6deg)}
+.float-wa svg{width:30px;height:30px;fill:#fff}
+.float-wa::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25d366;animation:waRing 2.4s ease-out infinite}
+@keyframes waRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+.hero{position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;pointer-events:none;z-index:0}
+.hero::before{width:420px;height:420px;background:#c19a3d;top:-140px;right:-100px;animation:orbFloat 9s ease-in-out infinite}
+.hero::after{width:340px;height:340px;background:#4d7fb5;bottom:-160px;left:-120px;animation:orbFloat 12s ease-in-out infinite reverse}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-34px)}}
+.hero .wrap{position:relative;z-index:1}
+.hero-photo{animation:heroIn 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes heroIn{from{opacity:0;transform:translateX(46px) scale(.97)}to{opacity:1;transform:none}}
+.badge{animation:badgeIn .7s ease both}
+.badge:nth-child(2){animation-delay:.12s}.badge:nth-child(3){animation-delay:.24s}
+@keyframes badgeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;bottom:0;width:45%;left:-60%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg)}
+.btn:hover::after{animation:btnShine .8s ease}
+@keyframes btnShine{to{left:130%}}
+.card-grid>*,.post-card,.video-card{transition:transform .25s ease,box-shadow .25s ease}
+.card-grid>*:hover,.post-card:hover{transform:translateY(-6px)}
+.trust .t b{font-variant-numeric:tabular-nums}
+/* reviews */
+.reviews{background:linear-gradient(180deg,#fff, var(--bg-soft));overflow:hidden}
+.stars{color:#f5a623;font-size:1.35rem;letter-spacing:.15em}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:1.6rem}
+.review-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;position:relative;transition:transform .25s ease,box-shadow .25s ease}
+.review-card:hover{transform:translateY(-6px);box-shadow:0 16px 36px rgba(15,42,74,.12)}
+.review-card .q{font-size:2.6rem;line-height:1;color:var(--gold);font-family:var(--serif)}
+.review-card p{font-size:.95rem;color:var(--ink);margin:.4rem 0 .9rem}
+.review-card .who{font-weight:700;font-size:.9rem}
+.review-card .src{font-size:.8rem;color:var(--muted)}
+.g-badge{display:inline-flex;align-items:center;gap:.7rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.55rem 1.2rem;box-shadow:0 6px 18px rgba(15,42,74,.08);margin-top:1.2rem}
+.g-badge .n{font-size:1.7rem;font-weight:800;color:var(--navy)}
+.g-badge .t{font-size:.85rem;color:var(--muted);line-height:1.3}
 .rel-box h3{margin-bottom:.6rem}
 .rel-box ul{list-style:none;display:grid;gap:.4rem}
 .rel-box a{font-weight:600}
