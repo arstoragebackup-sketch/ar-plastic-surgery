@@ -2163,7 +2163,7 @@ def main():
         f.write(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\n")
     # sitemap.xml
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
-          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.0.9">']
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u, pr in sitemap_urls:
         sm.append(f"  <url><loc>{BASE_URL}/{u}</loc><changefreq>monthly</changefreq><priority>{pr}</priority></url>")
     sm.append("</urlset>")
