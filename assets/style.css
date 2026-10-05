@@ -155,6 +155,27 @@ footer a:hover{color:#fff}
 .video-body h3{margin:.3rem 0 .45rem;font-size:1.08rem;line-height:1.35}
 .video-body p{color:var(--muted);font-size:.92rem;margin:0}
 .video-note{background:var(--gold-soft);border:1px solid #e7d9ae;border-radius:var(--radius);padding:1rem 1.3rem;font-size:.93rem;margin:1.6rem 0}
+/* gold medal certificate showcase */
+.cert-showcase{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 60%,#0b1f38 100%);color:#fff;overflow:hidden;position:relative}
+.cert-showcase::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(193,154,61,.20),transparent 50%),radial-gradient(circle at 85% 80%,rgba(193,154,61,.14),transparent 45%);pointer-events:none}
+.cert-grid{position:relative;display:grid;grid-template-columns:1fr 1.15fr;gap:2.6rem;align-items:center;padding:3.4rem 0}
+.cert-copy .eyebrow{color:var(--gold)}
+.cert-copy h2{color:#fff;margin:.3rem 0 .9rem}
+.cert-copy p{color:#c9d6e5}
+.cert-copy p strong{color:#ffe9a8}
+.cert-frame{position:relative;transform:perspective(1200px) rotateY(-7deg) rotateX(2deg);transition:transform .55s cubic-bezier(.2,.7,.3,1.2);filter:drop-shadow(0 26px 50px rgba(0,0,0,.5))}
+.cert-frame:hover{transform:perspective(1200px) rotateY(0deg) rotateX(0deg) scale(1.02)}
+.cert-frame img{width:100%;border:6px solid var(--gold);border-radius:10px;display:block;background:#fff}
+.cert-frame::after{content:"";position:absolute;inset:0;border-radius:10px;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.38) 50%,transparent 58%);transform:translateX(-130%);pointer-events:none}
+.cert-frame:hover::after{animation:certShine 1.15s ease}
+@keyframes certShine{to{transform:translateX(130%)}}
+.medal-seal{position:absolute;top:-30px;right:-16px;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffefa8,#c19a3d 62%,#8a6a1f);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#3d2c05;box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 2px 8px rgba(255,255,255,.55);animation:sealPulse 3.2s ease-in-out infinite;z-index:2;line-height:1.05}
+.medal-seal .star{font-size:1.7rem}
+.medal-seal .yr{font-size:.62rem;font-weight:800;letter-spacing:.08em}
+@keyframes sealPulse{0%,100%{transform:scale(1) rotate(-7deg)}50%{transform:scale(1.08) rotate(7deg)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
+.reveal.visible{opacity:1;transform:none}
+@media(max-width:860px){.cert-grid{grid-template-columns:1fr;padding:2.6rem 0}.medal-seal{width:78px;height:78px;top:-22px;right:-8px}}
 .rel-box h3{margin-bottom:.6rem}
 .rel-box ul{list-style:none;display:grid;gap:.4rem}
 .rel-box a{font-weight:600}
