@@ -1,4 +1,4 @@
-/* AR Plastic Surgery — AI Assistant Widget */
+/* AR Plastic Surgery — AI Assistant Widget (v2) */
 #ar-ai-launcher {
   position: fixed; bottom: 24px; right: 24px; z-index: 9999;
   width: 64px; height: 64px; border-radius: 50%;
@@ -19,7 +19,7 @@
 
 #ar-ai-panel {
   position: fixed; bottom: 100px; right: 24px; z-index: 9999;
-  width: 380px; max-width: calc(100vw - 48px); height: 560px; max-height: calc(100vh - 140px);
+  width: 380px; max-width: calc(100vw - 48px); height: 600px; max-height: calc(100vh - 140px);
   background: #fff; border-radius: 18px; overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,.25);
   display: none; flex-direction: column;
@@ -28,41 +28,60 @@
 #ar-ai-panel.open { display: flex; }
 #ar-ai-header {
   background: linear-gradient(135deg, #10264e, #1e3f7a);
-  color: #fff; padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  color: #fff; padding: 12px 14px; display: flex; align-items: center; gap: 10px;
 }
-#ar-ai-header img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #c9a24b; }
-#ar-ai-header .t { flex: 1; }
-#ar-ai-header .t b { font-size: 16px; display: block; }
-#ar-ai-header .t span { font-size: 12px; color: #c9a24b; }
+#ar-ai-header img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #c9a24b; }
+#ar-ai-header .t { flex: 1; min-width: 0; }
+#ar-ai-header .t b { font-size: 15px; display: block; }
 #ar-ai-header .online { font-size: 11px; color: #7ee2a8; }
-#ar-ai-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-#ar-ai-voice-toggle {
-  background: rgba(255,255,255,.15); border: 1px solid #c9a24b; color: #fff;
-  border-radius: 20px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+#ar-ai-header button {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(201,162,75,.5);
+  color: #fff; border-radius: 50%; width: 34px; height: 34px;
+  font-size: 15px; cursor: pointer; flex-shrink: 0;
 }
-#ar-ai-voice-toggle.off { opacity: .5; }
+#ar-ai-header button:hover { background: rgba(255,255,255,.25); }
+
+/* State pill */
+.ar-state {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 2px 10px; border-radius: 12px; margin-top: 2px;
+}
+.ar-state.listening { background: #27ae60; color: #fff; animation: ar-ping 1.2s infinite; }
+.ar-state.thinking { background: #f39c12; color: #fff; }
+.ar-state.speaking { background: #2980b9; color: #fff; }
+
+/* Voice wave */
+.ar-wave {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  height: 26px; background: #f2eee1;
+}
+.ar-wave span { width: 5px; height: 6px; background: #c9a24b; border-radius: 3px; transition: height .2s; }
+.ar-wave.listening span { animation: ar-wave .8s infinite ease-in-out; }
+.ar-wave.listening span:nth-child(2) { animation-delay: .15s; }
+.ar-wave.listening span:nth-child(3) { animation-delay: .3s; }
+.ar-wave.listening span:nth-child(4) { animation-delay: .45s; }
+.ar-wave.listening span:nth-child(5) { animation-delay: .6s; }
+.ar-wave.speaking span { animation: ar-wave 1s infinite ease-in-out; background: #2980b9; }
+@keyframes ar-wave { 0%,100% { height: 6px; } 50% { height: 20px; } }
+
 #ar-ai-messages { flex: 1; overflow-y: auto; padding: 14px; background: #f7f4ec; display: flex; flex-direction: column; gap: 10px; }
-.ar-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; }
+.ar-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14.5px; line-height: 1.55; }
 .ar-msg.bot { background: #fff; border: 1px solid #e8dfc8; align-self: flex-start; border-bottom-left-radius: 4px; }
 .ar-msg.user { background: #10264e; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-.ar-msg .typing { display: inline-block; }
-.ar-msg .typing span { display: inline-block; width: 7px; height: 7px; background: #999; border-radius: 50%; margin: 0 2px; animation: ar-blink 1s infinite; }
-.ar-msg .typing span:nth-child(2) { animation-delay: .2s; }
-.ar-msg .typing span:nth-child(3) { animation-delay: .4s; }
-@keyframes ar-blink { 0%,100% { opacity: .3;} 50% { opacity: 1;} }
 #ar-ai-quick { display: flex; gap: 8px; padding: 8px 12px; background: #f7f4ec; flex-wrap: wrap; }
 .ar-chip {
   background: #fff; border: 1px solid #c9a24b; color: #10264e;
   border-radius: 20px; padding: 6px 14px; font-size: 13px; cursor: pointer;
 }
 .ar-chip:hover { background: #c9a24b; color: #fff; }
+#ar-ai-privacy {
+  font-size: 11px; color: #999; text-align: center; padding: 4px 12px;
+  background: #fff; border-top: 1px solid #f0ead8;
+}
 #ar-ai-input-row { display: flex; padding: 10px 12px; background: #fff; border-top: 1px solid #eee; gap: 8px; }
-#ar-ai-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 10px 16px; font-size: 14px; outline: none; }
+#ar-ai-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 10px 16px; font-size: 14px; outline: none; min-width: 0; }
 #ar-ai-input:focus { border-color: #c9a24b; }
 #ar-ai-send {
-  width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
-  background: #10264e; color: #c9a24b; font-size: 18px; flex-shrink: 0;
-}
   width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
   background: #10264e; color: #c9a24b; font-size: 18px; flex-shrink: 0;
 }
@@ -72,3 +91,8 @@
   padding: 3px 14px; font-size: 12px; cursor: pointer;
 }
 #ar-ai-lang button.active { background: #10264e; color: #fff; border-color: #10264e; }
+
+@media (max-width: 480px) {
+  #ar-ai-panel { bottom: 96px; right: 12px; width: calc(100vw - 24px); }
+  #ar-ai-launcher { bottom: 16px; right: 16px; }
+}
