@@ -39,7 +39,10 @@
       fallback: 'క్షమించండి, నాకు అర్థం కాలేదు. సేవలు, డాక్టర్, సమయం, చిరునామా గురించి అడగండి — లేదా "బుక్" అని టైప్ చేసి అపాయింట్‌మెంట్ బుక్ చేసుకోండి.',
       chips: ['సేవలు', 'డాక్టర్ గురించి', 'సమయం', 'చిరునామా', 'బుక్ చేయండి'],
       placeholder: 'మీ సందేశం టైప్ చేయండి...',
-      voiceOn: 'వాయిస్ ఆన్', voiceOff: 'వాయిస్ ఆఫ్'
+      voiceOn: 'వాయిస్ ఆన్', voiceOff: 'వాయిస్ ఆఫ్',
+      cost: 'చికిత్స ఖర్చు మీ కేసును బట్టి ఉంటుంది. ఖచ్చితమైన అంచనా కోసం దయచేసి అపాయింట్‌మెంట్ బుక్ చేయండి — డా. అశోక్ రెడ్డి గారు పరిశీలించి అన్నీ స్పష్టంగా వివరిస్తారు. కాల్ చేయండి: ' + CLINIC_PHONE,
+      reviews: 'గూగుల్‌లో మాకు 4.9 స్టార్ రేటింగ్ ఉంది — తెలంగాణ నలుమూలల నుండి 240కి పైగా సంతోషకరమైన రోగుల సమీక్షలు.',
+      emergency: 'చేతి గాయాలు లేదా అత్యవసర పరిస్థితుల్లో వెంటనే కాల్ చేయండి: ' + CLINIC_PHONE + ' — లేదా నేరుగా క్లినిక్‌కు రండి. ప్రతిరోజూ ఉదయం 10 నుండి రాత్రి 8 వరకు తెరిచి ఉంటాము.'
     },
     en: {
       greeting: 'Hello! 🙏 Welcome to AR Plastic Surgery. I am your assistant. Ask me about Dr Ashok Reddy\'s clinic, our services, or book an appointment.',
@@ -55,7 +58,10 @@
       fallback: 'Sorry, I didn\'t understand. Ask about services, the doctor, timings, or address — or type "book" to make an appointment.',
       chips: ['Services', 'About Doctor', 'Timings', 'Address', 'Book Now'],
       placeholder: 'Type your message...',
-      voiceOn: 'Voice on', voiceOff: 'Voice off'
+      voiceOn: 'Voice on', voiceOff: 'Voice off',
+      cost: 'Treatment costs depend on your specific case. For an accurate estimate, please book a consultation — Dr Ashok Reddy will assess and explain everything clearly. Call ' + CLINIC_PHONE + '.',
+      reviews: 'We have a 4.9-star rating on Google with over 240 reviews from happy patients across Telangana.',
+      emergency: 'For hand injuries or emergencies, please call us immediately at ' + CLINIC_PHONE + ' or visit the clinic directly. We are open daily 10 AM to 8 PM.'
     }
   };
 
@@ -133,6 +139,9 @@
       }
       return 'badMobile';
     }
+    if (/(cost|price|fee|ఖర్చు|ధర|ఫీజు)/.test(t)) return 'cost';
+    if (/(review|rating|రేటింగ్|సమీక్ష)/.test(t)) return 'reviews';
+    if (/(emergency|urgent|injury|అత్యవసర|గాయం)/.test(t)) return 'emergency';
     if (/(book|appointment|అపాయింట్|బుక్)/.test(t)) return 'book';
     if (/(service|సేవ)/.test(t)) return 'services';
     if (/(doctor|ashok|డాక్టర్|అశోక్)/.test(t)) return 'doctor';
@@ -166,6 +175,9 @@
       else if (intent === 'hours') { addMsg(S.hours, 'bot'); }
       else if (intent === 'location') { addMsg(S.location, 'bot'); }
       else if (intent === 'about') { addMsg(S.about, 'bot'); }
+      else if (intent === 'cost') { addMsg(S.cost, 'bot'); }
+      else if (intent === 'reviews') { addMsg(S.reviews, 'bot'); }
+      else if (intent === 'emergency') { addMsg(S.emergency, 'bot'); }
       else if (intent === 'greeting') { addMsg(S.greeting, 'bot'); }
       else if (intent.indexOf('serviceInfo:') === 0) {
         var svc = intent.split(':')[1];
@@ -238,7 +250,7 @@
       '<div id="ar-ai-lang"><button data-lang="te" class="active">తెలుగు</button><button data-lang="en">English</button></div>' +
       '<div id="ar-ai-messages"></div>' +
       '<div id="ar-ai-quick"></div>' +
-      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-send">➤</button></div>';
+      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-mic" title="Speak">🎤</button><button id="ar-ai-send">➤</button></div>';
     document.body.appendChild(panel);
 
     launcher.onclick = function () {
@@ -271,6 +283,44 @@
     };
     document.getElementById('ar-ai-send').onclick = send;
     input.onkeydown = function (e) { if (e.key === 'Enter') send(); };
+
+    // Voice input — listens in the visitor's language
+    var micBtn = document.getElementById('ar-ai-mic');
+    var recog = null, listening = false;
+    function stopListen() {
+      listening = false;
+      micBtn.textContent = '🎤';
+      micBtn.style.background = '#10264e';
+      try { recog && recog.stop(); } catch (e) {}
+    }
+    micBtn.onclick = function () {
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        addMsg(lang === 'te'
+          ? 'క్షమించండి, మీ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ సపోర్ట్ లేదు. దయచేసి టైప్ చేయండి.'
+          : 'Sorry, voice input is not supported in this browser. Please type instead.', 'bot');
+        return;
+      }
+      if (listening) { stopListen(); return; }
+      try {
+        recog = new SR();
+        recog.lang = lang === 'te' ? 'te-IN' : 'en-IN';
+        recog.interimResults = false;
+        recog.maxAlternatives = 1;
+        recog.onresult = function (e) {
+          var txt = e.results[0][0].transcript;
+          stopListen();
+          if (txt && txt.trim()) sendUser(txt.trim());
+        };
+        recog.onerror = function () { stopListen(); };
+        recog.onend = function () { if (listening) stopListen(); };
+        recog.start();
+        listening = true;
+        micBtn.textContent = '⏹';
+        micBtn.style.background = '#c0392b';
+        addMsg(lang === 'te' ? '🎤 వింటున్నాను... మాట్లాడండి' : '🎤 Listening... speak now', 'bot');
+      } catch (e) { stopListen(); }
+    };
 
     // Auto-launch after 3 seconds on first visit
     setTimeout(function () {

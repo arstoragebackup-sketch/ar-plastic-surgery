@@ -59,7 +59,14 @@
 #ar-ai-input-row { display: flex; padding: 10px 12px; background: #fff; border-top: 1px solid #eee; gap: 8px; }
 #ar-ai-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 10px 16px; font-size: 14px; outline: none; }
 #ar-ai-input:focus { border-color: #c9a24b; }
+#ar-ai-mic {
+  width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+  background: #10264e; color: #fff; font-size: 18px; flex-shrink: 0;
+}
 #ar-ai-send {
+  width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+  background: #10264e; color: #c9a24b; font-size: 18px; flex-shrink: 0;
+}
   width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
   background: #10264e; color: #c9a24b; font-size: 18px; flex-shrink: 0;
 }
