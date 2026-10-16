@@ -34,3 +34,6 @@
 .ar-tl-when { font-weight: 700; color: #10264e; font-size: .95rem; }
 .ar-tl-what { color: #555; font-size: .92rem; margin-top: 2px; line-height: 1.55; }
 .ar-tl-note { font-size: .82rem; color: #999; font-style: italic; margin-top: 1rem; text-align: center; }
+
+.ar-zone-area { fill: rgba(201,162,75,.12); stroke: none; cursor: pointer; transition: fill .2s; }
+.ar-zone-area:hover { fill: rgba(201,162,75,.3); }

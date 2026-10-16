@@ -3,24 +3,24 @@
   'use strict';
 
   var BODY_ZONES = [
-    { id: 'hair', x: 50, y: 8, label: 'Hair', treatments: [
+    { id: 'hair', x: 50, y: 6, label: 'Hair', treatments: [
       { name: 'FUE Hair Transplant', link: 'procedures/fue-hair-transplant.html', desc: 'Permanent, natural hair restoration' },
       { name: 'PRP Therapy', link: 'procedures/prp-therapy.html', desc: 'Non-surgical hair regrowth support' } ] },
-    { id: 'face', x: 50, y: 18, label: 'Face & Nose', treatments: [
+    { id: 'face', x: 50, y: 16, label: 'Face & Nose', treatments: [
       { name: 'Rhinoplasty', link: 'procedures/rhinoplasty.html', desc: 'Nose reshaping for form & function' },
       { name: 'Botox & Fillers', link: 'procedures/botox-treatment.html', desc: 'Wrinkle softening, volume restoration' },
       { name: 'Eyelid Surgery', link: 'procedures/eyelid-surgery-blepharoplasty.html', desc: 'Brighter, youthful eyes' } ] },
-    { id: 'chest', x: 50, y: 32, label: 'Chest', treatments: [
+    { id: 'chest', x: 50, y: 35, label: 'Chest', treatments: [
       { name: 'Gynecomastia Surgery', link: 'procedures/gynecomastia-surgery.html', desc: 'Male chest contouring' },
       { name: 'Breast Augmentation', link: 'procedures/breast-augmentation.html', desc: 'Natural enhancement' },
       { name: 'Breast Reduction', link: 'procedures/breast-reduction.html', desc: 'Comfort & proportion' } ] },
-    { id: 'abdomen', x: 50, y: 46, label: 'Abdomen', treatments: [
+    { id: 'abdomen', x: 50, y: 51, label: 'Abdomen', treatments: [
       { name: 'Liposuction', link: 'procedures/liposuction.html', desc: 'Stubborn fat removal & contouring' },
       { name: 'Tummy Tuck', link: 'procedures/tummy-tuck.html', desc: 'Excess skin removal, muscle tightening' } ] },
-    { id: 'hand', x: 78, y: 42, label: 'Hand', treatments: [
+    { id: 'hand', x: 72, y: 50, label: 'Hand', treatments: [
       { name: 'Hand Trauma Surgery', link: 'procedures/hand-trauma-surgery.html', desc: 'Tendon, nerve & fracture repair' },
       { name: 'Carpal Tunnel Release', link: 'procedures/carpal-tunnel-release.html', desc: 'Numbness & pain relief' } ] },
-    { id: 'skin', x: 22, y: 55, label: 'Skin', treatments: [
+    { id: 'skin', x: 28, y: 50, label: 'Skin', treatments: [
       { name: 'Scar Revision', link: 'procedures/scar-keloid-treatment.html', desc: 'Surgical & laser scar improvement' },
       { name: 'Lipoma Removal', link: 'procedures/lipoma-removal.html', desc: 'Quick lump removal' },
       { name: 'Burn Reconstruction', link: 'procedures/burn-reconstruction.html', desc: 'Function & appearance restoration' } ] }
@@ -53,15 +53,16 @@
   function buildExplorer() {
     var el = document.getElementById('ar-body-explorer');
     if (!el) return;
-    var svg = '<svg viewBox="0 0 100 100" class="ar-body-svg">' +
-      '<ellipse cx="50" cy="12" rx="11" ry="13" class="ar-body-part" data-zone="hair"/>' +
-      '<ellipse cx="50" cy="14" rx="8" ry="9" class="ar-body-part" data-zone="face"/>' +
-      '<rect x="38" y="26" width="24" height="22" rx="8" class="ar-body-part" data-zone="chest"/>' +
-      '<rect x="40" y="48" width="20" height="18" rx="6" class="ar-body-part" data-zone="abdomen"/>' +
-      '<rect x="28" y="28" width="7" height="28" rx="3.5" class="ar-body-part" data-zone="skin"/>' +
-      '<rect x="65" y="28" width="7" height="28" rx="3.5" class="ar-body-part" data-zone="hand"/>' +
-      '<rect x="42" y="66" width="7" height="28" rx="3.5" class="ar-body-part" data-zone="skin"/>' +
-      '<rect x="51" y="66" width="7" height="28" rx="3.5" class="ar-body-part" data-zone="skin"/>';
+    var svg = '<svg viewBox="0 0 100 110" class="ar-body-svg">' +
+      // single clean body silhouette
+      '<path class="ar-body-part" d="M50 2 C42 2 37 8 37 14 C37 19 40 22 43 24 L38 28 C34 30 32 34 32 40 L30 62 C30 65 32 67 34 67 C36 67 38 65 38 62 L40 44 L41 66 L41 104 C41 107 43 108 45 108 C47 108 49 107 49 104 L50 70 L51 104 C51 107 53 108 55 108 C57 108 59 107 59 104 L59 66 L60 44 L62 62 C62 65 64 67 66 67 C68 67 70 65 70 62 L68 40 C68 34 66 30 62 28 L57 24 C60 22 63 19 63 14 C63 8 58 2 50 2 Z"/>' +
+      // subtle zone shading
+      '<ellipse cx="50" cy="8" rx="9" ry="7" class="ar-zone-area" data-zone="hair"/>' +
+      '<ellipse cx="50" cy="16" rx="7" ry="6" class="ar-zone-area" data-zone="face"/>' +
+      '<rect x="40" y="28" width="20" height="14" rx="5" class="ar-zone-area" data-zone="chest"/>' +
+      '<rect x="42" y="44" width="16" height="14" rx="5" class="ar-zone-area" data-zone="abdomen"/>' +
+      '<rect x="63" y="40" width="6" height="20" rx="3" class="ar-zone-area" data-zone="hand"/>' +
+      '<rect x="31" y="40" width="6" height="20" rx="3" class="ar-zone-area" data-zone="skin"/>';
     BODY_ZONES.forEach(function (z) {
       svg += '<g class="ar-zone-dot" data-zone="' + z.id + '" style="cursor:pointer">' +
         '<circle cx="' + z.x + '" cy="' + z.y + '" r="4" class="ar-dot"/>' +
