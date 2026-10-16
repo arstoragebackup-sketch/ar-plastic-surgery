@@ -134,8 +134,16 @@
       u.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
       u.rate = 0.95; u.pitch = 1.05;
       if (femaleVoice) u.voice = femaleVoice;
-      u.onstart = function () { setState('speaking'); };
-      u.onend = function () { if (state === 'speaking') setState('listening'); };
+      u.onstart = function () {
+        setState('speaking');
+        var av = document.getElementById('ar-ai-avatar');
+        if (av) av.classList.add('talking');
+      };
+      u.onend = function () {
+        var av = document.getElementById('ar-ai-avatar');
+        if (av) av.classList.remove('talking');
+        if (state === 'speaking') setState('listening');
+      };
       speechSynthesis.speak(u);
     } catch (e) {}
   }
@@ -179,6 +187,44 @@
       b.onclick = function () { cb ? cb(c) : handleUserText(c.label || c); };
       row.appendChild(b);
     });
+  }
+
+  var SERVICE_ICONS = {
+    'hair-transplant': '💇', 'gynecomastia': '👔', 'rhinoplasty': '👃',
+    'liposuction': '⚖️', 'breast': '👚', 'tummy-tuck': '👗',
+    'lipoma': '🔵', 'prp': '💉', 'hand-surgery': '🤲',
+    'botox-fillers': '✨', 'scar': '🩹', 'burn': '🔥'
+  };
+
+  function showServiceCards() {
+    var box = document.getElementById('ar-ai-messages');
+    var wrap = document.createElement('div');
+    wrap.className = 'ar-cards';
+    KB.SERVICES.forEach(function (s) {
+      var c = document.createElement('div');
+      c.className = 'ar-card';
+      c.innerHTML = '<div class="ic">' + (SERVICE_ICONS[s.id] || '🏥') + '</div>' +
+        '<div class="nm">' + (s.title[lang] || s.title.en) + '</div>';
+      c.onclick = function () { handleUserText(s.title[lang] || s.title.en); };
+      wrap.appendChild(c);
+    });
+    box.appendChild(wrap);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function showWelcomeHero() {
+    var box = document.getElementById('ar-ai-messages');
+    var h = document.createElement('div');
+    h.className = 'ar-hero';
+    var t1 = lang === 'te' ? 'AR ప్లాస్టిక్ సర్జరీకి <gold>స్వాగతం</gold>'
+      : lang === 'hi' ? 'AR प्लास्टिक सर्जरी में <gold>स्वागत</gold>'
+      : 'Welcome to <gold>AR Plastic Surgery</gold>';
+    var t2 = lang === 'te' ? 'డా. అశోక్ రెడ్డి గారు • గోల్డ్ మెడలిస్ట్ • కరీంనగర్'
+      : lang === 'hi' ? 'डॉ. अशोक रेड्डी • गोल्ड मेडलिस्ट • करीमनगर'
+      : 'Dr Ashok Reddy • Gold Medalist • Karimnagar';
+    h.innerHTML = '<div class="t1">' + t1 + '</div><div class="t2">' + t2 + '</div>';
+    box.appendChild(h);
+    box.scrollTop = box.scrollHeight;
   }
 
   function defaultChips() {
@@ -285,9 +331,8 @@
       return;
     }
     if (/(service|treatment|సేవ|चिकित्सा|सेवा)/.test(tLow)) {
-      var names = KB.SERVICES.map(function (s) { return s.title[lang] || s.title.en; }).slice(0, 8);
-      addMsg(names.join(' • '), 'bot');
       say(t('askService'));
+      setTimeout(showServiceCards, 900);
       return;
     }
     if (/(thank|ధన్యవాద|धन्यवाद)/.test(tLow)) {
@@ -375,13 +420,13 @@
     panel.id = 'ar-ai-panel';
     panel.innerHTML =
       '<div id="ar-ai-header">' +
-        '<img src="' + root + 'assets/logo.png" alt="AR">' +
-        '<div class="t"><b>' + 'AR Assistant' + '</b><span id="ar-ai-state" class="ar-state" style="display:none"></span><div class="online">● Online</div></div>' +
+        '<div id="ar-ai-avatar">👩‍⚕️</div>' +
+        '<div class="t"><b>' + 'AR Assistant' + '</b><div class="sub">Dr Ashok Reddy\'s Clinic</div><span id="ar-ai-state" class="ar-state" style="display:none"></span><div class="online">● Online</div></div>' +
         '<button id="ar-ai-mute" title="Mute">🔊</button>' +
         '<button id="ar-ai-end" title="End">📞</button>' +
         '<button id="ar-ai-close">×</button>' +
       '</div>' +
-      '<div id="ar-ai-wave" class="ar-wave idle"><span></span><span></span><span></span><span></span><span></span></div>' +
+      '<div id="ar-ai-wave" class="ar-wave idle"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>' +
       '<div id="ar-ai-lang">' +
         '<button data-lang="te" class="active">తెలుగు</button>' +
         '<button data-lang="hi">हिंदी</button>' +
@@ -411,7 +456,11 @@
           wantListen = true;
           if (!greeted) {
             greeted = true;
-            setTimeout(function () { say(t('greeting')); }, 500);
+            setTimeout(function () {
+              showWelcomeHero();
+              say(t('greeting'));
+              setTimeout(showServiceCards, 2500);
+            }, 500);
           } else {
             startListening();
           }
