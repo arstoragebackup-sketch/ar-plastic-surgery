@@ -5,8 +5,12 @@
 */
 (function () {
   'use strict';
-  var KB = window.AR_KB;
-  var CLINIC = KB.CLINIC;
+  var KB = null;
+  var CLINIC = null;
+  function ensureKB() {
+    if (!KB && window.AR_KB) { KB = window.AR_KB; CLINIC = KB.CLINIC; }
+    return KB;
+  }
 
   var state = 'idle';           // idle | listening | thinking | speaking
   var lang = 'te';
@@ -31,11 +35,11 @@
       consultNote: 'ఖచ్చితమైన సలహా కోసం డాక్టర్‌ను కలవడం అవసరం. ప్రతి రోగి వేరు — పరీక్ష తర్వాతే సరైన చికిత్స నిర్ణయించగలము.',
       costHonest: 'ఖర్చు మీ కేసును బట్టి మారుతుంది. తప్పుడు ధర చెప్పడం నాకు ఇష్టం లేదు. సంప్రదింపులో డాక్టర్ ఖచ్చితంగా వివరిస్తారు.',
       scared: 'అర్థం చేసుకోగలను — సర్జరీ అంటే భయంగా ఉండటం సహజం. సంప్రదింపులో ఎంపికలు, ప్రయోజనాలు, నష్టాలు, కోలుకోవడం గురించి అన్నీ తెలుసుకోవచ్చు, నిర్ణయం తర్వాత.',
-      emergency: 'దయచేసి వెంటనే అత్యవసర వైద్య సహాయం తీసుకోండి లేదా దగ్గరి ఆసుపత్రికి వెళ్లండి. తీవ్రమైన లక్షణాలకు వేచి ఉండకండి. మా క్లినిక్ నంబర్: ' + CLINIC.phone,
-      dontKnow: 'దీని గురించి నాకు ఖచ్చితమైన సమాచారం లేదు. క్లినిక్ సిబ్బందిని అడగమని సూచిస్తున్నాను: ' + CLINIC.phone,
+      emergency: 'దయచేసి వెంటనే అత్యవసర వైద్య సహాయం తీసుకోండి లేదా దగ్గరి ఆసుపత్రికి వెళ్లండి. తీవ్రమైన లక్షణాలకు వేచి ఉండకండి. మా క్లినిక్ నంబర్: ' + '{PHONE}',
+      dontKnow: 'దీని గురించి నాకు ఖచ్చితమైన సమాచారం లేదు. క్లినిక్ సిబ్బందిని అడగమని సూచిస్తున్నాను: ' + '{PHONE}',
       fallback: 'క్షమించండి, సరిగ్గా అర్థం కాలేదు. సేవలు, డాక్టర్, సమయం, ఖర్చు గురించి అడగండి — లేదా "అపాయింట్‌మెంట్" అని చెప్పండి.',
       hours: 'మేము ప్రతిరోజూ ఉదయం 10 నుండి రాత్రి 8 వరకు తెరిచి ఉంటాము.',
-      location: 'మా చిరునామా: ధ్రువ హాస్పిటల్, కరీంనగర్. ' + CLINIC.street,
+      location: 'మా చిరునామా: ధ్రువ హాస్పిటల్, కరీంనగర్. ' + '{STREET}',
       doctor: 'డా. అశోక్ రెడ్డి గారు — MBBS, DNB ముంబై, M.Ch ఢిల్లీ, గోల్డ్ మెడలిస్ట్. ప్లాస్టిక్, కాస్మెటిక్ మరియు హెయిర్ ట్రాన్స్‌ప్లాంట్ నిపుణులు. గూగుల్‌లో 4.9 స్టార్ రేటింగ్.',
       whatsappOffer: 'వాట్సాప్‌లో మాట్లాడాలనుకుంటున్నారా? "వాట్సాప్" అని చెప్పండి, లింక్ ఇస్తాను.',
       whatsappMsg: 'వాట్సాప్ తెరుస్తున్నాను — మీరు సిద్ధంగా ఉన్న సందేశాన్ని పంపవచ్చు.',
@@ -54,11 +58,11 @@
       consultNote: 'For accurate advice, an in-person consultation is needed. Every patient is different — only an examination can decide the right treatment.',
       costHonest: "The cost depends on your individual case. I don't want to give you a wrong figure. The doctor will explain clearly during consultation.",
       scared: "That's completely understandable — feeling nervous about surgery is natural. A consultation lets you understand the options, benefits, risks and recovery before deciding anything.",
-      emergency: 'Please seek immediate emergency medical care or go to the nearest hospital right away. Do not wait. Our clinic number is ' + CLINIC.phone,
-      dontKnow: "I don't have verified information about that. I'd suggest asking our clinic staff: " + CLINIC.phone,
+      emergency: 'Please seek immediate emergency medical care or go to the nearest hospital right away. Do not wait. Our clinic number is ' + '{PHONE}',
+      dontKnow: "I don't have verified information about that. I'd suggest asking our clinic staff: " + '{PHONE}',
       fallback: 'Sorry, I didn\'t quite catch that. Ask about services, the doctor, timings, or cost — or say "appointment".',
       hours: "We're open every day from 10 AM to 8 PM.",
-      location: 'Our address: Dhruva Hospital, Karimnagar. ' + CLINIC.street,
+      location: 'Our address: Dhruva Hospital, Karimnagar. ' + '{STREET}',
       doctor: 'Dr Ashok Reddy — MBBS, DNB Mumbai, M.Ch Delhi, Gold Medalist. Specialist in plastic, cosmetic and hair transplant surgery. 4.9 stars on Google.',
       whatsappOffer: 'Would you like to chat on WhatsApp? Say "WhatsApp" and I\'ll share the link.',
       whatsappMsg: 'Opening WhatsApp — you can send the ready message.',
@@ -77,11 +81,11 @@
       consultNote: 'सटीक सलाह के लिए डॉक्टर से मिलना जरूरी है। हर मरीज अलग है — जांच के बाद ही सही इलाज तय हो सकता है।',
       costHonest: 'खर्च आपके केस पर निर्भर करता है। गलत कीमत नहीं बताना चाहती। परामर्श में डॉक्टर स्पष्ट रूप से बताएंगे।',
       scared: 'यह बिल्कुल समझ में आता है — सर्जरी से डरना स्वाभाविक है। परामर्श में आप विकल्प, फायदे, जोखिम और ठीक होने के बारे में सब जान सकते हैं।',
-      emergency: 'कृपया तुरंत आपातकालीन चिकित्सा सहायता लें या नजदीकी अस्पताल जाएं। इंतजार न करें। हमारा क्लिनिक नंबर: ' + CLINIC.phone,
-      dontKnow: 'इसके बारे में मेरे पास सत्यापित जानकारी नहीं है। कृपया क्लिनिक स्टाफ से पूछें: ' + CLINIC.phone,
+      emergency: 'कृपया तुरंत आपातकालीन चिकित्सा सहायता लें या नजदीकी अस्पताल जाएं। इंतजार न करें। हमारा क्लिनिक नंबर: ' + '{PHONE}',
+      dontKnow: 'इसके बारे में मेरे पास सत्यापित जानकारी नहीं है। कृपया क्लिनिक स्टाफ से पूछें: ' + '{PHONE}',
       fallback: 'क्षमा करें, ठीक से समझ नहीं आया। सेवाओं, डॉक्टर, समय या खर्च के बारे में पूछें — या "अपॉइंटमेंट" कहें।',
       hours: 'हम रोज़ सुबह 10 से रात 8 बजे तक खुले हैं।',
-      location: 'हमारा पता: ध्रुवा हॉस्पिटल, करीमनगर। ' + CLINIC.street,
+      location: 'हमारा पता: ध्रुवा हॉस्पिटल, करीमनगर। ' + '{STREET}',
       doctor: 'डॉ. अशोक रेड्डी — MBBS, DNB मुंबई, M.Ch दिल्ली, गोल्ड मेडलिस्ट। प्लास्टिक, कॉस्मेटिक और हेयर ट्रांसप्लांट विशेषज्ञ। Google पर 4.9 स्टार रेटिंग।',
       whatsappOffer: 'क्या आप WhatsApp पर बात करना चाहेंगे? "WhatsApp" कहें, लिंक देती हूं।',
       whatsappMsg: 'WhatsApp खोल रही हूं — आप तैयार संदेश भेज सकते हैं।',
@@ -93,6 +97,9 @@
   function t(key, vars) {
     var s = (S[lang] && S[lang][key]) || S.en[key] || key;
     if (vars) for (var k in vars) s = s.replace('{' + k + '}', vars[k]);
+    if (CLINIC) {
+      s = s.split('{PHONE}').join(CLINIC.phone).split('{STREET}').join(CLINIC.street);
+    }
     return s;
   }
 
@@ -186,6 +193,7 @@
   /* ---------- CONVERSATION LOGIC ---------- */
   function handleUserText(text) {
     handleInterruption();
+    if (!ensureKB()) { addMsg(t('dontKnow'), 'bot'); return; }
     addMsg(text, 'user');
     // auto-detect language from what they said
     var detected = KB.detectLang(text);
@@ -392,7 +400,7 @@
     setTimeout(function () { clearInterval(bootTimer); if (!window.AR_KB) wireUp(); }, 3000);
 
     function wireUp() {
-      KB = window.AR_KB || KB; CLINIC = KB.CLINIC;
+      if (window.AR_KB) { KB = window.AR_KB; CLINIC = KB.CLINIC; }
       launcher.onclick = function () {
         var p = document.getElementById('ar-ai-panel');
         var opening = !p.classList.contains('open');
