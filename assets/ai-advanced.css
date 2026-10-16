@@ -1,0 +1,36 @@
+/* Body Explorer + Recovery Timeline */
+.ar-explorer-wrap { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 700px) { .ar-explorer-wrap { grid-template-columns: 1fr; } .ar-explorer-svg { max-width: 240px; margin: 0 auto; } }
+.ar-body-svg { width: 100%; height: auto; }
+.ar-body-part { fill: #eef2f8; stroke: #c9a24b; stroke-width: .8; transition: fill .2s; }
+.ar-body-part:hover { fill: #f7ecd0; }
+.ar-dot { fill: #c9a24b; animation: ar-ping 1.8s infinite; }
+.ar-dot.active { fill: #10264e; }
+.ar-dot-ring { fill: none; stroke: #c9a24b; stroke-width: .6; opacity: .5; }
+.ar-zone-label { font-size: 4.5px; fill: #10264e; font-weight: 700; }
+.ar-explorer-info { background: #fff; border: 1px solid #ece2c6; border-radius: 16px; padding: 1.5rem; min-height: 200px; }
+.ar-explorer-hint { color: #999; text-align: center; padding: 2rem 1rem; font-size: .95rem; }
+.ar-zone-title { font-size: 1.3rem; font-weight: 800; color: #10264e; margin-bottom: 1rem; }
+.ar-treatment-link {
+  display: block; padding: .9rem 1.1rem; border: 1px solid #eee4c8; border-radius: 12px;
+  margin-bottom: .7rem; text-decoration: none; transition: all .2s;
+}
+.ar-treatment-link:hover { border-color: #c9a24b; transform: translateX(4px); box-shadow: 0 3px 12px rgba(16,38,78,.08); }
+.ar-t-name { display: block; font-weight: 700; color: #10264e; }
+.ar-t-desc { font-size: .88rem; color: #777; }
+/* Timeline */
+.ar-timeline { position: relative; padding-left: 8px; }
+.ar-timeline::before {
+  content: ''; position: absolute; left: 23px; top: 10px; bottom: 10px;
+  width: 3px; background: linear-gradient(180deg, #c9a24b, #10264e); border-radius: 2px;
+}
+.ar-tl-step { display: flex; gap: 1.2rem; margin-bottom: 1.4rem; position: relative; }
+.ar-tl-dot {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #10264e, #1e3f7a); color: #c9a24b;
+  display: flex; align-items: center; justify-content: center; font-weight: 800;
+  border: 2px solid #c9a24b; z-index: 1;
+}
+.ar-tl-when { font-weight: 700; color: #10264e; font-size: .95rem; }
+.ar-tl-what { color: #555; font-size: .92rem; margin-top: 2px; line-height: 1.55; }
+.ar-tl-note { font-size: .82rem; color: #999; font-style: italic; margin-top: 1rem; text-align: center; }
