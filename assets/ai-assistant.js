@@ -26,7 +26,7 @@
 
   var STR = {
     te: {
-      greeting: 'నమస్కారం! 🙏 AR ప్లాస్టిక్ సర్జరీకి స్వాగతం. నేను మీ సహాయకుడిని. డా. అశోక్ రెడ్డి గారి క్లినిక్ గురించి, మా సేవల గురించి అడగండి, లేదా అపాయింట్‌మెంట్ బుక్ చేసుకోండి.',
+      greeting: 'నమస్కారం! 🙏 AR ప్లాస్టిక్ సర్జరీకి స్వాగతం. నేను మీ సహాయకుడిని — నేను వింటున్నాను, మీరు మాట్లాడవచ్చు! డా. అశోక్ రెడ్డి గారి క్లినిక్ గురించి, మా సేవల గురించి అడగండి, లేదా అపాయింట్‌మెంట్ బుక్ చేసుకోండి.',
       about: 'AR ప్లాస్టిక్ సర్జరీ కరీంనగర్‌లోని ప్రముఖ క్లినిక్. డా. అశోక్ రెడ్డి గారు — MBBS, DNB (ముంబై), M.Ch (ఢిల్లీ), గోల్డ్ మెడలిస్ట్. ప్లాస్టిక్, కాస్మెటిక్, హెయిర్ ట్రాన్స్‌ప్లాంట్ మరియు హ్యాండ్ సర్జరీలో నిపుణులు. మా సమయం: ప్రతిరోజూ ఉదయం 10 నుండి రాత్రి 8 వరకు.',
       servicesIntro: 'మా ప్రధాన సేవలు ఇవి. దేని గురించి తెలుసుకోవాలనుకుంటున్నారు?',
       hours: 'మేము ప్రతిరోజూ ఉదయం 10:00 నుండి రాత్రి 8:00 వరకు తెరిచి ఉంటాము. ఆదివారం కూడా!',
@@ -45,7 +45,7 @@
       emergency: 'చేతి గాయాలు లేదా అత్యవసర పరిస్థితుల్లో వెంటనే కాల్ చేయండి: ' + CLINIC_PHONE + ' — లేదా నేరుగా క్లినిక్‌కు రండి. ప్రతిరోజూ ఉదయం 10 నుండి రాత్రి 8 వరకు తెరిచి ఉంటాము.'
     },
     en: {
-      greeting: 'Hello! 🙏 Welcome to AR Plastic Surgery. I am your assistant. Ask me about Dr Ashok Reddy\'s clinic, our services, or book an appointment.',
+      greeting: 'Hello! 🙏 Welcome to AR Plastic Surgery. I am your assistant — I\'m listening, just speak! Ask me about Dr Ashok Reddy\'s clinic, our services, or book an appointment.',
       about: 'AR Plastic Surgery is Karimnagar\'s leading clinic. Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist — specialises in plastic, cosmetic, hair transplant and hand surgery. Open daily 10 AM to 8 PM.',
       servicesIntro: 'Here are our main services. Which would you like to know about?',
       hours: 'We are open every day from 10:00 AM to 8:00 PM, including Sundays!',
@@ -250,7 +250,7 @@
       '<div id="ar-ai-lang"><button data-lang="te" class="active">తెలుగు</button><button data-lang="en">English</button></div>' +
       '<div id="ar-ai-messages"></div>' +
       '<div id="ar-ai-quick"></div>' +
-      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-mic" title="Speak">🎤</button><button id="ar-ai-send">➤</button></div>';
+      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-send">➤</button></div>';
     document.body.appendChild(panel);
 
     launcher.onclick = function () {
@@ -284,42 +284,52 @@
     document.getElementById('ar-ai-send').onclick = send;
     input.onkeydown = function (e) { if (e.key === 'Enter') send(); };
 
-    // Voice input — listens in the visitor's language
-    var micBtn = document.getElementById('ar-ai-mic');
-    var recog = null, listening = false;
-    function stopListen() {
-      listening = false;
-      micBtn.textContent = '🎤';
-      micBtn.style.background = '#10264e';
-      try { recog && recog.stop(); } catch (e) {}
-    }
-    micBtn.onclick = function () {
-      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) {
-        addMsg(lang === 'te'
-          ? 'క్షమించండి, మీ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ సపోర్ట్ లేదు. దయచేసి టైప్ చేయండి.'
-          : 'Sorry, voice input is not supported in this browser. Please type instead.', 'bot');
-        return;
-      }
-      if (listening) { stopListen(); return; }
+    // Always-on voice listening — starts automatically, no button needed
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var recog = null, wantListen = true, heardOnce = false;
+    function startListen() {
+      if (!SR || !wantListen) return;
       try {
+        if (recog) { try { recog.stop(); } catch (e) {} }
         recog = new SR();
         recog.lang = lang === 'te' ? 'te-IN' : 'en-IN';
+        recog.continuous = true;
         recog.interimResults = false;
         recog.maxAlternatives = 1;
         recog.onresult = function (e) {
-          var txt = e.results[0][0].transcript;
-          stopListen();
-          if (txt && txt.trim()) sendUser(txt.trim());
+          var txt = e.results[e.results.length - 1][0].transcript;
+          if (txt && txt.trim()) {
+            heardOnce = true;
+            sendUser(txt.trim());
+          }
         };
-        recog.onerror = function () { stopListen(); };
-        recog.onend = function () { if (listening) stopListen(); };
+        recog.onerror = function (e) {
+          // permission denied — stop trying silently after first failure
+          if (e.error === 'not-allowed' || e.error === 'service-not-allowed') wantListen = false;
+        };
+        recog.onend = function () {
+          // auto-restart so listening never stops
+          if (wantListen) setTimeout(startListen, 400);
+        };
         recog.start();
-        listening = true;
-        micBtn.textContent = '⏹';
-        micBtn.style.background = '#c0392b';
-        addMsg(lang === 'te' ? '🎤 వింటున్నాను... మాట్లాడండి' : '🎤 Listening... speak now', 'bot');
-      } catch (e) { stopListen(); }
+      } catch (e) {
+        if (wantListen) setTimeout(startListen, 2000);
+      }
+    }
+    // begin listening when panel first opens
+    var _origLauncher = launcher.onclick;
+    launcher.onclick = function () {
+      _origLauncher();
+      if (document.getElementById('ar-ai-panel').classList.contains('open')) {
+        wantListen = true;
+        startListen();
+      }
+    };
+    // keep language in sync if user switches mid-session
+    var _origSetLang = setLang;
+    setLang = function (l) {
+      _origSetLang(l);
+      if (recog) { try { recog.stop(); } catch (e) {} }
     };
 
     // Auto-launch after 3 seconds on first visit
