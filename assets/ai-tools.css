@@ -1,0 +1,60 @@
+/* AI Smart Tools styles */
+.ar-smart-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+@media (max-width: 800px) { .ar-smart-tools { grid-template-columns: 1fr; } }
+.ar-tool-card {
+  background: #fff; border: 1px solid #ece2c6; border-radius: 18px;
+  padding: 1.8rem; box-shadow: 0 4px 20px rgba(16,38,78,.07);
+}
+.ar-tool-card h3 { margin: 0 0 .4rem; color: #10264e; font-size: 1.25rem; }
+.ar-tool-card .sub { color: #777; font-size: .92rem; margin-bottom: 1.2rem; }
+.ar-tool-badge {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  background: linear-gradient(135deg, #10264e, #1e3f7a); color: #c9a24b;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: .8rem;
+}
+/* Quiz */
+.ar-quiz-q { font-size: 1.1rem; font-weight: 700; color: #10264e; margin-bottom: 1rem; }
+.ar-quiz-opts { display: flex; flex-direction: column; gap: .6rem; }
+.ar-quiz-opt {
+  text-align: left; background: #faf7ef; border: 1.5px solid #e5dcc2; border-radius: 12px;
+  padding: .85rem 1.1rem; font-size: .95rem; cursor: pointer; transition: all .2s; color: #2c2c2c;
+}
+.ar-quiz-opt:hover { border-color: #c9a24b; background: #fff; transform: translateX(4px); }
+.ar-quiz-progress { margin-top: 1rem; font-size: .8rem; color: #999; text-align: center; }
+.ar-quiz-result { text-align: center; }
+.ar-quiz-label { font-size: .85rem; color: #c9a24b; font-weight: 700; letter-spacing: 1px; margin-bottom: .5rem; }
+.ar-quiz-treatment { font-size: 1.5rem; font-weight: 800; color: #10264e; margin-bottom: .8rem; }
+.ar-quiz-restart { background: none; border: none; color: #888; cursor: pointer; margin-top: 1rem; font-size: .9rem; }
+.ar-quiz-restart:hover { color: #10264e; }
+/* Estimator */
+.ar-est-select {
+  width: 100%; padding: .9rem 1rem; border: 1.5px solid #e5dcc2; border-radius: 12px;
+  font-size: 1rem; background: #faf7ef; color: #2c2c2c; cursor: pointer;
+}
+.ar-est-result { margin-top: 1.2rem; text-align: center; animation: ar-fadein .3s; }
+@keyframes ar-fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+.ar-est-range { font-size: 1.6rem; font-weight: 800; color: #10264e; }
+.ar-est-note { color: #666; margin: .3rem 0; }
+.ar-est-disc { font-size: .8rem; color: #999; margin-top: .6rem; font-style: italic; }
+/* Before/After */
+.ar-ba {
+  position: relative; overflow: hidden; border-radius: 16px; cursor: ew-resize;
+  user-select: none; -webkit-user-select: none; aspect-ratio: 4/3; background: #eee;
+  border: 1px solid #ece2c6;
+}
+.ar-ba img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.ar-ba-after { position: absolute; inset: 0; }
+.ar-ba-before { position: absolute; top: 0; left: 0; bottom: 0; overflow: hidden; border-right: 3px solid #c9a24b; }
+.ar-ba-before img { width: 100vw; max-width: none; }
+.ar-ba-handle { position: absolute; top: 0; bottom: 0; width: 0; z-index: 2; }
+.ar-ba-knob {
+  position: absolute; top: 50%; left: 0; transform: translate(-50%, -50%);
+  width: 44px; height: 44px; border-radius: 50%; background: #c9a24b; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.ar-ba-tag {
+  position: absolute; top: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  background: rgba(0,0,0,.55); color: #fff; padding: 4px 12px; border-radius: 12px; z-index: 2;
+}
+.tag-b { left: 12px; } .tag-a { right: 12px; }
