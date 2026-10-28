@@ -1,0 +1,13 @@
+/* Instagram gallery (one-off page styles, loaded after style.css) */
+.ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.4rem}
+.ig-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:.18s}
+.ig-card:hover{box-shadow:0 12px 30px rgba(15,42,74,.1);transform:translateY(-2px)}
+.ig-card img{width:100%;aspect-ratio:1/1.28;object-fit:cover}
+.ig-body{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;flex:1}
+.ig-tag{font-size:.75rem;color:var(--gold);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ig-body h3{margin:.3rem 0 .4rem;font-size:1.05rem;line-height:1.35}
+.ig-body p{color:var(--muted);font-size:.92rem;flex:1}
+.ig-links{margin-top:.9rem;display:flex;flex-direction:column;gap:.3rem}
+.ig-links a{font-weight:700;font-size:.92rem}
+@media(max-width:900px){.ig-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.ig-grid{grid-template-columns:1fr}}
