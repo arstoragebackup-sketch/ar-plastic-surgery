@@ -9,6 +9,14 @@ from html.parser import HTMLParser
 from content_proc_a import PROCEDURES_A
 from content_proc_b import PROCEDURES_B
 from content_blog import POSTS
+from content_district_posts import DISTRICT_POSTS
+ALL_POSTS = POSTS + DISTRICT_POSTS
+try:
+    from content_blog_te import TE_POSTS
+    from content_district_posts_te import TE_DISTRICT_POSTS
+    ALL_TE_POSTS = TE_POSTS + TE_DISTRICT_POSTS
+except ImportError:
+    ALL_TE_POSTS = []
 
 PROCEDURES = PROCEDURES_A + PROCEDURES_B
 PROC_BY_SLUG = {p["slug"]: p for p in PROCEDURES}
@@ -34,6 +42,7 @@ CLINIC = {
     "hours": "Monday – Sunday, 10:00 AM – 8:00 PM",
     "booking": "https://arstoragebackup-sketch.github.io/Booking/",
     "instagram": "https://www.instagram.com/karimnagar.aesthetics/",
+    "whatsapp": "https://wa.me/919182656866?text=Hi%20AR%20Plastic%20Surgery%2C%20I%27d%20like%20to%20book%20a%20consultation.",
     "lat": "18.44449",
     "lon": "79.12475",
 }
@@ -210,6 +219,80 @@ footer a:hover{color:#fff}
 .post-card h3{margin:.35rem 0 .4rem;font-size:1.25rem}
 .post-card p{color:var(--muted);font-size:.96rem}
 .rel-box{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.6rem;margin-top:2.2rem}
+/* video library */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;margin:1.2rem 0 2.6rem}
+.video-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.18s}
+.video-card:hover{box-shadow:0 12px 30px rgba(15,42,74,.1)}
+.video-frame{position:relative;aspect-ratio:9/13;max-height:430px;background:var(--navy) url('assets/logo.png') center/72px no-repeat}
+.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-facade{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:1.4rem;background:linear-gradient(180deg,rgba(15,42,74,.25),rgba(15,42,74,.88));cursor:pointer;border:0;width:100%;text-align:center}
+.video-facade .play{width:64px;height:64px;border-radius:50%;background:var(--gold);color:#fff;font-size:1.6rem;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.video-facade .watch-label{color:#fff;font-weight:700;font-size:.95rem}
+.video-body{padding:1.1rem 1.2rem 1.3rem}
+.video-cat{font-size:.75rem;color:var(--gold);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.video-body h3{margin:.3rem 0 .45rem;font-size:1.08rem;line-height:1.35}
+.video-body p{color:var(--muted);font-size:.92rem;margin:0}
+.video-note{background:var(--gold-soft);border:1px solid #e7d9ae;border-radius:var(--radius);padding:1rem 1.3rem;font-size:.93rem;margin:1.6rem 0}
+/* gold medal certificate showcase */
+.cert-showcase{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 60%,#0b1f38 100%);color:#fff;overflow:hidden;position:relative}
+.cert-showcase::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(193,154,61,.20),transparent 50%),radial-gradient(circle at 85% 80%,rgba(193,154,61,.14),transparent 45%);pointer-events:none}
+.cert-grid{position:relative;display:grid;grid-template-columns:1fr 1.15fr;gap:2.6rem;align-items:center;padding:3.4rem 0}
+.cert-copy .eyebrow{color:var(--gold)}
+.cert-copy h2{color:#fff;margin:.3rem 0 .9rem}
+.cert-copy p{color:#c9d6e5}
+.cert-copy p strong{color:#ffe9a8}
+.cert-frame{position:relative;transform:perspective(1200px) rotateY(-7deg) rotateX(2deg);transition:transform .55s cubic-bezier(.2,.7,.3,1.2);filter:drop-shadow(0 26px 50px rgba(0,0,0,.5))}
+.cert-frame:hover{transform:perspective(1200px) rotateY(0deg) rotateX(0deg) scale(1.02)}
+.cert-frame img{width:100%;border:6px solid var(--gold);border-radius:10px;display:block;background:#fff}
+.cert-frame::after{content:"";position:absolute;inset:0;border-radius:10px;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.38) 50%,transparent 58%);transform:translateX(-130%);pointer-events:none}
+.cert-frame:hover::after{animation:certShine 1.15s ease}
+@keyframes certShine{to{transform:translateX(130%)}}
+.medal-seal{position:absolute;top:-30px;right:-16px;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffefa8,#c19a3d 62%,#8a6a1f);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#3d2c05;box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 2px 8px rgba(255,255,255,.55);animation:sealPulse 3.2s ease-in-out infinite;z-index:2;line-height:1.05}
+.medal-seal .star{font-size:1.7rem}
+.medal-seal .yr{font-size:.62rem;font-weight:800;letter-spacing:.08em}
+@keyframes sealPulse{0%,100%{transform:scale(1) rotate(-7deg)}50%{transform:scale(1.08) rotate(7deg)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s ease}
+.reveal.visible{opacity:1;transform:none}
+@media(max-width:860px){.cert-grid{grid-template-columns:1fr;padding:2.6rem 0}.medal-seal{width:78px;height:78px;top:-22px;right:-8px}}
+/* ---- premium polish: floats, shine, reveals ---- */
+.float-wa{position:fixed;left:18px;bottom:18px;z-index:60;width:58px;height:58px;border-radius:50%;
+  background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .2s}
+.float-wa:hover{transform:scale(1.1) rotate(6deg)}
+.float-wa svg{width:30px;height:30px;fill:#fff}
+.float-wa::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25d366;animation:waRing 2.4s ease-out infinite}
+@keyframes waRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+.hero{position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;pointer-events:none;z-index:0}
+.hero::before{width:420px;height:420px;background:#c19a3d;top:-140px;right:-100px;animation:orbFloat 9s ease-in-out infinite}
+.hero::after{width:340px;height:340px;background:#4d7fb5;bottom:-160px;left:-120px;animation:orbFloat 12s ease-in-out infinite reverse}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-34px)}}
+.hero .wrap{position:relative;z-index:1}
+.hero-photo{animation:heroIn 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes heroIn{from{opacity:0;transform:translateX(46px) scale(.97)}to{opacity:1;transform:none}}
+.badge{animation:badgeIn .7s ease both}
+.badge:nth-child(2){animation-delay:.12s}.badge:nth-child(3){animation-delay:.24s}
+@keyframes badgeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;bottom:0;width:45%;left:-60%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg)}
+.btn:hover::after{animation:btnShine .8s ease}
+@keyframes btnShine{to{left:130%}}
+.card-grid>*,.post-card,.video-card{transition:transform .25s ease,box-shadow .25s ease}
+.card-grid>*:hover,.post-card:hover{transform:translateY(-6px)}
+.trust .t b{font-variant-numeric:tabular-nums}
+/* reviews */
+.reviews{background:linear-gradient(180deg,#fff, var(--bg-soft));overflow:hidden}
+.stars{color:#f5a623;font-size:1.35rem;letter-spacing:.15em}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:1.6rem}
+.review-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;position:relative;transition:transform .25s ease,box-shadow .25s ease}
+.review-card:hover{transform:translateY(-6px);box-shadow:0 16px 36px rgba(15,42,74,.12)}
+.review-card .q{font-size:2.6rem;line-height:1;color:var(--gold);font-family:var(--serif)}
+.review-card p{font-size:.95rem;color:var(--ink);margin:.4rem 0 .9rem}
+.review-card .who{font-weight:700;font-size:.9rem}
+.review-card .src{font-size:.8rem;color:var(--muted)}
+.g-badge{display:inline-flex;align-items:center;gap:.7rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.55rem 1.2rem;box-shadow:0 6px 18px rgba(15,42,74,.08);margin-top:1.2rem}
+.g-badge .n{font-size:1.7rem;font-weight:800;color:var(--navy)}
+.g-badge .t{font-size:.85rem;color:var(--muted);line-height:1.3}
 .rel-box h3{margin-bottom:.6rem}
 .rel-box ul{list-style:none;display:grid;gap:.4rem}
 .rel-box a{font-weight:600}
@@ -270,8 +353,18 @@ def clinic_jsonld(page_url, description):
             "description": f"{CLINIC['doctor']}, {CLINIC['credentials']}; {CLINIC['specialties']}.",
         },
         "areaServed": [{"@type": "City", "name": t} for t in TOWNS],
-        "sameAs": [CLINIC["instagram"]],
+        "sameAs": [
+            CLINIC["instagram"],
+            "https://www.justdial.com/Karimnagar/Ar-Plastic-Surgery-Opposite-Reddy-Gari-Vantillu-Malkapur-Road-Karimnagar/9999PX878-X878-230906081410-A2I2_BZDET",
+            "https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar",
+        ],
         "priceRange": "₹₹",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "240",
+            "bestRating": "5",
+        },
     }
 
 def faq_jsonld(faqs):
@@ -285,9 +378,18 @@ def faq_jsonld(faqs):
     }
 
 def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png",
-         asset_prefix="assets/", og_type="website"):
+         asset_prefix="assets/", og_type="website", lang="en", alternates=None):
     import json
     url = BASE_URL + path
+    GA_ID = "G-0FZ4GMKT75"
+    ga_tag = f"""<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', '{GA_ID}');
+</script>"""
     schemas = [clinic_jsonld(url, desc)]
     if extra_jsonld:
         schemas.append(extra_jsonld)
@@ -295,14 +397,23 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png",
         '<script type="application/ld+json">\n' + json.dumps(s, ensure_ascii=False, indent=2) + "\n</script>"
         for s in schemas
     )
+    alt_tags = ""
+    if alternates:
+        alt_tags = "\n".join(
+            f'<link rel="alternate" hreflang="{hl}" href="{u}">' for hl, u in alternates)
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="geo.region" content="IN-TG" />
+<meta name="geo.placename" content="Karimnagar, Telangana, India" />
+<meta name="geo.position" content="18.44449;79.12475" />
+<meta name="ICBM" content="18.44449, 79.12475" />
 <title>{htmllib.escape(title)}</title>
 <meta name="description" content="{htmllib.escape(desc)}">
 <link rel="canonical" href="{url}">
+{alt_tags}
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="AR Plastic Surgery">
@@ -316,6 +427,7 @@ def head(title, desc, path, extra_jsonld=None, og_image="/assets/logo.png",
 <meta name="twitter:image" content="{BASE_URL}{og_image}">
 <link rel="icon" href="{asset_prefix}logo.png" type="image/png">
 <link rel="stylesheet" href="{asset_prefix}style.css">
+{ga_tag}
 {ld}
 </head>"""
 
@@ -337,6 +449,9 @@ def header(active, root=""):
       {a('/services.html','Services','services')}
       {a('/procedures/index.html','Procedures','procedures')}
       {a('/blog/index.html','Blog','blog')}
+      {a('/videos.html','Videos','videos')}
+      {a('/stories/index.html','Stories','stories')}
+      {a('/te/index.html','తెలుగు','telugu')}
       {a('/contact.html','Contact','contact')}
     </nav>
     <div class="header-cta">
@@ -394,15 +509,73 @@ def footer(root=""):
 <a class="float-call" href="tel:{CLINIC['phone_tel']}" aria-label="Call AR Plastic Surgery now">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
 </a>
+<a class="float-wa" href="{CLINIC['whatsapp']}" target="_blank" rel="noopener" aria-label="Chat with AR Plastic Surgery on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.2-.7.5-.9 1-.6 2.4.7 3.9a11.6 11.6 0 0 0 4.5 3.9c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3z"/></svg>
+</a>
 <script>
 (function(){{
   var t=document.getElementById('navToggle'),n=document.getElementById('mainNav'),hd=document.getElementById('siteHeader');
   if(t){{t.addEventListener('click',function(){{var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o);}});}}
   window.addEventListener('scroll',function(){{hd.classList.toggle('scrolled',window.scrollY>8);}},{{passive:true}});
+  /* scroll reveals */
+  var rev=document.querySelectorAll('main .reveal');
+  function show(e){{e.classList.add('visible');}}
+  if('IntersectionObserver' in window){{
+    var io=new IntersectionObserver(function(es){{es.forEach(function(en){{if(en.isIntersecting){{show(en.target);io.unobserve(en.target);}}}});}},{{threshold:.12,rootMargin:'0px 0px -6% 0px'}});
+    rev.forEach(function(e){{io.observe(e);}});
+  }} else {{ rev.forEach(show); }}
+  /* animated counters */
+  function animCount(el){{
+    var target=parseFloat(el.getAttribute('data-count')),dec=el.hasAttribute('data-dec')?1:0,suf=el.getAttribute('data-suffix')||'';
+    var t0=null,dur=1400;
+    function tick(ts){{if(!t0)t0=ts;var p=Math.min((ts-t0)/dur,1),e=1-Math.pow(1-p,3),v=(target*e).toFixed(dec);
+      el.textContent=v+suf;if(p<1)requestAnimationFrame(tick);}}
+    requestAnimationFrame(tick);
+  }}
+  var cEls=document.querySelectorAll('[data-count]');
+  if(cEls.length&&'IntersectionObserver' in window){{
+    var io3=new IntersectionObserver(function(es){{es.forEach(function(en){{if(en.isIntersecting){{animCount(en.target);io3.unobserve(en.target);}}}});}},{{threshold:.4}});
+    cEls.forEach(function(e){{io3.observe(e);}});
+  }} else {{ cEls.forEach(animCount); }}
 }})();
 </script>
+<link rel="stylesheet" href="{root}assets/ai-tools.css">
+<script src="{root}assets/ai-knowledge.js" defer></script>
+<script src="{root}assets/ai-tools.js" defer></script>
+<link rel="stylesheet" href="{root}assets/ai-advanced.css">
+<script src="{root}assets/ai-advanced.js" defer></script>
+<script src="{root}assets/ai-assistant.js" defer></script>
 </body>
 </html>"""
+
+def body_explorer_section():
+    return """<section><div class="wrap reveal">
+<span class="eyebrow">Interactive Explorer</span>
+<h2>Explore treatments by body area</h2>
+<p class="lede">Tap any glowing point to see what we offer for that area — honest information, no pressure.</p>
+<div id="ar-body-explorer"></div>
+</div></section>"""
+
+def smart_tools_section():
+    return """<section><div class="wrap reveal">
+<span class="eyebrow">AI-Powered Tools</span>
+<h2>Smart tools, honest answers</h2>
+<p class="lede">Not sure where to start? Our intelligent tools guide you — no pressure, no gimmicks.</p>
+<div class="ar-smart-tools">
+<div class="ar-tool-card">
+<span class="ar-tool-badge">🤖 AI QUIZ</span>
+<h3>Find Your Treatment</h3>
+<p class="sub">Answer 3 quick questions and get a personalised treatment recommendation.</p>
+<div id="ar-quiz"></div>
+</div>
+<div class="ar-tool-card">
+<span class="ar-tool-badge">💰 ESTIMATOR</span>
+<h3>Treatment Cost Estimator</h3>
+<p class="sub">Get an indicative price range. Final cost is confirmed during consultation.</p>
+<div id="ar-estimator"></div>
+</div>
+</div>
+</div></section>"""
 
 def cta_band(root=""):
     return f"""<div class="wrap"><div class="cta-band">
@@ -432,7 +605,7 @@ PROC_CATS = [
       "eyelid-surgery-blepharoplasty", "lipoma-removal"]),
     ("Reconstructive Surgery", "reconstructive-surgery",
      ["breast-reconstruction", "burn-reconstruction", "scar-keloid-treatment",
-      "cleft-lip-palate-repair"]),
+      "cleft-lip-palate-repair", "skin-grafting"]),
     ("Hand & Microvascular Surgery", "hand-microvascular-surgery",
      ["hand-trauma-surgery", "tendon-repair", "nerve-repair-microsurgery",
       "carpal-tunnel-release", "microsurgery-free-flap", "fingertip-replantation"]),
@@ -504,6 +677,20 @@ def blogposting_jsonld(post, url):
         "mainEntityOfPage": {"@type": "WebPage", "@id": url},
     }
 
+def breadcrumb_jsonld(items):
+    """items: list of (name, url) — last item may have url=None for current page."""
+    elems = []
+    for i, (name, url) in enumerate(items, 1):
+        el = {"@type": "ListItem", "position": i, "name": name}
+        if url:
+            el["item"] = url
+        elems.append(el)
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": elems,
+    }
+
 def esc_paras(paras):
     return "\n".join(f"<p>{htmllib.escape(p)}</p>" for p in paras)
 
@@ -512,6 +699,81 @@ def page_procedure(proc):
     path = f"/procedures/{slug}.html"
     url = BASE_URL + path
     faqs = proc["faqs"]
+    # district guide cross-link — internal links help guides get discovered and rank
+    PROC_TO_HUB = {
+        "fue-hair-transplant": "hair-transplant",
+        "breast-augmentation": "breast-augmentation",
+        "gynecomastia-surgery": "gynecomastia",
+        "tummy-tuck": "tummy-tuck",
+        "liposuction": "liposuction",
+        "rhinoplasty": "rhinoplasty",
+        "burn-reconstruction": "burn-reconstruction",
+        "scar-keloid-treatment": "scar-treatment",
+        "hand-trauma-surgery": "hand-surgery",
+        "tendon-repair": "hand-surgery",
+        "nerve-repair-microsurgery": "hand-surgery",
+        "fingertip-replantation": "hand-surgery",
+        "botox-treatment": "botox-fillers",
+    }
+    guide_block = ""
+    hub = PROC_TO_HUB.get(slug)
+    if hub:
+        import json as _json
+        try:
+            _here = os.path.dirname(os.path.abspath(__file__))
+            done_hubs = _json.load(open(os.path.join(_here, "district_hub_queue.json")))
+        except Exception:
+            done_hubs = []
+        if hub in done_hubs:
+            guide_block = f"""
+  <div class="rel-box" style="margin-top:1.6rem">
+    <h3>Coming from outside Karimnagar?</h3>
+    <p>Read our complete {htmllib.escape(proc["name"])} guide covering all 33 Telangana districts — who it suits, what to expect, and how to plan your visit: <a href="../blog/{hub}-telangana-district-guide.html">{htmllib.escape(proc["name"])}: Telangana all-districts guide →</a></p>
+  </div>"""
+        # Karimnagar-local guide cross-link (P0 keyword page) — only on the FUE page
+        if slug == "fue-hair-transplant":
+            guide_block += """
+  <div class="rel-box" style="margin-top:1.2rem">
+    <h3>In Karimnagar itself?</h3>
+    <p>Read our Karimnagar-focused guide — candidacy, the procedure, recovery and what to ask at consultation, right here in town: <a href="../blog/hair-transplant-karimnagar-guide.html">Hair transplant in Karimnagar: the local guide →</a></p>
+  </div>"""
+    # procedure explainer videos (YouTube) — helps these pages appear in video search
+    PROC_VIDEOS = {
+        "fue-hair-transplant": ("CWpc34EG0mY", "Hair Transplant in Karimnagar: 5 Checks Before You Choose a Clinic"),
+        "burn-reconstruction": ("9v-7iTb2hSQ", "Childhood Burns Need the Right Care at the Right Time"),
+        "breast-augmentation": ("Q6K8kjZdLTk", "Breast Implants: Shape, Volume & Confidence"),
+    }
+    video_block, video_schema = "", []
+    if slug in PROC_VIDEOS:
+        ytid, vtitle = PROC_VIDEOS[slug]
+        video_block = f"""
+  <h2 style="margin-top:2rem">Watch: {htmllib.escape(vtitle)}</h2>
+  <p>Dr Ashok Reddy explains this treatment on video:</p>
+  <div class="video-frame" style="max-width:380px;aspect-ratio:9/14">
+    <button class="video-facade" data-embed="https://www.youtube.com/embed/{ytid}" aria-label="Play video: {htmllib.escape(vtitle)}">
+      <span class="play">▶</span><span class="watch-label">Watch on this page</span>
+    </button>
+  </div>
+  <script>
+  document.querySelectorAll('.video-facade').forEach(function(btn){{
+    btn.addEventListener('click', function(){{
+      var f = document.createElement('iframe');
+      f.src = btn.getAttribute('data-embed');
+      f.setAttribute('allowfullscreen',''); f.setAttribute('loading','lazy');
+      f.setAttribute('title', btn.getAttribute('aria-label'));
+      btn.parentElement.replaceChild(f, btn);
+    }}, {{once:true}});
+  }});
+  </script>"""
+        video_schema = [{
+            "@context": "https://schema.org", "@type": "VideoObject",
+            "name": vtitle,
+            "description": f"{vtitle} — explained by Dr Ashok Reddy, AR Plastic Surgery Karimnagar.",
+            "contentUrl": f"https://youtube.com/shorts/{ytid}",
+            "embedUrl": f"https://www.youtube.com/embed/{ytid}",
+            "thumbnailUrl": f"https://i.ytimg.com/vi/{ytid}/hqdefault.jpg",
+            "uploadDate": "2026-10-06T00:00:00+05:30",
+        }]
     rel_cards = []
     for r in proc["related"]:
         rp = PROC_BY_SLUG.get(r)
@@ -543,6 +805,7 @@ def page_procedure(proc):
   {esc_paras(proc["overview"])}
   <h2 style="margin-top:2rem">Our approach</h2>
   {esc_paras(proc["approach"])}
+  {video_block}
   <h2 style="margin-top:2rem">What to expect</h2>
   {journey}
   <h2 style="margin-top:2rem">Risks and limitations — stated honestly</h2>
@@ -552,6 +815,7 @@ def page_procedure(proc):
   </ul>
   <h2 style="margin-top:2.2rem">Related procedures</h2>
   <div class="card-grid">{"".join(rel_cards)}</div>
+  {guide_block}
   <div class="rel-box">
     <h3>Visiting from nearby?</h3>
     <p>{town_links}</p>
@@ -561,8 +825,9 @@ def page_procedure(proc):
 {cta_band(root="../")}
 </main>"""
     return (head(proc["title"], proc["desc"], path,
-                 [procedure_jsonld(proc, url), faq_jsonld(faqs)],
-                 asset_prefix="../assets/")
+                 [procedure_jsonld(proc, url), faq_jsonld(faqs)] + video_schema,
+                 asset_prefix="../assets/",
+                 alternates=_te_alternates("/te/fue-hair-transplant.html", path) if slug == "fue-hair-transplant" else None)
             + header("procedures", root="../") + body + footer(root="../"))
 
 def page_procedures_index():
@@ -603,7 +868,14 @@ def page_blog_index():
     desc = ("Patient-education articles by Dr Ashok Reddy, Karimnagar: hair transplant questions, gynecomastia "
             "facts, hand surgery guidance, Botox myths and recovery guides.")
     cards = []
-    for post in POSTS:
+    # featured: the standalone Karimnagar hair-transplant guide (P0 keyword page, not in POSTS)
+    cards.append(
+        '<article class="post-card"><div class="post-date">Patient guide</div>'
+        '<h3>Hair Transplant in Karimnagar: The Local Guide</h3><p>Considering hair transplant in Karimnagar? '
+        'Dr Ashok Reddy explains candidacy, procedure and recovery at AR Plastic Surgery, Court Chowrasta.</p>'
+        '<a class="more" style="font-weight:700;font-size:.92rem" href="hair-transplant-karimnagar-guide.html">Read the article →</a></article>'
+    )
+    for post in ALL_POSTS:
         cards.append(
             f'<article class="post-card"><div class="post-date">{htmllib.escape(post["date"])}</div>'
             f'<h3>{htmllib.escape(post["h1"])}</h3><p>{htmllib.escape(post["desc"])}</p>'
@@ -621,6 +893,17 @@ def page_blog_index():
 </main>"""
     return (head(title, desc, "/blog/index.html", asset_prefix="../assets/")
             + header("blog", root="../") + body + footer(root="../"))
+
+def guide_box(post):
+    """Optional district-guide cross-link for blog posts (via post['guide'] hub slug)."""
+    hub = post.get("guide")
+    if not hub:
+        return ""
+    return f"""
+  <div class="rel-box" style="margin-top:1.2rem">
+    <h3>Coming from outside Karimnagar?</h3>
+    <p>Read our complete hand surgery guide covering all 33 Telangana districts — who it suits, what to expect, and how to plan your visit: <a href="{hub}-telangana-district-guide.html">Hand Surgery: Telangana all-districts guide →</a></p>
+  </div>"""
 
 def page_blog_post(post):
     slug = post["slug"]
@@ -647,14 +930,21 @@ def page_blog_post(post):
     <h3>Related procedures</h3>
     <ul>{rel_items}</ul>
   </div>
+  {guide_box(post)}
 </div></section>
 {faq_block(faqs) if faqs else ""}
 {cta_band(root="../")}
 </main>"""
-    extra = [blogposting_jsonld(post, url)]
+    extra = [blogposting_jsonld(post, url),
+             breadcrumb_jsonld([("Home", BASE_URL + "/index.html"),
+                                ("Blog", BASE_URL + "/blog/index.html"),
+                                (post["h1"], url)])]
     if faqs:
         extra.append(faq_jsonld(faqs))
-    return (head(post["title"], post["desc"], path, extra, asset_prefix="../assets/", og_type="article")
+    te_url = BASE_URL + f"/te/blog/{slug}.html"
+    alternates = [("en", url), ("te", te_url), ("x-default", url)]
+    return (head(post["title"], post["desc"], path, extra, asset_prefix="../assets/", og_type="article",
+                 alternates=alternates)
             + header("blog", root="../") + body + footer(root="../"))
 
 # ---------------------------------------------------------------- services data
@@ -739,6 +1029,45 @@ INDEX_FAQS = [
   "Yes. All consultations at AR Plastic Surgery are private, and your information is handled with strict confidentiality."),
 ]
 
+# ---------------------------------------------------------------- guides section (homepage)
+def guides_section():
+    """Latest district guides — internal links that help guides get indexed and rank."""
+    import json as _json
+    GUIDE_TITLES = {
+        "hair-transplant": "Hair Transplant",
+        "breast-augmentation": "Breast Augmentation",
+        "gynecomastia": "Gynecomastia",
+        "tummy-tuck": "Tummy Tuck",
+        "liposuction": "Liposuction",
+        "rhinoplasty": "Rhinoplasty",
+        "burn-reconstruction": "Burn Reconstruction",
+        "scar-treatment": "Scar Treatment",
+        "hand-surgery": "Hand Surgery",
+        "botox-fillers": "Botox & Fillers",
+    }
+    try:
+        _here = os.path.dirname(os.path.abspath(__file__))
+        done = _json.load(open(os.path.join(_here, "district_hub_queue.json")))
+    except Exception:
+        done = []
+    done = [h for h in done if h in GUIDE_TITLES]
+    if not done:
+        return ""
+    cards = "".join(
+        f'<article class="card"><h3>{GUIDE_TITLES[h]}</h3>'
+        f'<p>Complete {GUIDE_TITLES[h].lower()} guide covering all 33 Telangana districts — who it suits, what to expect, and planning your visit.</p>'
+        f'<a class="more" href="blog/{h}-telangana-district-guide.html">Read the guide →</a></article>'
+        for h in done
+    )
+    return f"""
+<section style="background:var(--bg-soft)"><div class="wrap reveal">
+  <span class="eyebrow">Patient guides</span>
+  <h2>Procedure guides for every Telangana district</h2>
+  <p class="lede">In-depth guides written for patients across the state — each one covers all 33 districts:</p>
+  <div class="card-grid">{cards}</div>
+  <p style="margin-top:1rem"><a class="more" href="blog/index.html">All articles →</a></p>
+</div></section>"""
+
 def page_index():
     title = "AR Plastic Surgery | Plastic Surgeon in Karimnagar"
     desc = ("Dr Ashok Reddy (MBBS, DNB, M.Ch, Gold Medalist) leads AR Plastic Surgery, Karimnagar — "
@@ -788,19 +1117,19 @@ def page_index():
 
 <div class="trust"><div class="wrap trust-grid">
   <div class="t"><b>Gold Medalist</b><span>M.Ch Plastic Surgery</span></div>
-  <div class="t"><b>19</b><span>Surgeon-led services</span></div>
+  <div class="t"><b data-count="19">19</b><span>Surgeon-led services</span></div>
   <div class="t"><b>7 days</b><span>Open Mon–Sun, 10 AM–8 PM</span></div>
-  <div class="t"><b>17 towns</b><span>Service area across Telangana</span></div>
+  <div class="t"><b><span data-count="17">17</span> towns</b><span>Service area across Telangana</span></div>
 </div></div>
 
-<section><div class="wrap">
+<section><div class="wrap reveal">
   <span class="eyebrow">What we treat</span>
   <h2>Complete plastic surgery, under one roof</h2>
   <p class="lede">From reconstructive surgery after trauma and burns to cosmetic procedures and non-surgical aesthetics — every treatment is planned by a qualified plastic surgeon.</p>
   <div class="card-grid">{cards}</div>
 </div></section>
 
-<section style="background:var(--bg-soft)"><div class="wrap split">
+<section style="background:var(--bg-soft)"><div class="wrap split reveal">
   <img class="doc" src="assets/dr-ashok-reddy.jpg" alt="Portrait of {CLINIC['doctor']}" width="540" height="648" loading="lazy">
   <div>
     <span class="eyebrow">Meet your surgeon</span>
@@ -816,17 +1145,55 @@ def page_index():
   </div>
 </div></section>
 
-<section><div class="wrap">
+<section class="cert-showcase"><div class="wrap cert-grid">
+  <div class="cert-copy reveal">
+    <span class="eyebrow">Gold Medalist</span>
+    <h2>Recognised at the national level</h2>
+    <p>{CLINIC['doctor']} was awarded the <strong>Dr Anju B Singh Memorial Tara Ambadutt Tiwari Gold Medal for Plastic &amp; Reconstructive Surgery (2019)</strong> — for academic excellence at the Atal Bihari Vajpayee Institute of Medical Sciences, Dr Ram Manohar Lohia Hospital, New Delhi.</p>
+    <p>That same standard — precision and perfection — goes into every consultation and procedure at AR Plastic Surgery, Karimnagar.</p>
+    <div class="btn-row"><a class="btn btn-gold" href="about.html">More about {CLINIC['doctor']} →</a></div>
+  </div>
+  <div class="cert-frame reveal">
+    <div class="medal-seal" aria-hidden="true"><span class="star">★</span><span class="yr">2019</span></div>
+    <img src="assets/gold-medal-certificate.jpg" alt="Certificate of Academic Excellence: Gold Medal for Plastic and Reconstructive Surgery 2019 awarded to Dr Daram Ashok Reddy, ABVIMS Dr RML Hospital, New Delhi" loading="lazy" width="1439" height="1093">
+  </div>
+</div></section>
+<script>
+(function(){{var els=document.querySelectorAll('.cert-showcase .reveal');
+if(!('IntersectionObserver' in window)){{els.forEach(function(e){{e.classList.add('visible')}});return;}}
+var io=new IntersectionObserver(function(es){{es.forEach(function(en){{if(en.isIntersecting){{en.target.classList.add('visible');io.unobserve(en.target);}}}})}} ,{{threshold:.18}});
+els.forEach(function(e){{io.observe(e)}});}})();
+</script>
+
+<section class="reviews"><div class="wrap">
+  <div class="reveal" style="text-align:center;max-width:660px;margin:0 auto">
+    <span class="eyebrow">Patient reviews</span>
+    <h2>Rated 4.9 by patients on Google</h2>
+    <div class="stars" role="img" aria-label="Rated 4.9 out of 5 stars">★★★★★</div>
+    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>240 Google reviews</b><br>verified patient ratings</span></span></div>
+    <p class="lede" style="margin-top:1.1rem">Every single review is answered personally by our team — because every patient's experience matters.</p>
+    <div class="btn-row" style="justify-content:center"><a class="btn btn-solid" href="https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar+Telangana" target="_blank" rel="noopener">Read all reviews on Google →</a></div>
+  </div>
+</div></section>
+
+<section><div class="wrap reveal">
   <span class="eyebrow">Areas we serve</span>
   <h2>Karimnagar's plastic surgery practice for all of Telangana</h2>
   <p class="lede">Patients visit us from across the region — including Jagtial, Warangal and nearby districts. Dedicated guides for our neighbouring towns:</p>
   <div class="town-grid">{town_cards}</div>
 </div></section>
 
+{guides_section()}
+
+{body_explorer_section()}
+
+{smart_tools_section()}
+
 {faq_block(INDEX_FAQS)}
 {cta_band()}
 </main>"""
-    return head(title, desc, "/index.html", faq_jsonld(INDEX_FAQS)) + header("home") + body + footer()
+    return head(title, desc, "/index.html", faq_jsonld(INDEX_FAQS),
+                alternates=_te_alternates("/te/index.html", "/index.html")) + header("home") + body + footer()
 
 # ---------------------------------------------------------------- about.html
 def page_about():
@@ -882,6 +1249,65 @@ def page_about():
 {cta_band()}
 </main>"""
     return head(title, desc, "/about.html") + header("about") + body + footer()
+
+# ---------------------------------------------------------------- hand-surgeon-karimnagar.html
+def page_hand_surgeon():
+    title = "Hand Surgeon in Karimnagar | Dr Ashok Reddy | AR Plastic Surgery"
+    desc = ("Hand surgeon in Karimnagar: Dr Ashok Reddy (MBBS, DNB, M.Ch, Gold Medalist), hand & microvascular "
+            "surgeon for injuries, tendon & nerve repair at AR Plastic Surgery.")
+    faqs = [
+        ("Who is a hand surgeon?",
+         "A hand surgeon is a specialist who treats injuries and conditions of the hand, wrist and forearm — bones, tendons, nerves, vessels and skin. In India, hand surgeons usually come from plastic surgery or orthopaedic backgrounds with additional super-specialty training in hand and microsurgery."),
+        ("Why see a plastic surgeon for a hand problem?",
+         "Plastic surgeons with hand training bring microsurgery — operating under magnification on structures millimetres wide. Tendon, nerve and vessel repair demands this precision. Dr Ashok Reddy is an M.Ch plastic surgeon and Gold Medalist with dedicated hand & microvascular training."),
+        ("What conditions does a hand surgeon treat?",
+         "Hand fractures, deep cuts, crush injuries, fingertip amputations, divided tendons and nerves, carpal tunnel syndrome, trigger finger, and post-injury stiffness. Both emergency trauma and planned treatment for ongoing hand problems."),
+        ("Do I need to travel to Hyderabad for hand surgery?",
+         "No. AR Plastic Surgery in Karimnagar provides full-time hand surgical care — emergency assessment, microsurgical repair and hand therapy — so patients across Telangana can be treated close to home."),
+        ("How do I book a consultation?",
+         "Call +91 91826 56866 or book online. The clinic is open daily 10 AM to 8 PM at Court Chowrasta, Karimnagar."),
+    ]
+    faq_html = "\n".join(
+        f'<div class="faq"><h3>{htmllib.escape(q)}</h3><p>{htmllib.escape(a)}</p></div>'
+        for q, a in faqs)
+    body = f"""
+<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Hand Surgeon in Karimnagar</nav>
+  <span class="eyebrow">Hand &amp; microvascular surgery</span>
+  <h1>Hand Surgeon in Karimnagar</h1>
+  <p class="lede">When a hand is injured — a deep cut, a crush, a finger that will not move — it needs a surgeon trained for exactly that. Dr Ashok Reddy is a hand &amp; microvascular surgeon practising full-time in Karimnagar.</p>
+  <p class="byline">By {CLINIC['doctor']}, {CLINIC['credentials']} — {CLINIC['specialties']}</p>
+</div></section>
+<section style="padding-top:0"><div class="wrap" style="max-width:46rem">
+  <h2>Meet your hand surgeon</h2>
+  <p><strong>{CLINIC['doctor']}</strong> — {CLINIC['credentials']} — trained at premier institutions (DNB, Mumbai; M.Ch, Delhi, Gold Medal) and practises hand &amp; microvascular surgery at AR Plastic Surgery, Karimnagar. His hand practice covers the full spectrum: emergency trauma, tendon and nerve repair under the operating microscope, fingertip replantation, and planned surgery for conditions like carpal tunnel syndrome and trigger finger.</p>
+  <h2>What a hand surgeon treats</h2>
+  <ul class="checklist">
+    <li><a href="procedures/hand-trauma-surgery.html">Hand trauma</a> — fractures, crush injuries, deep lacerations, amputations</li>
+    <li><a href="procedures/tendon-repair.html">Tendon repair</a> — divided flexor and extensor tendons</li>
+    <li><a href="procedures/nerve-repair-microsurgery.html">Nerve repair &amp; microsurgery</a> — injured nerves, microsurgical reconstruction</li>
+    <li><a href="procedures/carpal-tunnel-release.html">Carpal tunnel release</a> — numbness, tingling, night pain in the hand</li>
+    <li><a href="procedures/fingertip-replantation.html">Fingertip replantation</a> — microsurgical reattachment after amputation</li>
+  </ul>
+  <h2>Why a plastic surgeon for hand surgery?</h2>
+  <p>Hand surgery demands microsurgery: joining vessels and nerves barely a millimetre wide under an operating microscope, with sutures finer than a human hair. This is core plastic-surgical training. A hand surgeon with this background can assess the whole injured hand — bone, tendon, nerve, vessel and skin — as one system rather than in parts.</p>
+  <div class="rel-box" style="margin-top:1.2rem">
+    <h3>Coming from outside Karimnagar?</h3>
+    <p>Read our complete hand surgery guide covering all 33 Telangana districts — who it suits, what to expect, and how to plan your visit: <a href="blog/hand-surgery-telangana-district-guide.html">Hand Surgery: Telangana all-districts guide →</a></p>
+  </div>
+</div></section>
+<section><div class="wrap" style="max-width:46rem">
+  <span class="eyebrow">Common questions</span>
+  <h2>Hand surgeon FAQs</h2>
+  {faq_html}
+</div></section>
+{cta_band()}
+</main>"""
+    extra = [breadcrumb_jsonld([("Home", BASE_URL + "/index.html"),
+                               ("Hand Surgeon in Karimnagar", BASE_URL + "/hand-surgeon-karimnagar.html")]),
+             faq_jsonld(faqs)]
+    return (head(title, desc, "/hand-surgeon-karimnagar.html", extra)
+            + header("hand-surgeon") + body + footer())
 
 # ---------------------------------------------------------------- services.html
 def page_services():
@@ -952,7 +1378,7 @@ def page_siddipet():
 <li><strong>Scar revision, skin grafting, facial trauma</strong> — reconstructive procedures that need a plastic surgeon's planning.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Surgeon-led cosmetic care</h2>
-<p>For <a href="services.html#fue-hair-transplant">hair transplant</a>, <a href="services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href="services.html#liposuction">liposuction</a> and <a href="services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential. <strong>Free OP consultations are available every Wednesday.</strong></p>
+<p>For <a href="services.html#fue-hair-transplant">hair transplant</a>, <a href="services.html#gynecomastia-surgery">gynecomastia surgery</a>, <a href="services.html#liposuction">liposuction</a> and <a href="services.html#rhinoplasty">rhinoplasty</a>, the difference at AR is that every case is planned and performed by a qualified plastic surgeon — not delegated. Consultations are confidential.</p>
 <p>Many Siddipet patients combine their consultation with a single day trip. Call or book online to reserve your slot.</p>""",
         [
          ("Do you treat patients from Siddipet?",
@@ -960,7 +1386,7 @@ def page_siddipet():
          ("Is hand surgery available without going to Hyderabad?",
           "Yes. Dr Ashok Reddy is a trained hand & microvascular surgeon, and the clinic manages hand injuries and tendon and nerve problems without referral to Hyderabad."),
          ("How do I book?",
-          "Call +91 91826 56866 or use the online booking page. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or use the online booking page to book a consultation."),
         ])
 
 def page_sircilla():
@@ -982,7 +1408,7 @@ def page_sircilla():
 <li><strong>Hand surgery, burn reconstruction, skin grafting</strong> — reconstructive care with no dedicated local provider in Sircilla.</li>
 </ul>
 <h2 style="margin-top:1.8rem">What to expect</h2>
-<p>Every treatment begins with an honest consultation: what surgery can and cannot do, the plan, the recovery — explained before anything is decided. <strong>Free OP consultations every Wednesday.</strong> Led by <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>; the clinic holds a 4.9-star Google rating and is open <strong>every day, 10:00 AM – 8:00 PM</strong>.</p>
+<p>Every treatment begins with an honest consultation: what surgery can and cannot do, the plan, the recovery — explained before anything is decided. Led by <strong>Dr Ashok Reddy — MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong>; the clinic holds a 4.9-star Google rating and is open <strong>every day, 10:00 AM – 8:00 PM</strong>.</p>
 <p>Sircilla is a short drive from Karimnagar — most consultations fit into a single visit.</p>""",
         [
          ("Do you treat patients from Sircilla?",
@@ -990,7 +1416,7 @@ def page_sircilla():
          ("Is gynecomastia surgery confidential?",
           "Yes. Consultations are private, and the procedure uses a scar-minimal approach."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_peddapalli():
@@ -1013,7 +1439,7 @@ def page_peddapalli():
 <li><strong><a href="services.html#cleft-lip-palate">Cleft lip &amp; palate repair</a></strong> — staged correction from the earliest months of life.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, tummy tuck, scar revision</strong> — the full cosmetic and reconstructive range, all surgeon-led.</li>
 </ul>
-<p style="margin-top:1.2rem"><strong>Free OP consultations every Wednesday.</strong> One trip covers consultation and planning; surgery and follow-ups are scheduled around you. Before choosing any clinic, check who actually performs the surgery — AR's procedures are done by a qualified plastic surgeon at a real clinic you can visit.</p>""",
+<p style="margin-top:1.2rem">One trip covers consultation and planning; surgery and follow-ups are scheduled around you. Before choosing any clinic, check who actually performs the surgery — AR's procedures are done by a qualified plastic surgeon at a real clinic you can visit.</p>""",
         [
          ("Do you treat patients from Peddapalli?",
           "Yes — Peddapalli is one of the towns the clinic regularly serves across Telangana."),
@@ -1042,14 +1468,14 @@ def page_vemulawada():
 <li><strong>Facelift, <a href="services.html#cleft-lip-palate">cleft repair</a></strong> — genuine expertise a short trip away.</li>
 <li><strong>Hair transplant (FUE), gynecomastia, liposuction, rhinoplasty</strong> — cosmetic procedures planned and performed by the surgeon himself.</li>
 </ul>
-<p style="margin-top:1.2rem">The clinic holds a <strong>4.9-star Google rating</strong> and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. <strong>Free OP consultations every Wednesday.</strong> Many patients complete consultation and planning in a single visit.</p>""",
+<p style="margin-top:1.2rem">The clinic holds a <strong>4.9-star Google rating</strong> and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Many patients complete consultation and planning in a single visit.</p>""",
         [
          ("Do you treat patients from Vemulawada?",
           "Yes — Vemulawada is within the clinic's service area across Telangana."),
          ("I injured my hand — do I need to go to Hyderabad?",
           "Not necessarily. Dr Reddy's hand & microvascular training covers most hand injuries and tendon and nerve problems right here in Karimnagar."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 # ---------------------------------------------------------------- district pages
@@ -1072,14 +1498,14 @@ def page_warangal():
 <li><strong>Non-surgical aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP and lasers, doctor-administered.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planning your visit from Warangal</h2>
-<p>Karimnagar is well connected to Warangal by road, so most consultations fit comfortably into a day trip. <strong>Free OP consultations are held every Wednesday</strong> — an easy way to meet the surgeon, understand your options and get an honest opinion before committing to anything. The clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>, and holds a 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a> to reserve your slot.</p>""",
+<p>Karimnagar is well connected to Warangal by road, so most consultations fit comfortably into a day trip. Meet the surgeon, understand your options and get an honest opinion — <a href="contact.html">book a consultation</a> before committing to anything. The clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>, and holds a 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a> to reserve your slot.</p>""",
         [
          ("Do you treat patients from Warangal?",
           "Yes — patients from Warangal and other Telangana districts visit the Karimnagar clinic regularly."),
          ("Will the same surgeon handle my whole treatment?",
           "Yes. Dr Ashok Reddy plans and performs the procedures himself, and oversees aftercare — the same surgeon from consultation to follow-up."),
          ("How do I book?",
-          "Call +91 91826 56866 or use the online booking page. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or use the online booking page to book a consultation."),
         ])
 
 def page_nizamabad():
@@ -1102,14 +1528,14 @@ def page_nizamabad():
 <h2 style="margin-top:1.8rem">Cosmetic procedures, honestly planned</h2>
 <p>For <a href="procedures/fue-hair-transplant.html">hair transplant (FUE)</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a> and <a href="procedures/rhinoplasty.html">rhinoplasty</a>, consultations are private and pressure-free: what the procedure can and cannot do, explained before anything is decided.</p>
 <h2 style="margin-top:1.8rem">Making the journey simple</h2>
-<p>Nizamabad is well connected to Karimnagar by road. <strong>Free OP consultations every Wednesday</strong> mean your first visit costs nothing but the trip — and the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Nizamabad is well connected to Karimnagar by road. Your first visit is just the trip — and the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Nizamabad?",
           "Yes — Nizamabad is within the clinic's service area across Telangana."),
          ("My burn scar restricts movement — can it be improved?",
-          "Possibly. Burn contractures can often be released surgically, but it needs an in-person assessment — book a Wednesday free OP to discuss it."),
+          "Possibly. Burn contractures can often be released surgically, but it needs an in-person assessment — book a consultation to discuss it."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_khammam():
@@ -1132,14 +1558,14 @@ def page_khammam():
 <h2 style="margin-top:1.8rem">Confidential cosmetic consultations</h2>
 <p>Concerns like <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, hair loss (<a href="procedures/fue-hair-transplant.html">FUE transplant</a>), body contour (<a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a>) or nose shape (<a href="procedures/rhinoplasty.html">rhinoplasty</a>) are discussed in fully private consultations — with honest guidance on whether surgery is even the right answer.</p>
 <h2 style="margin-top:1.8rem">Visit us from Khammam</h2>
-<p>The road journey to Karimnagar is straightforward, and <strong>free OP consultations every Wednesday</strong> make the first trip easy to justify. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>The road journey to Karimnagar is straightforward — plan your first trip around a morning consultation. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Khammam?",
           "Yes — patients from Khammam and districts across Telangana visit the Karimnagar clinic."),
          ("At what age should cleft treatment start?",
           "Assessment can begin in the earliest months of life, with staged surgery planned from there. An early consultation helps map the full journey."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_mancherial():
@@ -1162,14 +1588,14 @@ def page_mancherial():
 <h2 style="margin-top:1.8rem">Beyond emergency care</h2>
 <p>The same precision serves <a href="procedures/scar-keloid-treatment.html">scar revision</a> after healed injuries, <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, and cosmetic procedures — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a> — all planned and performed by the surgeon himself.</p>
 <h2 style="margin-top:1.8rem">Getting here from Mancherial</h2>
-<p>Karimnagar is an easy road trip from Mancherial. For non-urgent concerns, <strong>free OP consultations every Wednesday</strong> are the ideal first step. For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> immediately — the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. You can also <a href="contact.html">book online</a>.</p>""",
+<p>Karimnagar is an easy road trip from Mancherial. For non-urgent concerns, a consultation is the ideal first step. For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> immediately — the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. You can also <a href="contact.html">book online</a>.</p>""",
         [
          ("I injured my hand at work — what should I do?",
           "Keep the hand still, control bleeding with gentle pressure, and call +91 91826 56866 promptly — tendon, nerve and vessel injuries are time-sensitive."),
          ("Do you treat patients from Mancherial?",
           "Yes — Mancherial is within the clinic's regular service area."),
          ("How do I book a non-urgent consultation?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_jagtial():
@@ -1193,14 +1619,14 @@ def page_jagtial():
 <h2 style="margin-top:1.8rem">Cosmetic care close to home</h2>
 <p><a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/tummy-tuck.html">tummy tuck</a>, <a href="procedures/botox-treatment.html">Botox</a> and lasers — every cosmetic case is planned and performed by Dr Reddy personally, starting with a confidential consultation.</p>
 <h2 style="margin-top:1.8rem">A neighbourly visit</h2>
-<p>Being nearby means follow-ups are easy too — an important part of any surgical plan. <strong>Free OP consultations every Wednesday</strong>, open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Being nearby means follow-ups are easy too — an important part of any surgical plan. Open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Jagtial?",
           "Yes — Jagtial is one of the closest towns the clinic serves."),
          ("Is follow-up difficult if I come from Jagtial?",
           "No — the short distance makes follow-up visits straightforward, which is ideal for surgical aftercare."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_adilabad():
@@ -1222,14 +1648,14 @@ def page_adilabad():
 <li><strong>Cosmetic procedures</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a> — confidential, surgeon-led.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planning the trip from Adilabad</h2>
-<p>It is the longest journey on this page — so we make it count. <strong>Free OP consultations every Wednesday</strong> mean your assessment visit costs nothing; surgery and follow-ups are then scheduled around you, with as few trips as safely possible. The clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong> and holds a 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a> to plan your visit.</p>""",
+<p>It is the longest journey on this page — so we make it count: assessment and planning finish in one visit, and surgery and follow-ups are then scheduled around you, with as few trips as safely possible. The clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong> and holds a 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a> to plan your visit.</p>""",
         [
          ("Do you treat patients from Adilabad?",
           "Yes — patients from Adilabad and across northern Telangana visit the Karimnagar clinic."),
          ("How many trips will treatment need?",
-          "It depends on the procedure. The Wednesday free OP covers assessment and planning; surgery and follow-ups are scheduled to minimise travel while keeping care safe."),
+          "It depends on the procedure. One consultation covers assessment and planning; surgery and follow-ups are scheduled to minimise travel while keeping care safe."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_bhadradri_kothagudem():
@@ -1252,14 +1678,14 @@ def page_bhadradri_kothagudem():
 <h2 style="margin-top:1.8rem">Reconstructive care for the district's families</h2>
 <p>Beyond the workplace: <a href="procedures/burn-reconstruction.html">burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft lip &amp; palate repair</a> and <a href="procedures/scar-keloid-treatment.html">scar revision</a> — staged, specialist care that changes daily life. Cosmetic consultations (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) are private and pressure-free.</p>
 <h2 style="margin-top:1.8rem">Reaching us from the east</h2>
-<p>The district is large, so plan around <strong>free OP consultations every Wednesday</strong> — assessment and planning in one visit, surgery scheduled to minimise return trips. For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> at once; the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. You can also <a href="contact.html">book online</a>.</p>""",
+<p>The district is large, so plan around a single visit — assessment and planning in one visit, surgery scheduled to minimise return trips. For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> at once; the clinic is open <strong>every day, 10:00 AM – 8:00 PM</strong>. You can also <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Bhadradri Kothagudem?",
           "Yes — patients from Kothagudem, Bhadrachalam and across the district visit the Karimnagar clinic."),
          ("A worker injured his hand — how urgent is it?",
           "Very. Tendon, nerve and vessel injuries are time-sensitive — call +91 91826 56866 promptly for guidance."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_hanamkonda():
@@ -1272,8 +1698,8 @@ def page_hanamkonda():
          "consultation is a day trip, not an expedition. For working professionals and families here, "
          "AR Plastic Surgery in Karimnagar offers the city's most personal route to cosmetic and hand care: "
          "one surgeon, from first conversation to final follow-up."),
-        """<h2>The easy first step: a free Wednesday consultation</h2>
-<p>Considering <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> or <a href="procedures/liposuction.html">liposuction</a>? Start with a <strong>free OP consultation every Wednesday</strong> — meet <strong>Dr Ashok Reddy (MBBS, DNB Mumbai, M.Ch Delhi, Gold Medalist)</strong>, ask everything, and leave with an honest opinion. No pressure, no obligation.</p>
+        """<h2>The easy first step: a consultation</h2>
+<p>Considering <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> or <a href="procedures/liposuction.html">liposuction</a>? Start with a <strong>consultation</strong> — meet <strong>Dr Ashok Reddy (MBBS, DNB Mumbai, M.Ch Delhi, Gold Medalist)</strong>, ask everything, and leave with an honest opinion. No pressure, no obligation.</p>
 <h2 style="margin-top:1.8rem">Non-surgical options, doctor-administered</h2>
 <p>Not everything needs an operating theatre. The clinic offers <a href="procedures/botox-treatment.html">Botox</a>, dermal fillers, <a href="procedures/prp-therapy.html">PRP therapy</a>, <a href="procedures/chemical-peels.html">chemical peels</a> and <a href="procedures/laser-treatments.html">laser treatments</a> — subtle rejuvenation planned by a plastic surgeon, with realistic expectations set upfront.</p>
 <h2 style="margin-top:1.8rem">Hand expertise on call</h2>
@@ -1282,7 +1708,7 @@ def page_hanamkonda():
          ("Do you treat patients from Hanamkonda?",
           "Yes — Hanamkonda is part of the Warangal urban region the clinic regularly serves."),
          ("I want a consultation but not surgery yet — is that okay?",
-          "Absolutely. Many consultations end with advice, not an operation. Wednesday OP consultations are free."),
+          "Absolutely. Many consultations end with advice, not an operation."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1307,14 +1733,14 @@ def page_hyderabad():
 <li><strong>Doctor-led aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels and lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planned around a single trip</h2>
-<p><strong>Free OP consultations every Wednesday</strong> let you meet the surgeon before deciding anything. Surgery and follow-ups are then scheduled to minimise travel — many patients combine consultation and planning in one visit. The clinic holds a 4.9-star Google rating and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Meet the surgeon before deciding anything. Surgery and follow-ups are then scheduled to minimise travel — many patients combine consultation and planning in one visit. The clinic holds a 4.9-star Google rating and is open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Why would I travel from Hyderabad to Karimnagar?",
           "For continuity: one gold-medalist surgeon consults, operates and follows up with you personally — a different experience from a large hospital system."),
          ("Do you treat Hyderabad patients?",
           "Yes — patients from Hyderabad, Secunderabad and surrounding areas visit the clinic regularly."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_jangaon():
@@ -1335,12 +1761,12 @@ def page_jangaon():
 <li><strong>Non-surgical</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">A straightforward visit</h2>
-<p>Jangaon's central location makes Karimnagar an easy trip. <strong>Free OP consultations every Wednesday</strong>, open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Jangaon's central location makes Karimnagar an easy trip. Open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Jangaon?",
           "Yes — Jangaon is within the clinic's service area across Telangana."),
          ("Is a consultation worth the trip if I'm unsure about surgery?",
-          "Yes — many consultations end with advice rather than an operation, and Wednesday OP consultations are free."),
+          "Yes — many consultations end with advice rather than an operation."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1365,14 +1791,14 @@ def page_jayashankar_bhupalpally():
 <h2 style="margin-top:1.8rem">Cosmetic care too</h2>
 <p><a href="procedures/fue-hair-transplant.html">Hair transplant (FUE)</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a> and <a href="procedures/rhinoplasty.html">rhinoplasty</a> are available with the same confidential, pressure-free consultations.</p>
 <h2 style="margin-top:1.8rem">Planning a long journey</h2>
-<p>Because the trip is long, we plan efficiently: <strong>free OP consultations every Wednesday</strong> for assessment, then surgery scheduled to minimise return visits. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Because the trip is long, we plan efficiently: one consultation for assessment, then surgery scheduled to minimise return visits. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Jayashankar Bhupalpally?",
           "Yes — patients from across this remote district visit the Karimnagar clinic."),
          ("My child has a cleft lip — when should we come?",
           "As early as possible — assessment can begin in the first months of life, with staged surgery planned from there."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_jogulamba_gadwal():
@@ -1395,12 +1821,12 @@ def page_jogulamba_gadwal():
 <h2 style="margin-top:1.8rem">And for personal concerns</h2>
 <p>Hair loss, gynecomastia, body contour or nose shape — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a> and <a href="procedures/rhinoplasty.html">rhinoplasty</a> begin with a private consultation where you'll hear what surgery can and cannot do.</p>
 <h2 style="margin-top:1.8rem">Worth the journey south to north</h2>
-<p>It's a long trip, so make the first one count: <strong>free OP consultations every Wednesday</strong>. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>It's a long trip, so make the first one count — book a consultation. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Jogulamba Gadwal?",
           "Yes — patients from Gadwal and surrounding areas visit the Karimnagar clinic."),
          ("Is it worth travelling so far for a consultation?",
-          "Wednesday OP consultations are free, so your first visit is purely information — many patients find one trip enough to decide."),
+          "Your first visit is purely information — many patients find one trip enough to decide."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1425,14 +1851,14 @@ def page_kamareddy():
 <h2 style="margin-top:1.8rem">The full practice, for everything else</h2>
 <p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — plus cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with confidential consultations.</p>
 <h2 style="margin-top:1.8rem">Visit us from Kamareddy</h2>
-<p>Well connected by road to Karimnagar. <strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> immediately — or <a href="contact.html">book online</a> for planned visits.</p>""",
+<p>Well connected by road to Karimnagar. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> immediately — or <a href="contact.html">book online</a> for planned visits.</p>""",
         [
          ("Do you treat patients from Kamareddy?",
           "Yes — Kamareddy is within the clinic's service area across northern Telangana."),
          ("My finger was cut deeply — can it be saved?",
           "It depends on the injury and timing — call +91 91826 56866 promptly; tendon and nerve injuries are time-sensitive."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_komaram_bheem_asifabad():
@@ -1453,12 +1879,12 @@ def page_komaram_bheem_asifabad():
 <li><strong><a href="procedures/scar-keloid-treatment.html">Scar revision</a></strong> — for restrictive or prominent scars.</li>
 </ul>
 <h2 style="margin-top:1.8rem">One planned trip</h2>
-<p>Long journeys demand efficient planning: <strong>free OP consultations every Wednesday</strong> cover assessment and a clear plan, with surgery scheduled to minimise return trips. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Long journeys demand efficient planning: one visit covers assessment and a clear plan, with surgery scheduled to minimise return trips. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Komaram Bheem Asifabad?",
           "Yes — patients from Asifabad and surrounding mandals visit the Karimnagar clinic."),
          ("How do we plan treatment with such a long journey?",
-          "Start with a free Wednesday OP consultation — assessment and planning in one visit, then surgery scheduled around minimal travel."),
+          "Start with a consultation — assessment and planning in one visit, then surgery scheduled around minimal travel."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1480,13 +1906,13 @@ def page_mahabubabad():
 <li><strong>Cosmetic</strong> — <a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — confidential and surgeon-led.</li>
 <li><strong>Non-surgical</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
-<h2 style="margin-top:1.8rem">Start with a free Wednesday consultation</h2>
-<p>Every treatment begins with an honest conversation about what surgery can and cannot do. <strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<h2 style="margin-top:1.8rem">Start with a consultation</h2>
+<p>Every treatment begins with an honest conversation about what surgery can and cannot do. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Mahabubabad?",
           "Yes — Mahabubabad is within the clinic's service area across Telangana."),
          ("What does a first consultation involve?",
-          "An unhurried discussion of your concern, examination, and honest advice on options — free on Wednesdays."),
+          "An unhurried discussion of your concern, examination, and honest advice on options."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1509,14 +1935,14 @@ def page_mahabubnagar():
 <li><strong>Confidential cosmetic care</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/botox-treatment.html">Botox</a>.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Make the trip worthwhile</h2>
-<p><strong>Free OP consultations every Wednesday</strong> — meet the surgeon, get an honest opinion, plan everything in one visit. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Meet the surgeon, get an honest opinion, plan everything in one visit. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Mahabubnagar?",
           "Yes — patients from Mahabubnagar and the Palamuru region visit the clinic."),
          ("Is cosmetic surgery confidential?",
           "Completely. Consultations are private, and your information stays between you and the clinic."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_medak():
@@ -1537,14 +1963,14 @@ def page_medak():
 <li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">An easy decision to explore</h2>
-<p><strong>Free OP consultations every Wednesday</strong> — come, meet the surgeon, hear an honest opinion. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Come, meet the surgeon, hear an honest opinion. Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Medak?",
           "Yes — Medak is within the clinic's service area."),
          ("Do I need a referral?",
           "No — call or book directly; walk-ins are welcome during clinic hours."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_medchal_malkajgiri():
@@ -1567,14 +1993,14 @@ def page_medchal_malkajgiri():
 <li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planned around your schedule</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; surgery scheduled to minimise travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Consultation and planning in one visit; surgery scheduled to minimise travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Why travel from Medchal to Karimnagar?",
           "For personal continuity — one surgeon handles your consultation, operation and aftercare, unlike a rotating hospital team."),
          ("Do you treat patients from Medchal-Malkajgiri?",
           "Yes — patients from across the Hyderabad urban region visit regularly."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_mulugu():
@@ -1597,12 +2023,12 @@ def page_mulugu():
 <h2 style="margin-top:1.8rem">Reconstructive care for families</h2>
 <p><a href="procedures/cleft-lip-palate-repair.html">Cleft lip &amp; palate repair</a> — staged correction from the earliest months of life — and <a href="procedures/burn-reconstruction.html">burn reconstruction</a> for contractures that limit movement. These are the procedures that change a child's or a worker's daily life.</p>
 <h2 style="margin-top:1.8rem">One efficient trip</h2>
-<p><strong>Free OP consultations every Wednesday</strong> — assessment and a clear plan in a single visit, surgery scheduled to minimise return travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Assessment and a clear plan in a single visit; surgery scheduled to minimise return travel. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Mulugu?",
           "Yes — patients from Mulugu and surrounding mandals visit the Karimnagar clinic."),
          ("The journey is long — how do we plan it?",
-          "Begin with a free Wednesday OP consultation: assessment and planning in one visit, then surgery scheduled around minimal travel."),
+          "Begin with a consultation: assessment and planning in one visit, then surgery scheduled around minimal travel."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1627,12 +2053,12 @@ def page_nagarkurnool():
 <h2 style="margin-top:1.8rem">Cosmetic concerns welcome too</h2>
 <p><a href="procedures/fue-hair-transplant.html">Hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — private consultations, honest opinions, surgeon-performed procedures.</p>
 <h2 style="margin-top:1.8rem">Planning your visit</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Nagarkurnool?",
           "Yes — Nagarkurnool is within the clinic's service area across Telangana."),
          ("My child's burn scar is tightening — can it be released?",
-          "Often, yes — but it needs an in-person assessment. A free Wednesday OP is the right first step."),
+          "Often, yes — but it needs an in-person assessment. A consultation is the right first step."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1656,14 +2082,14 @@ def page_nalgonda():
 <h2 style="margin-top:1.8rem">Led by Dr Ashok Reddy</h2>
 <p><strong>MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. Every case is planned and performed by the surgeon himself, starting with an honest consultation.</p>
 <h2 style="margin-top:1.8rem">Visit us</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Nalgonda?",
           "Yes — patients from Nalgonda visit the Karimnagar clinic regularly."),
          ("What should I bring to my first consultation?",
           "Any previous medical records, prescriptions or photos related to your concern — and your questions."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_narayanpet():
@@ -1686,14 +2112,14 @@ def page_narayanpet():
 <h2 style="margin-top:1.8rem">The complete practice behind it</h2>
 <p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with private consultations.</p>
 <h2 style="margin-top:1.8rem">Visit us from Narayanpet</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("My hands go numb at night — what could it be?",
-          "It may be carpal tunnel or another nerve issue — but only an examination can tell. Book a Wednesday free OP for an assessment."),
+          "It may be carpal tunnel or another nerve issue — but only an examination can tell. Book a consultation for an assessment."),
          ("Do you treat patients from Narayanpet?",
           "Yes — Narayanpet is within the clinic's service area."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_nirmal():
@@ -1715,14 +2141,14 @@ def page_nirmal():
 <h2 style="margin-top:1.8rem">Reconstructive and cosmetic, under one roof</h2>
 <p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a> — plus <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> and <a href="procedures/botox-treatment.html">Botox</a>, all surgeon-led.</p>
 <h2 style="margin-top:1.8rem">Getting here</h2>
-<p>Well connected north to Karimnagar. <strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> at once — or <a href="contact.html">book online</a>.</p>""",
+<p>Well connected north to Karimnagar. Open <strong>every day, 10:00 AM – 8:00 PM</strong>. For hand emergencies call <a href="tel:+919182656866">+91 91826 56866</a> at once — or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Nirmal?",
           "Yes — Nirmal is within the clinic's service area across northern Telangana."),
          ("A craft tool cut my finger deeply — can it be repaired?",
           "Possibly — timing matters greatly with tendon and nerve injuries. Call +91 91826 56866 promptly."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_peddapalli_district():
@@ -1746,14 +2172,14 @@ def page_peddapalli_district():
 <h2 style="margin-top:1.8rem">Cosmetic care for the district</h2>
 <p><a href="procedures/fue-hair-transplant.html">FUE hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia surgery</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/liposuction.html">liposuction</a> — confidential consultations, procedures performed by the surgeon himself. If you're in Peddapalli town, our <a href="peddapalli-plastic-surgeon.html">town guide</a> has town-specific detail.</p>
 <h2 style="margin-top:1.8rem">Visit us</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>daily, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("How is this different from the Peddapalli town guide?",
           "The town guide focuses on Peddapalli town; this page covers the wider district — Ramagundam, surrounding towns and rural mandals."),
          ("Do you treat industrial hand injuries?",
           "Yes — hand trauma, tendon and nerve injuries are a core specialty. Call +91 91826 56866 promptly for urgent injuries."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_rajanna_sircilla():
@@ -1777,14 +2203,14 @@ def page_rajanna_sircilla():
 <h2 style="margin-top:1.8rem">Beyond the workplace</h2>
 <p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/liposuction.html">liposuction</a>) with confidential consultations. Sircilla town residents: see the <a href="sircilla-plastic-surgeon.html">town guide</a>.</p>
 <h2 style="margin-top:1.8rem">Close enough for easy follow-up</h2>
-<p>The district borders Karimnagar — follow-up visits are straightforward. <strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>The district borders Karimnagar — follow-up visits are straightforward. Open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("How is this different from the Sircilla town guide?",
           "The town guide focuses on Sircilla town; this page covers the whole Rajanna Sircilla district including Vemulawada and surrounding areas."),
          ("Do you treat powerloom hand injuries?",
           "Yes — hand trauma is a core specialty. For urgent injuries, call +91 91826 56866 immediately."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_rangareddy():
@@ -1806,14 +2232,14 @@ def page_rangareddy():
 <li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planned around minimal travel</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; surgery and follow-ups scheduled efficiently. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Consultation and planning in one visit; surgery and follow-ups scheduled efficiently. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Why travel from Rangareddy to Karimnagar?",
           "For one-surgeon continuity — consultation, operation and aftercare with the same gold-medalist surgeon, rather than a rotating hospital team."),
          ("Do you treat industrial hand injuries?",
           "Yes — hand trauma, tendon and nerve injuries are a core specialty. Call promptly for urgent injuries."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_sangareddy():
@@ -1836,14 +2262,14 @@ def page_sangareddy():
 <h2 style="margin-top:1.8rem">The wider practice</h2>
 <p><a href="procedures/burn-reconstruction.html">Burn reconstruction</a>, <a href="procedures/scar-keloid-treatment.html">scar revision</a>, <a href="procedures/cleft-lip-palate-repair.html">cleft repair</a> — and cosmetic procedures (<a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>) with confidential consultations.</p>
 <h2 style="margin-top:1.8rem">Act fast on injuries</h2>
-<p>For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> immediately — time decides outcomes. For planned care, <strong>free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. <a href="contact.html">Book online</a>.</p>""",
+<p>For hand emergencies, call <a href="tel:+919182656866">+91 91826 56866</a> immediately — time decides outcomes. For planned care, <a href="contact.html">book a consultation</a>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. <a href="contact.html">Book online</a>.</p>""",
         [
          ("A machine injured a worker's hand — what now?",
           "Keep the hand still, preserve any amputated tissue in a clean cool bag, and call +91 91826 56866 immediately — these injuries are time-critical."),
          ("Do you treat patients from Sangareddy?",
           "Yes — Sangareddy is within the clinic's service area."),
          ("How do I book planned care?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_siddipet_district():
@@ -1865,14 +2291,14 @@ def page_siddipet_district():
 <li><strong>Cosmetic, confidential</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/liposuction.html">liposuction</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Siddipet town residents</h2>
-<p>See the <a href="siddipet-plastic-surgeon.html">Siddipet town guide</a> for town-specific detail. For everyone in the district: <strong>free OP consultations every Wednesday</strong>, open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>See the <a href="siddipet-plastic-surgeon.html">Siddipet town guide</a> for town-specific detail. For everyone in the district: open <strong>daily 10:00 AM – 8:00 PM</strong>, 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("How is this different from the Siddipet town guide?",
           "The town guide focuses on Siddipet town; this page serves the wider district's towns and mandals."),
          ("Do you treat patients from rural mandals?",
           "Yes — patients from across the district visit the Karimnagar clinic."),
          ("How do I book?",
-          "Call +91 91826 56866 or book online. Wednesday OP consultations are free."),
+          "Call +91 91826 56866 or book a consultation online."),
         ])
 
 def page_suryapet():
@@ -1894,12 +2320,12 @@ def page_suryapet():
 <h2 style="margin-top:1.8rem">Led by Dr Ashok Reddy</h2>
 <p><strong>MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist</strong> — plastic, cosmetic, hand &amp; microvascular surgeon. Every case planned and performed by the surgeon himself, beginning with an honest consultation.</p>
 <h2 style="margin-top:1.8rem">Visit us</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Suryapet?",
           "Yes — Suryapet is within the clinic's service area across Telangana."),
          ("Can consultation and planning happen in one visit?",
-          "Usually, yes — many patients complete assessment and planning in a single Wednesday free OP visit."),
+          "Usually, yes — many patients complete assessment and planning in a single visit."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1922,12 +2348,12 @@ def page_vikarabad():
 <li><strong>Cosmetic, confidential</strong> — <a href="procedures/fue-hair-transplant.html">hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a>, <a href="procedures/botox-treatment.html">Botox</a>.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Planning your visit</h2>
-<p><strong>Free OP consultations every Wednesday</strong> — assessment and planning in one trip. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Assessment and planning in one trip. Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Vikarabad?",
           "Yes — Vikarabad is within the clinic's service area."),
          ("Is it closer than Hyderabad for specialist care?",
-          "For most of the district, yes — and a Wednesday free OP makes the first visit easy to plan."),
+          "For most of the district, yes — and one visit is usually enough to plan your treatment."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1952,12 +2378,12 @@ def page_wanaparthy():
 <h2 style="margin-top:1.8rem">Personal concerns, privately handled</h2>
 <p><a href="procedures/fue-hair-transplant.html">Hair transplant</a>, <a href="procedures/gynecomastia-surgery.html">gynecomastia</a>, <a href="procedures/rhinoplasty.html">rhinoplasty</a> — confidential consultations and surgeon-performed procedures.</p>
 <h2 style="margin-top:1.8rem">Make the journey count</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>daily, 10:00 AM – 8:00 PM</strong>. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Wanaparthy?",
           "Yes — Wanaparthy is within the clinic's service area across Telangana."),
          ("How do we minimise travel for treatment?",
-          "Start with a free Wednesday OP — assessment and planning in one visit, then surgery scheduled around minimal travel."),
+          "Start with a consultation — assessment and planning in one visit, then surgery scheduled around minimal travel."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -1980,12 +2406,12 @@ def page_yadadri_bhuvanagiri():
 <li><strong>Aesthetics</strong> — <a href="procedures/botox-treatment.html">Botox</a>, fillers, PRP, peels, lasers.</li>
 </ul>
 <h2 style="margin-top:1.8rem">Visit us</h2>
-<p><strong>Free OP consultations every Wednesday</strong>; open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
+<p>Open <strong>every day, 10:00 AM – 8:00 PM</strong>; 4.9-star Google rating. Call <a href="tel:+919182656866">+91 91826 56866</a> or <a href="contact.html">book online</a>.</p>""",
         [
          ("Do you treat patients from Yadadri Bhuvanagiri?",
           "Yes — the district is within the clinic's service area."),
          ("What happens at a first consultation?",
-          "An unhurried discussion, examination, and honest advice on your options — free on Wednesdays."),
+          "An unhurried discussion, examination, and honest advice on your options."),
          ("How do I book?",
           "Call +91 91826 56866 or book online."),
         ])
@@ -2040,7 +2466,8 @@ def page_contact():
 </div></section>
 {cta_band()}
 </main>"""
-    return head(title, desc, "/contact.html") + header("contact") + body + footer()
+    return head(title, desc, "/contact.html",
+                alternates=_te_alternates("/te/contact.html", "/contact.html")) + header("contact") + body + footer()
 
 # ---------------------------------------------------------------- 404.html
 def page_404():
@@ -2057,9 +2484,364 @@ def page_404():
     return head(title, desc, "/404.html") + header("") + body + footer()
 
 # ---------------------------------------------------------------- build + validate
+VIDEOS = [
+    # (ig shortcode, youtube id ('' if none), category, seo title, seo description)
+    ("DdeCKf2v6ya", "CWpc34EG0mY", "Hair Transplant",
+     "Hair Transplant in Karimnagar: 5 Checks Before You Choose a Clinic",
+     "Dr Ashok Reddy explains 5 things to verify before a hair transplant in Karimnagar or Telangana — beyond flashy ads: surgeon qualification, technique, realistic graft planning, hygiene and honest pricing."),
+    ("Dc-PZAOxJmd", "nbgdqfFb4Lo", "Cosmetic Surgery",
+     "Lobuloplasty: Torn or Stretched Earlobe Repair in Karimnagar",
+     "Torn or stretched earlobes can be beautifully restored. Dr Ashok Reddy explains lobuloplasty — a short, precise procedure to repair earlobes and bring back a natural shape."),
+    ("DZRWcEqx4d3", "Q6K8kjZdLTk", "Cosmetic Surgery",
+     "Breast Implants in Karimnagar: Shape, Volume and Confidence",
+     "Breast implants can enhance shape and volume — for cosmetic reasons or reconstruction. Dr Ashok Reddy explains how the right plan is chosen for each patient in Telangana."),
+    ("DdTx1a7pTow", "l7njhImsCWo", "Burns Care",
+     "Hot Water Burns in Children: Prevention and First Aid",
+     "Hot-water burns are common in children — one small mistake can cause a serious burn. Dr Ashok Reddy shares how Karimnagar parents can prevent scalds and what to do first."),
+    ("Dakr8XxvbaM", "9v-7iTb2hSQ", "Burns Care",
+     "Childhood Burns Need the Right Care at the Right Time",
+     "Small burn injuries in children should never be ignored. Dr Ashok Reddy explains why early, correct burns care in Karimnagar prevents lifelong scars and complications."),
+    ("Dd3-CbqPl-Y", "z9l6l6ku6G0", "Reconstructive Surgery",
+     "Facial Trauma & Plastic Surgery: Treating Facial Injuries and Scars",
+     "Wounds may heal, but scars can last. Dr Ashok Reddy on plastic surgery for severe facial injuries — jaw, cheekbone, nose — and restoring both appearance and function in Telangana patients."),
+    ("Dd6YnDTPjmO", "e4EKtoJL9nM", "Hand Surgery",
+     "Protect Your Hands: Bike Cleaning Safety Tips",
+     "Weekend bike cleaning is fun — but chains, grease and chemicals injure hands every week. A hand surgeon in Karimnagar shares simple habits that prevent tendon and skin injuries."),
+    ("DaQPAoShOCf", "", "Hand Surgery",
+     "Hand and Microvascular Surgery in Karimnagar",
+     "Tendon, nerve and artery repair under magnification — Dr Ashok Reddy explains hand and microvascular surgery, a rare specialist service available at AR Plastic Surgery, Karimnagar."),
+    ("DZNWrdjvoqn", "9hwA1da26cY", "Skin & Non-Surgical",
+     "HydraFacial in Karimnagar: Deep Cleanse, Exfoliation and Hydration",
+     "Unlock your skin's true potential. Dr Ashok Reddy introduces the signature HydraFacial at AR Plastic Surgery Karimnagar — deep cleansing, exfoliation and hydration without downtime."),
+    ("DaXzHXTRkNt", "QQKyFMLzUCc", "Patient Education",
+     "How to Choose a Plastic Surgeon: 4 Red Flags to Avoid",
+     "Is your 'plastic surgeon' a walking red flag? Dr Ashok Reddy lists 4 warnings — no board certification, rushed booking, no long-term before-and-afters, shockingly cheap prices — for patients in Telangana."),
+    ("DZ6dM0oxKbe", "2gnvQx7rSgk", "Patient Education",
+     "What Is Plastic Surgery? Awareness Series by Dr Ashok Reddy",
+     "Plastic surgery is not just about appearance — it restores form and function after trauma, burns and birth conditions. Part 4 of Dr Ashok Reddy's awareness series for Karimnagar."),
+    ("DZcln5Vvq60", "b6W3XKb2cXM", "Clinic",
+     "Plastic Surgery Consultation in Karimnagar",
+     "Meet Dr Ashok Reddy at AR Plastic Surgery, Karimnagar. Get your plastic surgery queries answered — hair, skin, scars, hand injuries and more."),
+]
+
+VIDEO_CATS = ["Hair Transplant", "Cosmetic Surgery", "Burns Care", "Reconstructive Surgery",
+              "Hand Surgery", "Skin & Non-Surgical", "Patient Education", "Clinic"]
+
+def page_videos():
+    import json as _json
+    title = "Plastic Surgery Videos Karimnagar | Patient Education"
+    desc = ("Dr Ashok Reddy's plastic surgery videos: hair transplant, burns care, hand surgery "
+            "and cosmetic procedures explained for Karimnagar, Telangana patients.")
+    assert 45 <= len(title) <= 68, len(title)
+    assert 140 <= len(desc) <= 168, len(desc)
+    sections = []
+    schemas = []
+    for cat in VIDEO_CATS:
+        cards = []
+        for code, ytid, c, t, d in VIDEOS:
+            if c != cat:
+                continue
+            watch = f"https://youtube.com/shorts/{ytid}" if ytid else f"https://www.instagram.com/reel/{code}/"
+            embed = f"https://www.youtube.com/embed/{ytid}" if ytid else f"https://www.instagram.com/reel/{code}/embed"
+            srclabel = "YouTube" if ytid else "Instagram"
+            cards.append(
+                f'<article class="video-card"><div class="video-frame">'
+                f'<button class="video-facade" data-embed="{embed}" aria-label="Play video: {htmllib.escape(t)}">'
+                f'<span class="play">▶</span><span class="watch-label">Watch on this page</span></button></div>'
+                f'<div class="video-body"><div class="video-cat">{htmllib.escape(c)}</div>'
+                f'<h3>{htmllib.escape(t)}</h3><p>{htmllib.escape(d)}</p>'
+                f'<p style="margin-top:.6rem"><a href="{watch}" target="_blank" rel="noopener" style="font-weight:700;font-size:.9rem">Watch on {srclabel} →</a></p>'
+                f'</div></article>'
+            )
+            schemas.append({
+                "@context": "https://schema.org", "@type": "VideoObject",
+                "name": t, "description": d, "contentUrl": watch,
+                "embedUrl": embed,
+                "uploadDate": "2026-01-01T00:00:00+05:30",
+                "publisher": {"@type": "MedicalClinic", "name": "AR Plastic Surgery",
+                              "telephone": "+91 91826 56866",
+                              "address": {"@type": "PostalAddress", "addressLocality": "Karimnagar",
+                                          "addressRegion": "Telangana", "postalCode": "505001",
+                                          "addressCountry": "IN"}}})
+            if ytid:
+                schemas[-1]["thumbnailUrl"] = f"https://i.ytimg.com/vi/{ytid}/hqdefault.jpg"
+        if cards:
+            sections.append(f'<h2 style="margin-top:2.2rem">{htmllib.escape(cat)} videos</h2>'
+                            f'<div class="video-grid">{"".join(cards)}</div>')
+    body = f"""<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › Videos</nav>
+  <span class="eyebrow">Watch &amp; learn</span>
+  <h1>Plastic surgery videos by Dr Ashok Reddy, Karimnagar</h1>
+  <p class="lede">Short, honest videos on hair transplant, burns care, hand &amp; microvascular surgery, cosmetic procedures and skin treatments — recorded by {CLINIC['doctor']} ({CLINIC['credentials']}) for patients across Karimnagar and Telangana. Prefer reading? Visit the <a href="blog/index.html">patient-education blog</a>.</p>
+  <div class="video-note"><strong>New here?</strong> Every treatment plan at AR Plastic Surgery starts with an honest consultation. <a href="{CLINIC['booking']}" target="_blank" rel="noopener" style="font-weight:700">Book your slot →</a></div>
+  {"".join(sections)}
+</div></section>
+<section><div class="wrap"><span class="eyebrow">Common questions</span><h2>Video FAQs</h2>
+<details class="faq"><summary>Who explains the treatments in these videos?</summary><p>All videos feature {CLINIC['doctor']} — {CLINIC['credentials']}, Plastic, Cosmetic, Hand &amp; Microvascular Surgeon at AR Plastic Surgery, Karimnagar.</p></details>
+<details class="faq"><summary>Can I consult the doctor after watching a video?</summary><p>Yes. Call {CLINIC['phone_display']} or book online. The clinic is open Monday–Sunday, 10 AM–8 PM.</p></details>
+<details class="faq"><summary>Do you treat patients from outside Karimnagar?</summary><p>Yes — patients visit from Warangal, Siddipet, Sircilla, Peddapalli, Nizamabad and districts across Telangana. See our <a href="index.html">areas we serve</a> section for district guides.</p></details>
+</div></section>
+{cta_band()}
+</main>
+<script>
+document.querySelectorAll('.video-facade').forEach(function(btn){{
+  btn.addEventListener('click', function(){{
+    var f = document.createElement('iframe');
+    f.src = btn.getAttribute('data-embed');
+    f.setAttribute('allowfullscreen',''); f.setAttribute('loading','lazy');
+    f.setAttribute('title', btn.getAttribute('aria-label'));
+    btn.parentElement.replaceChild(f, btn);
+  }}, {{once:true}});
+}});
+</script>"""
+    return (head(title, desc, "/videos.html", extra_jsonld=schemas)
+            + header("videos") + body + footer())
+def _te_alternates(te_path, en_path):
+    return [("te", BASE_URL + te_path), ("en", BASE_URL + en_path),
+            ("x-default", BASE_URL + en_path)]
+
+def page_te_index():
+    title = "కరీంనగర్‌లో ప్లాస్టిక్ సర్జన్ | AR Plastic Surgery"
+    desc = ("డా. అశోక్ రెడ్డి (MBBS, DNB, M.Ch, గోల్డ్ మెడలిస్ట్) — కరీంనగర్‌లో ప్లాస్టిక్, కాస్మెటిక్, "
+            "హ్యాండ్ సర్జరీ. ప్రతిరోజూ ఉదయం 10 – రాత్రి 8. బుధవారం ఉచిత కన్సల్టేషన్.")
+    assert 45 <= len(title) <= 68, len(title)
+    assert 140 <= len(desc) <= 168, len(desc)
+    body = f"""<main>
+<section class="hero"><div class="wrap hero-grid">
+  <div>
+    <h1>ప్లాస్టిక్, కాస్మెటిక్ &amp; హ్యాండ్ సర్జరీ — <span class="accent">ప్రెసిషన్ అండ్ పర్‌ఫెక్షన్</span></h1>
+    <p class="lede">కరీంనగర్‌లోని సంపూర్ణ ప్లాస్టిక్ సర్జరీ కేంద్రం — <strong>డా. అశోక్ రెడ్డి</strong> (MBBS, DNB ముంబై, M.Ch ఢిల్లీ, <strong>గోల్డ్ మెడలిస్ట్</strong>) నేతృత్వంలో ప్లాస్టిక్, కాస్మెటిక్, హ్యాండ్ &amp; మైక్రోవాస్కులర్ సర్జరీ.</p>
+    <div class="badges">
+      <span class="badge"><b>గోల్డ్ మెడలిస్ట్</b> ప్లాస్టిక్ సర్జన్</span>
+      <span class="badge"><b>ప్రతిరోజూ</b> ఉదయం 10 – రాత్రి 8</span>
+      <span class="badge">Google లో <b>4.9★</b> రేటింగ్</span>
+    </div>
+    <div class="btn-row" style="display:flex;gap:.8rem;flex-wrap:wrap">
+      <a class="btn btn-gold" href="{CLINIC['booking']}" target="_blank" rel="noopener">ఆన్‌లైన్‌లో బుక్ చేయండి</a>
+      <a class="btn btn-outline" href="tel:{CLINIC['phone_tel']}">కాల్ చేయండి: {CLINIC['phone_display']}</a>
+    </div>
+    <p style="margin-top:1rem"><a href="{CLINIC['whatsapp']}" target="_blank" rel="noopener" style="font-weight:700">WhatsApp లో మెసేజ్ చేయండి →</a></p>
+  </div>
+  <figure class="hero-photo">
+    <img src="../assets/dr-ashok-reddy.jpg" alt="డా. అశోక్ రెడ్డి, కరీంనగర్ ప్లాస్టిక్ సర్జన్" width="640" height="704" fetchpriority="high">
+    <figcaption>డా. అశోక్ రెడ్డి — {CLINIC['credentials']}</figcaption>
+  </figure>
+</div></section>
+
+<div class="trust"><div class="wrap trust-grid">
+  <div class="t"><b>గోల్డ్ మెడలిస్ట్</b><span>M.Ch ప్లాస్టిక్ సర్జరీ</span></div>
+  <div class="t"><b data-count="19">19</b><span>సర్జన్ నేతృత్వ సేవలు</span></div>
+  <div class="t"><b>7 రోజులు</b><span>సోమ–ఆది, ఉదయం 10 – రాత్రి 8</span></div>
+  <div class="t"><b><span data-count="17">17</span> పట్టణాలు</b><span>తెలంగాణ అంతటా సేవలు</span></div>
+</div></div>
+
+<section><div class="wrap reveal">
+  <span class="eyebrow">మా సేవలు</span>
+  <h2>అన్ని ప్లాస్టిక్ సర్జరీ సేవలు — ఒకే చోట</h2>
+  <p class="lede">గాయాలు, కాలిన గాయాల తర్వాత పునర్నిర్మాణం నుండి కాస్మెటిక్ ప్రక్రియల వరకు — ప్రతి చికిత్స అర్హత కలిగిన ప్లాస్టిక్ సర్జన్ పర్యవేక్షణలోనే.</p>
+  <div class="card-grid">
+    <article class="card"><h3>హెయిర్ ట్రాన్స్‌ప్లాంట్</h3><p>FUE హెయిర్ ట్రాన్స్‌ప్లాంట్ — సహజమైన ఫలితాల కోసం జాగ్రత్తగా ప్లాన్ చేసిన గ్రాఫ్ట్‌లు.</p><a class="more" href="fue-hair-transplant.html">మరింత తెలుసుకోండి →</a></article>
+    <article class="card"><h3>కాస్మెటిక్ సర్జరీ</h3><p>గైనకోమాస్టియా, లైపోసక్షన్, రైనోప్లాస్టీ, బ్రెస్ట్ సర్జరీ, టమ్మీ టక్.</p><a class="more" href="../procedures/index.html">అన్ని ప్రక్రియలు →</a></article>
+    <article class="card"><h3>కాలిన గాయాలు &amp; మచ్చలు</h3><p>కాలిన గాయాల చికిత్స, మచ్చల సవరణ — పిల్లలు &amp; పెద్దల కోసం సరైన సమయంలో సరైన కేర్.</p><a class="more" href="../videos.html">వీడియోలు చూడండి →</a></article>
+    <article class="card"><h3>హ్యాండ్ సర్జరీ</h3><p>చేతి గాయాలు, టెండాన్, నరాల &amp; రక్తనాళాల మరమ్మత్తు — మైక్రోవాస్కులర్ నైపుణ్యంతో.</p><a class="more" href="../procedures/index.html">మరింత తెలుసుకోండి →</a></article>
+  </div>
+</div></section>
+
+<section class="reviews"><div class="wrap">
+  <div class="reveal" style="text-align:center;max-width:660px;margin:0 auto">
+    <span class="eyebrow">పేషెంట్ రివ్యూలు</span>
+    <h2>Google లో 4.9 రేటింగ్ — 240 రివ్యూలు</h2>
+    <div class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</div>
+    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>240 Google రివ్యూలు</b><br>ధృవీకరించిన పేషెంట్ రేటింగ్‌లు</span></span></div>
+    <div class="btn-row" style="justify-content:center"><a class="btn btn-solid" href="https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar+Telangana" target="_blank" rel="noopener">Google రివ్యూలు చదవండి →</a></div>
+  </div>
+</div></section>
+
+<section><div class="wrap reveal">
+  <span class="eyebrow">ఉచిత సంప్రదింపు</span>
+  <h2>ప్రతి బుధవారం — ఉచిత కన్సల్టేషన్</h2>
+  <p class="lede">హెయిర్ ట్రాన్స్‌ప్లాంట్, కాస్మెటిక్ సర్జరీ, చేతి గాయాలు, మచ్చలు — ఏ సందేహమైనా డా. అశోక్ రెడ్డితో నేరుగా మాట్లాడండి. బుధవారాల్లో కన్సల్టేషన్ ఫీజు ఉండదు.</p>
+  <div class="btn-row"><a class="btn btn-gold" href="{CLINIC['booking']}" target="_blank" rel="noopener">స్లాట్ బుక్ చేయండి</a><a class="btn btn-outline" href="contact.html">సంప్రదింపు వివరాలు →</a></div>
+</div></section>
+{faq_block([("కన్సల్టేషన్‌కు రిఫరల్ అవసరమా?", "అవసరం లేదు. నేరుగా కాల్ చేయండి (" + CLINIC['phone_display'] + ") లేదా ఆన్‌లైన్‌లో బుక్ చేయండి. క్లినిక్ వేళల్లో వాక్-ఇన్ కూడా చేయవచ్చు."), ("మీ క్లినిక్ వేళలు ఏమిటి?", "ప్రతిరోజూ — సోమవారం నుండి ఆదివారం వరకు — ఉదయం 10:00 నుండి రాత్రి 8:00 వరకు తెరిచి ఉంటుంది."), ("ఏ ప్రాంతాల నుండి పేషెంట్లు వస్తారు?", "కరీంనగర్‌తో పాటు జగిత్యాల, సిరిసిల్ల, వరంగల్, సిద్దిపేట, పెద్దపల్లి, వేములవాడ మరియు తెలంగాణ అంతటా నుండి పేషెంట్లు వస్తుంటారు.")])}
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/te/index.html", lang="te",
+                 alternates=_te_alternates("/te/index.html", "/index.html"),
+                 asset_prefix="../assets/")
+            + header("telugu", root="../") + body + footer(root="../"))
+
+def page_te_hair():
+    title = "హెయిర్ ట్రాన్స్‌ప్లాంట్ కరీంనగర్ | FUE | డా. అశోక్ రెడ్డి"
+    desc = ("కరీంనగర్‌లో FUE హెయిర్ ట్రాన్స్‌ప్లాంట్ — డా. అశోక్ రెడ్డి (గోల్డ్ మెడలిస్ట్) వివరిస్తున్నారు. "
+            "క్లినిక్ ఎంచుకునే ముందు 5 జాగ్రత్తలు. ప్రతి బుధవారం ఉచిత కన్సల్టేషన్.")
+    assert 45 <= len(title) <= 68, len(title)
+    assert 140 <= len(desc) <= 168, len(desc)
+    body = f"""<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">హోమ్</a> › హెయిర్ ట్రాన్స్‌ప్లాంట్</nav>
+  <span class="eyebrow">జుట్టు పునరుద్ధరణ</span>
+  <h1>కరీంనగర్‌లో FUE హెయిర్ ట్రాన్స్‌ప్లాంట్</h1>
+  <p class="lede">జుట్టు రాలడం మిమ్మల్ని బాధిస్తోందా? డా. అశోక్ రెడ్డి (MBBS, DNB, M.Ch — గోల్డ్ మెడలిస్ట్) జాగ్రత్తగా ప్లాన్ చేసిన FUE హెయిర్ ట్రాన్స్‌ప్లాంట్‌తో సహజమైన, శాశ్వత ఫలితాలు.</p>
+  <div class="btn-row" style="display:flex;gap:.8rem;flex-wrap:wrap">
+    <a class="btn btn-gold" href="{CLINIC['booking']}" target="_blank" rel="noopener">ఆన్‌లైన్‌లో బుక్ చేయండి</a>
+    <a class="btn btn-outline" href="tel:{CLINIC['phone_tel']}">కాల్: {CLINIC['phone_display']}</a>
+  </div>
+</div></section>
+<section><div class="wrap reveal">
+  <h2>వీడియో చూడండి: క్లినిక్ ఎంచుకునే ముందు 5 జాగ్రత్తలు</h2>
+  <p>ప్రకటనలను చూసి మోసపోకండి — హెయిర్ ట్రాన్స్‌ప్లాంట్ క్లినిక్ ఎంచుకునే ముందు ఈ 5 విషయాలు తప్పక చూడండి:</p>
+  <div class="video-frame" style="max-width:380px;aspect-ratio:9/14">
+    <button class="video-facade" data-embed="https://www.youtube.com/embed/CWpc34EG0mY" aria-label="Play video">
+      <span class="play">▶</span><span class="watch-label">ఇక్కడే చూడండి</span>
+    </button>
+  </div>
+  <script>
+  document.querySelectorAll('.video-facade').forEach(function(btn){{
+    btn.addEventListener('click', function(){{
+      var f = document.createElement('iframe');
+      f.src = btn.getAttribute('data-embed');
+      f.setAttribute('allowfullscreen',''); f.setAttribute('loading','lazy');
+      f.setAttribute('title', btn.getAttribute('aria-label'));
+      btn.parentElement.replaceChild(f, btn);
+    }}, {{once:true}});
+  }});
+  </script>
+</div></section>
+<section><div class="wrap">
+  <h2>తరచూ అడిగే ప్రశ్నలు</h2>
+  <details class="faq"><summary>హెయిర్ ట్రాన్స్‌ప్లాంట్ ఫలితాలు శాశ్వతమా?</summary><p>మార్పిడి చేసిన జుట్టు సాధారణంగా శాశ్వతంగా ఉంటుంది — కానీ ఫలితం మీ జుట్టు రాలే తీరు, డోనర్ ప్రాంతం మరియు సరైన ప్రణాళికపై ఆధారపడుతుంది. కన్సల్టేషన్‌లో డాక్టర్ నిజాయితీగా వివరిస్తారు.</p></details>
+  <details class="faq"><summary>చికిత్సకు ఎంత సమయం పడుతుంది?</summary><p>గ్రాఫ్ట్‌ల సంఖ్యను బట్టి సాధారణంగా 4–8 గంటలు. చాలా మంది మరుసటి రోజే సాధారణ పనులకు వెళ్లవచ్చు.</p></details>
+  <details class="faq"><summary>కన్సల్టేషన్ ఫీజు ఉందా?</summary><p>ప్రతి బుధవారం కన్సల్టేషన్ పూర్తిగా ఉచితం. మిగతా రోజుల్లో అపాయింట్‌మెంట్‌కు కాల్ చేయండి.</p></details>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/te/fue-hair-transplant.html", lang="te",
+                 alternates=_te_alternates("/te/fue-hair-transplant.html", "/procedures/fue-hair-transplant.html"),
+                 asset_prefix="../assets/")
+            + header("telugu", root="../") + body + footer(root="../"))
+
+def page_te_contact():
+    title = "సంప్రదించండి | AR Plastic Surgery కరీంనగర్, తెలంగాణ"
+    desc = ("AR Plastic Surgery, కరీంనగర్ — చిరునామా, ఫోన్, వేళలు. రెడ్డి గారి వంటిల్లు ఎదురుగా, కోర్ట్ చౌరస్తా, "
+            "జ్యోతినగర్. ప్రతిరోజూ ఉదయం 10 – రాత్రి 8. కాల్: +91 91826 56866.")
+    assert 45 <= len(title) <= 68, len(title)
+    assert 140 <= len(desc) <= 168, len(desc)
+    body = f"""<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">హోమ్</a> › సంప్రదించండి</nav>
+  <span class="eyebrow">మమ్మల్ని కలవండి</span>
+  <h1>సంప్రదించండి — AR Plastic Surgery, కరీంనగర్</h1>
+  <p class="lede">అపాయింట్‌మెంట్ కోసం కాల్ చేయండి, WhatsApp చేయండి లేదా ఆన్‌లైన్‌లో బుక్ చేయండి.</p>
+  <div class="card-grid">
+    <article class="card"><h3>📍 చిరునామా</h3><p>{CLINIC['address']}</p></article>
+    <article class="card"><h3>📞 ఫోన్</h3><p><a href="tel:{CLINIC['phone_tel']}" style="font-weight:700">{CLINIC['phone_display']}</a></p><p><a href="{CLINIC['whatsapp']}" target="_blank" rel="noopener">WhatsApp చేయండి →</a></p></article>
+    <article class="card"><h3>🕙 వేళలు</h3><p>సోమవారం – ఆదివారం<br>ఉదయం 10:00 – రాత్రి 8:00<br><strong>ప్రతి బుధవారం ఉచిత కన్సల్టేషన్</strong></p></article>
+  </div>
+  <div class="btn-row" style="margin-top:1.6rem"><a class="btn btn-gold" href="{CLINIC['booking']}" target="_blank" rel="noopener">ఆన్‌లైన్‌లో బుక్ చేయండి</a></div>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/te/contact.html", lang="te",
+                 alternates=_te_alternates("/te/contact.html", "/contact.html"),
+                 asset_prefix="../assets/")
+            + header("telugu", root="../") + body + footer(root="../"))
+from stories_data import STORIES, BASE_CTA
+
+AMP_BOILERPLATE = """<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>"""
+
+def page_story(story):
+    path = f"/stories/{story['slug']}.html"
+    url = BASE_URL + path
+    poster = f"{BASE_URL}/assets/dr-ashok-reddy.jpg"
+    logo = f"{BASE_URL}/assets/logo.png"
+    color = story["color"]
+    pages_html = []
+    # cover
+    pages_html.append(f"""<amp-story-page id="cover">
+      <amp-story-grid-layer template="fill">
+        <div style="background:linear-gradient(160deg,{color} 0%,#0a0f1e 100%);width:100%;height:100%"></div>
+      </amp-story-grid-layer>
+      <amp-story-grid-layer template="vertical" style="justify-content:end;padding:32px">
+        <amp-img src="{logo}" width="120" height="120" layout="fixed" alt="AR Plastic Surgery logo" style="margin-bottom:16px"></amp-img>
+        <h1 style="color:#fff;font-size:2rem;line-height:1.25;margin:0 0 12px">{story['title']}</h1>
+        <p style="color:#c9d6e5;font-size:1rem;margin:0">Dr Ashok Reddy · AR Plastic Surgery, Karimnagar</p>
+      </amp-story-grid-layer>
+    </amp-story-page>""")
+    # content slides
+    for i, (h, t) in enumerate(story["slides"], 1):
+        pages_html.append(f"""<amp-story-page id="s{i}">
+      <amp-story-grid-layer template="fill">
+        <div style="background:linear-gradient(160deg,{color} 0%,#0a0f1e 100%);width:100%;height:100%"></div>
+      </amp-story-grid-layer>
+      <amp-story-grid-layer template="vertical" style="justify-content:center;padding:32px">
+        <p style="color:#c19a3d;font-size:1rem;font-weight:700;margin:0 0 8px">{i} / {len(story['slides'])}</p>
+        <h2 style="color:#fff;font-size:1.6rem;line-height:1.3;margin:0 0 12px">{h}</h2>
+        <p style="color:#e8eef6;font-size:1.05rem;line-height:1.55;margin:0">{t}</p>
+      </amp-story-grid-layer>
+    </amp-story-page>""")
+    # video slide
+    pages_html.append(f"""<amp-story-page id="video">
+      <amp-story-grid-layer template="fill">
+        <amp-video autoplay loop width="720" height="1280" layout="fill" poster="{poster}">
+          <source src="https://www.youtube.com/embed/{story['youtube_id']}" type="text/html">
+        </amp-video>
+      </amp-story-grid-layer>
+      <amp-story-grid-layer template="vertical" style="justify-content:end;padding:32px">
+        <h2 style="color:#fff;font-size:1.4rem;margin:0 0 8px">Watch Dr Reddy explain</h2>
+        <p style="color:#e8eef6;margin:0"><a href="https://youtube.com/shorts/{story['youtube_id']}" style="color:#c19a3d;font-weight:700">Watch the full video on YouTube →</a></p>
+      </amp-story-grid-layer>
+    </amp-story-page>""")
+    # CTA
+    cta_h, cta_t = BASE_CTA
+    pages_html.append(f"""<amp-story-page id="cta">
+      <amp-story-grid-layer template="fill">
+        <div style="background:linear-gradient(160deg,#0f2a4a 0%,#0a0f1e 100%);width:100%;height:100%"></div>
+      </amp-story-grid-layer>
+      <amp-story-grid-layer template="vertical" style="justify-content:center;padding:32px;text-align:center">
+        <h2 style="color:#c19a3d;font-size:1.8rem;margin:0 0 12px">{cta_h}</h2>
+        <p style="color:#e8eef6;font-size:1rem;line-height:1.6;margin:0 0 20px">{cta_t}</p>
+        <a href="{CLINIC['booking']}" style="display:inline-block;background:#c19a3d;color:#0f2a4a;font-weight:800;padding:14px 28px;border-radius:8px;text-decoration:none">Book Online</a>
+        <p style="margin-top:16px"><a href="tel:{CLINIC['phone_tel']}" style="color:#fff;font-weight:700">Call {CLINIC['phone_display']}</a></p>
+      </amp-story-grid-layer>
+    </amp-story-page>""")
+    story_ld = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": story["title"],
+        "description": story["desc"],
+        "image": [poster],
+        "datePublished": "2026-10-06",
+        "author": {"@type": "Person", "name": "Dr Ashok Reddy"},
+        "publisher": {"@type": "Organization", "name": "AR Plastic Surgery",
+                      "logo": {"@type": "ImageObject", "url": logo}},
+    }
+    import json
+    ld = '<script type="application/ld+json">\n' + json.dumps(story_ld, ensure_ascii=False, indent=2) + "\n</script>"
+    return f"""<!DOCTYPE html>
+<html amp lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>{htmllib.escape(story['title'])} | AR Plastic Surgery</title>
+<meta name="description" content="{htmllib.escape(story['desc'])}">
+<link rel="canonical" href="{url}">
+<script async src="https://cdn.ampproject.org/v0.js"></script>
+<script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
+<script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
+{AMP_BOILERPLATE}
+{ld}
+</head>
+<body>
+<amp-story standalone title="{htmllib.escape(story['title'])}" publisher="AR Plastic Surgery"
+  publisher-logo-src="{logo}" poster-portrait-src="{poster}" poster-square-src="{logo}" poster-landscape-src="{poster}">
+{''.join(pages_html)}
+</amp-story>
+</body>
+</html>"""
+
 PAGES = [
     ("index.html", page_index, 1.0),
     ("about.html", page_about, 0.8),
+    ("hand-surgeon-karimnagar.html", page_hand_surgeon, 0.9),
     ("services.html", page_services, 0.9),
     ("siddipet-plastic-surgeon.html", page_siddipet, 0.8),
     ("sircilla-plastic-surgeon.html", page_sircilla, 0.8),
@@ -2101,13 +2883,142 @@ PAGES = [
     ("404.html", page_404, 0.0),
     ("procedures/index.html", page_procedures_index, 0.9),
     ("blog/index.html", page_blog_index, 0.9),
+    ("videos.html", page_videos, 0.9),
+    ("te/index.html", page_te_index, 0.9),
+    ("te/fue-hair-transplant.html", page_te_hair, 0.8),
+    ("te/contact.html", page_te_contact, 0.7),
 ]
+PAGES += [(f"stories/{s['slug']}.html", (lambda st: lambda: page_story(st))(s), 0.8)
+          for s in STORIES]
+
+def page_stories_index():
+    title = "Web Stories: Visual Health Guides | AR Plastic Surgery"
+    desc = ("Swipe through visual web stories by Dr Ashok Reddy: hair transplant checks, burn first aid, "
+            "hand safety, and more. AR Plastic Surgery, Karimnagar.")
+    cards = []
+    for s in STORIES:
+        cards.append(
+            f'<article class="card"><h3>{htmllib.escape(s["title"])}</h3>'
+            f'<p>{htmllib.escape(s["desc"][:110]).rsplit(" ", 1)[0]}…</p>'
+            f'<a class="more" href="{s["slug"]}.html">View story →</a></article>'
+        )
+    body = f"""<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Stories</nav>
+  <span class="eyebrow">Visual stories</span>
+  <h1>Web Stories</h1>
+  <p class="lede">Quick, visual guides by {CLINIC["doctor"]} — tap a story, swipe through, and book your consultation at the end.</p>
+  <div class="card-grid">{"".join(cards)}</div>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    return (head(title, desc, "/stories/index.html", asset_prefix="../assets/")
+            + header("stories", root="../") + body + footer(root="../"))
+
+def page_te_index():
+    """Telugu landing page."""
+    body = f"""
+<main><section><div class="wrap">
+  <span class="eyebrow">కరీంనగర్ · తెలంగాణ</span>
+  <h1>AR ప్లాస్టిక్ సర్జరీ — తెలుగులో</h1>
+  <p class="lede">డా. అశోక్ రెడ్డి గారి ఆధ్వర్యంలో — ప్లాస్టిక్, కాస్మెటిక్, హెయిర్ ట్రాన్స్‌ప్లాంట్ మరియు హ్యాండ్ సర్జరీ. కరీంనగర్‌లోని విశ్వసనీయ క్లినిక్.</p>
+  <div class="post-list">
+    <article class="card"><h3><a href="blog/index.html">తెలుగు బ్లాగ్</a></h3>
+    <p>ప్లాస్టిక్ సర్జరీ గురించి సరళమైన తెలుగు మార్గదర్శకాలు — {len(ALL_TE_POSTS)} వ్యాసాలు.</p>
+    <a class="more" style="font-weight:700" href="blog/index.html">వ్యాసాలు చదవండి →</a></article>
+  </div>
+</div></section>
+{cta_band(root="../")}
+</main>"""
+    alternates = [("te", BASE_URL + "/te/index.html"), ("x-default", BASE_URL + "/index.html")]
+    return (head("AR ప్లాస్టిక్ సర్జరీ | కరీంనగర్ — తెలుగు", "తెలుగులో ప్లాస్టిక్ సర్జరీ సమాచారం",
+                 "/te/index.html", asset_prefix="../assets/",
+                 lang="te", alternates=alternates)
+            + header("telugu", root="../") + body + footer(root="../"))
+
+PAGES.append(("te/index.html", page_te_index, 0.9))
+PAGES.append(("stories/index.html", page_stories_index, 0.8))
 for _p in PROCEDURES:
     PAGES.append((f"procedures/{_p['slug']}.html",
                   (lambda pp: lambda: page_procedure(pp))(_p), 0.8))
-for _b in POSTS:
+for _b in ALL_POSTS:
     PAGES.append((f"blog/{_b['slug']}.html",
                   (lambda bb: lambda: page_blog_post(bb))(_b), 0.7))
+
+# Telugu blog pages (te/blog/) with hreflang alternates
+def page_blog_post_te(post):
+    """Telugu version of a blog post — same template, lang=te, hreflang links."""
+    slug = post["slug"]
+    path = f"/te/blog/{slug}.html"
+    url = BASE_URL + path
+    en_url = BASE_URL + f"/blog/{slug}.html"
+    faqs = post.get("faqs", [])
+    sections = "\n".join(
+        f"<h2>{htmllib.escape(h)}</h2>\n{esc_paras(paras)}"
+        for h, paras in post["sections"]
+    )
+    rel_items = "\n".join(
+        f'<li><a href="../../procedures/{r}.html">{htmllib.escape(PROC_BY_SLUG[r]["name"])}</a></li>'
+        for r in post["related_procedures"] if r in PROC_BY_SLUG
+    )
+    body = f"""
+<main><section><div class="wrap" style="max-width:46rem">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../index.html">హోమ్</a> › <a href="index.html">బ్లాగ్</a> › వ్యాసం</nav>
+  <span class="eyebrow">రోగి విద్య · {htmllib.escape(post["date"])}</span>
+  <h1>{htmllib.escape(post["h1"])}</h1>
+  <p class="lede">{htmllib.escape(post["lede"])}</p>
+  <p class="byline">By {CLINIC["doctor"]}, {CLINIC["credentials"]} — {CLINIC["specialties"]}</p>
+  {sections}
+  <div class="rel-box">
+    <h3>సంబంధిత చికిత్సలు</h3>
+    <ul>{rel_items}</ul>
+  </div>
+</div></section>
+{faq_block(faqs) if faqs else ""}
+{cta_band(root="../../")}
+</main>"""
+    extra = [blogposting_jsonld(post, url),
+             breadcrumb_jsonld([("Home", BASE_URL + "/index.html"),
+                                ("Blog", BASE_URL + "/te/blog/index.html"),
+                                (post["h1"], url)])]
+    if faqs:
+        pass
+    alternates = [("en", en_url), ("te", url), ("x-default", en_url)]
+    return (head(post["title"], post["desc"], path, extra_jsonld=extra,
+                 asset_prefix="../../assets/", lang="te", alternates=alternates)
+            + header("blog", root="../../") + body + footer(root="../../"))
+
+def page_blog_index_te():
+    """Telugu blog index page."""
+    cards = []
+    for post in ALL_TE_POSTS:
+        cards.append(
+            f'<article class="card"><h3><a href="{post["slug"]}.html">{htmllib.escape(post["h1"])}</a></h3>'
+            f'<p>{htmllib.escape(post["lede"][:160])}…</p>'
+            f'<a class="more" style="font-weight:700;font-size:.92rem" href="{post["slug"]}.html">వ్యాసం చదవండి →</a></article>'
+        )
+    body = f"""
+<main><section><div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../index.html">హోమ్</a> › బ్లాగ్</nav>
+  <span class="eyebrow">రోగి విద్య</span>
+  <h1>AR ప్లాస్టిక్ సర్జరీ బ్లాగ్</h1>
+  <p class="lede">{CLINIC["doctor"]} గారి నిజాయితీ, సరళమైన మార్గదర్శకాలు — క్లినిక్‌కు రాకముందే మీ ఎంపికలను అర్థం చేసుకోవడానికి.</p>
+  <div class="post-list">{"".join(cards)}</div>
+</div></section>
+{cta_band(root="../../")}
+</main>"""
+    alternates = [("en", BASE_URL + "/blog/index.html"),
+                  ("te", BASE_URL + "/te/blog/index.html"),
+                  ("x-default", BASE_URL + "/blog/index.html")]
+    return (head("AR ప్లాస్టిక్ సర్జరీ బ్లాగ్ | తెలుగు వ్యాసాలు", "తెలుగులో ప్లాస్టిక్ సర్జరీ మార్గదర్శకాలు",
+                 "/te/blog/index.html", asset_prefix="../../assets/",
+                 lang="te", alternates=alternates)
+            + header("blog", root="../../") + body + footer(root="../../"))
+
+for _bt in ALL_TE_POSTS:
+    PAGES.append((f"te/blog/{_bt['slug']}.html",
+                  (lambda bb: lambda: page_blog_post_te(bb))(_bt), 0.7))
+if ALL_TE_POSTS:
+    PAGES.append(("te/blog/index.html", page_blog_index_te, 0.8))
 
 class Checker(HTMLParser):
     def __init__(self):
@@ -2161,11 +3072,27 @@ def main():
     # robots.txt
     with open(os.path.join(OUT, "robots.txt"), "w") as f:
         f.write(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\n")
-    # sitemap.xml
+    # sitemap.xml (with lastmod from file mtime; see regen_sitemap.py)
+    import datetime as _dt
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u, pr in sitemap_urls:
-        sm.append(f"  <url><loc>{BASE_URL}/{u}</loc><changefreq>monthly</changefreq><priority>{pr}</priority></url>")
+        _lm = _dt.date.fromtimestamp(os.path.getmtime(os.path.join(OUT, u))).isoformat()
+        sm.append(f"  <url><loc>{BASE_URL}/{u}</loc><lastmod>{_lm}</lastmod><changefreq>monthly</changefreq><priority>{pr}</priority></url>")
+    # merge any extra .html files on disk not covered by PAGES (e.g. standalone blog pages)
+    _seen = {u for u, _ in sitemap_urls}
+    for _root, _dirs, _files in os.walk(OUT):
+        _dirs[:] = [d for d in _dirs if d not in ("__pycache__", ".git")]
+        for _fn in sorted(_files):
+            if not _fn.endswith(".html") or _fn == "404.html":
+                continue
+            _rel = os.path.relpath(os.path.join(_root, _fn), OUT)
+            if _rel in _seen:
+                continue
+            _pr = "0.7" if _rel.startswith("blog/") else "0.6"
+            _lm = _dt.date.fromtimestamp(os.path.getmtime(os.path.join(OUT, _rel))).isoformat()
+            sm.append(f"  <url><loc>{BASE_URL}/{_rel}</loc><lastmod>{_lm}</lastmod><changefreq>monthly</changefreq><priority>{_pr}</priority></url>")
+            _seen.add(_rel)
     sm.append("</urlset>")
     with open(os.path.join(OUT, "sitemap.xml"), "w") as f:
         f.write("\n".join(sm))
