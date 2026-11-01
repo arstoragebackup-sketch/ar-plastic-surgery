@@ -358,6 +358,7 @@ def clinic_jsonld(page_url, description):
             CLINIC["instagram"],
             "https://www.justdial.com/Karimnagar/Ar-Plastic-Surgery-Opposite-Reddy-Gari-Vantillu-Malkapur-Road-Karimnagar/9999PX878-X878-230906081410-A2I2_BZDET",
             "https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar",
+            "https://www.youtube.com/@Aradvancedplasticsurgery",
         ],
         "priceRange": "₹₹",
         "aggregateRating": {
