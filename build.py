@@ -8,6 +8,7 @@ from html.parser import HTMLParser
 
 from content_proc_a import PROCEDURES_A
 from content_proc_b import PROCEDURES_B
+from answer_faqs import ANSWER_FAQS
 from content_blog import POSTS
 from content_district_posts import DISTRICT_POSTS
 ALL_POSTS = POSTS + DISTRICT_POSTS
@@ -362,7 +363,7 @@ def clinic_jsonld(page_url, description):
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
-            "reviewCount": "242",
+            "reviewCount": "245",
             "bestRating": "5",
         },
     }
@@ -698,7 +699,7 @@ def page_procedure(proc):
     slug = proc["slug"]
     path = f"/procedures/{slug}.html"
     url = BASE_URL + path
-    faqs = proc["faqs"]
+    faqs = list(proc["faqs"]) + ANSWER_FAQS.get(slug, [])
     # district guide cross-link — internal links help guides get discovered and rank
     PROC_TO_HUB = {
         "fue-hair-transplant": "hair-transplant",
@@ -2824,6 +2825,12 @@ def page_story(story):
 <title>{htmllib.escape(story['title'])} | AR Plastic Surgery</title>
 <meta name="description" content="{htmllib.escape(story['desc'])}">
 <link rel="canonical" href="{url}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AR Plastic Surgery">
+<meta property="og:title" content="{htmllib.escape(story['title'])} | AR Plastic Surgery">
+<meta property="og:description" content="{htmllib.escape(story['desc'])}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{logo}">
 <script async src="https://cdn.ampproject.org/v0.js"></script>
 <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
 <script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
@@ -2930,7 +2937,7 @@ def page_te_index():
 {cta_band(root="../")}
 </main>"""
     alternates = [("te", BASE_URL + "/te/index.html"), ("x-default", BASE_URL + "/index.html")]
-    return (head("AR ప్లాస్టిక్ సర్జరీ | కరీంనగర్ — తెలుగు", "తెలుగులో ప్లాస్టిక్ సర్జరీ సమాచారం",
+    return (head("AR ప్లాస్టిక్ సర్జరీ కరీంనగర్ | తెలుగులో సమాచారం", "కరీంనగర్‌లో ప్లాస్టిక్, కాస్మెటిక్, హెయిర్ ట్రాన్స్‌ప్లాంట్, హ్యాండ్ సర్జరీ — డా. అశోక్ రెడ్డి (MBBS, DNB, M.Ch, గోల్డ్ మెడలిస్ట్). ప్రతిరోజూ ఉదయం 10 – రాత్రి 8.",
                  "/te/index.html", asset_prefix="../assets/",
                  lang="te", alternates=alternates)
             + header("telugu", root="../") + body + footer(root="../"))
@@ -3009,7 +3016,7 @@ def page_blog_index_te():
     alternates = [("en", BASE_URL + "/blog/index.html"),
                   ("te", BASE_URL + "/te/blog/index.html"),
                   ("x-default", BASE_URL + "/blog/index.html")]
-    return (head("AR ప్లాస్టిక్ సర్జరీ బ్లాగ్ | తెలుగు వ్యాసాలు", "తెలుగులో ప్లాస్టిక్ సర్జరీ మార్గదర్శకాలు",
+    return (head("AR ప్లాస్టిక్ సర్జరీ బ్లాగ్ | తెలుగు వ్యాసాలు", "తెలుగులో ప్లాస్టిక్ సర్జరీ మార్గదర్శకాలు — హెయిర్ ట్రాన్స్‌ప్లాంట్, గైనెకోమాస్టియా, రైనోప్లాస్టీ, హ్యాండ్ సర్జరీ, ఖర్చుల వివరాలు — డా. అశోక్ రెడ్డి సరళ వివరణలు.",
                  "/te/blog/index.html", asset_prefix="../../assets/",
                  lang="te", alternates=alternates)
             + header("blog", root="../../") + body + footer(root="../../"))
