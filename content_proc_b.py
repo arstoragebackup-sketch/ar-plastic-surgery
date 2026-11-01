@@ -401,4 +401,36 @@ PROCEDURES_B = [
         "related": ["hand-trauma-surgery", "nerve-repair-microsurgery", "microsurgery-free-flap"],
         "towns": ["Siddipet", "Sircilla", "Peddapalli"],
     },
+    {
+        "slug": "skin-grafting",
+        "name": "Skin Grafting",
+        "category": "Reconstructive Surgery",
+        "title": "Skin Grafting in Karimnagar | Wound & Burn Coverage | AR",
+        "desc": "Skin grafting in Karimnagar by Dr Ashok Reddy — healthy skin coverage for burns, non-healing wounds, ulcers and defects after tumour or trauma surgery.",
+        "lede": "When a wound is too large or too deep to close directly, skin grafting provides healthy coverage that protects, heals and restores function.",
+        "overview": [
+            "A skin graft is healthy skin taken from one part of the body — the donor site — and placed onto a wound elsewhere that cannot heal on its own. It is one of the oldest and most reliable techniques in plastic surgery, used for burn wounds, non-healing ulcers, large defects after tumour removal, and traumatic skin loss.",
+            "Grafts come in two main types. Split-thickness grafts take the top layers of skin and are used for larger areas; they heal quickly at the donor site, which regenerates on its own. Full-thickness grafts include the entire dermis and give a better cosmetic match for visible areas like the face and hands, though the donor site needs direct closure.",
+        ],
+        "approach": [
+            "The choice of graft is planned around the wound: its size, depth, location and blood supply. A graft survives by drawing nourishment from the wound bed in the first days, so preparing that bed — cleaning infection, ensuring healthy granulation tissue — is as important as the graft itself.",
+            "Dr Reddy assesses whether grafting is the right option at all. Some wounds heal better with dressings and time; others need flap surgery rather than a graft. The recommendation follows the wound, not a routine.",
+        ],
+        "journey": [
+            ("The procedure", "Grafting is usually a day-care or short-stay procedure under anaesthesia. The graft is secured with dressings and left undisturbed for the first critical days while it takes. The donor site — often the thigh — heals like a superficial graze within two weeks."),
+            ("Aftercare", "Follow-up checks that the graft has taken fully; small areas of loss can usually be managed with dressings. Physiotherapy starts early where grafts cross joints, because a graft that heals stiff has failed half its purpose."),
+        ],
+        "risks": [
+            "The main risks are partial graft loss, infection and scarring at both graft and donor sites. Colour and texture differences between graft and surrounding skin are expected and usually improve over months.",
+            "Grafts over joints can contract as they heal, which is why splinting, therapy and timely review are built into the aftercare plan from the start.",
+        ],
+        "faqs": [
+            ("Does skin grafting leave a scar at the donor site?", "The donor site heals on its own within about two weeks and typically leaves a pale, flat area that fades with time. It is usually taken from a discreet location such as the thigh."),
+            ("How long does a graft take to heal?", "A graft begins establishing blood supply within days and is generally secure within two weeks, though full maturation of colour and texture takes months."),
+            ("Can grafts be done for old, non-healing wounds?", "Often yes — chronic ulcers and long-standing wounds are common reasons for grafting, provided the wound bed is properly prepared first. An assessment determines suitability."),
+            ("Will the grafted skin look normal?", "Grafted skin differs somewhat in colour and texture from surrounding skin, and the difference lessens over time. Function — durable, protective coverage — is the primary goal."),
+        ],
+        "related": ["burn-reconstruction", "scar-keloid-treatment", "microsurgery-free-flap"],
+        "towns": ["Siddipet", "Sircilla", "Peddapalli"],
+    },
 ]
