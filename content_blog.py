@@ -172,6 +172,7 @@ POSTS += [
              "Details of the injury or symptom timeline, previous X-rays or reports, a list of medications and any prior treatment. If the injury is recent, keep the wound clean, covered and undisturbed until you are seen."),
         ],
         "related_procedures": ["hand-trauma-surgery", "tendon-repair", "carpal-tunnel-release"],
+        "guide": "hand-surgery",
     },
 ]
 POSTS += [
@@ -420,5 +421,139 @@ POSTS += [
              "Keep the hand elevated and immobilised, maintain pressure on any bleeding, and avoid unnecessary movement of injured fingers. Do not let the person drive themselves if the dominant hand is injured or they feel faint."),
         ],
         "related_procedures": ["hand-trauma-surgery", "fingertip-replantation", "tendon-repair"],
+        "guide": "hand-surgery",
     },
 ]
+
+POSTS += [
+    {
+        "slug": "botox-vs-fillers",
+        "h1": "Botox vs Dermal Fillers: What's the Difference?",
+        "title": "Botox vs Fillers: Which One Do You Need? | AR Plastic",
+        "desc": "Botox relaxes wrinkles caused by movement; fillers restore volume and contour. Dr Ashok Reddy explains what each treats, how long results last, and how to choose.",
+        "lede": "They are often mentioned in the same breath, but Botox and dermal fillers do completely different jobs. Understanding the difference is the first step to getting the right treatment.",
+        "date": "14 October 2026",
+        "sections": [
+            ("What Botox Actually Does", [
+                "Botox is a purified protein that temporarily blocks nerve signals to targeted muscles. When a muscle cannot contract as strongly, the wrinkles formed by repeated movement soften: forehead lines, the frown lines between the eyebrows, and crow's feet at the outer eyes are the classic treatment areas.",
+                "The effect builds over several days rather than appearing instantly, and it typically lasts three to four months before muscle activity gradually returns. It adds no volume anywhere; it only relaxes movement. Maintenance sessions are needed to sustain the effect, and stopping simply lets the muscles return to their previous behaviour.",
+            ]),
+            ("What Dermal Fillers Actually Do", [
+                "Fillers are gel-like substances placed beneath the skin to restore volume that age, weight change or genetics have reduced. The most widely used type is based on hyaluronic acid, a substance the body produces naturally. They soften folds that are present even when the face is at rest, such as the nasolabial folds running from nose to mouth, and they rebuild contour in the cheeks, lips, chin or jawline.",
+                "Results are visible immediately and the body breaks the material down gradually over many months, sometimes beyond a year depending on the product and the area treated. Because they occupy space rather than relaxing muscle, fillers cannot do what Botox does, and Botox cannot do what fillers do.",
+            ]),
+            ("The Key Differences at a Glance", [
+                "Mechanism is the fundamental divide: Botox quiets muscle activity while fillers replace lost volume. That decides everything else. Lines caused by expression respond to Botox; hollows, folds and flat areas respond to fillers. Onset differs too: fillers show their result at once, while Botox needs days to take full effect.",
+                "Duration also differs. Botox generally lasts three to four months; fillers often last six to eighteen months depending on the product, the depth of placement and how much movement the area sees. One practical difference patients appreciate: hyaluronic acid fillers can be dissolved with an enzyme if the result needs adjusting, which gives an added margin of correctability.",
+            ]),
+            ("Can They Be Used Together?", [
+                "Often, yes, because ageing rarely presents a single problem. A common combined plan relaxes the forehead with Botox while restoring cheek volume with filler, addressing both movement lines and volume loss in one strategy. The two treatments work on different layers and do not interfere with each other.",
+                "Combination treatment should still be planned conservatively, sometimes staged across visits so each change can be assessed before the next is made. A good injector treats the face as a whole rather than selling units of product, and will tell you when one treatment alone is enough.",
+            ]),
+            ("Choosing Safely: What Matters More Than the Product", [
+                "The person holding the syringe matters more than the brand in it. Facial anatomy is intricate: nerves, vessels and tissue planes sit millimetres apart, and safe placement depends on deep anatomical knowledge. A plastic surgeon brings years of training in exactly this anatomy to every injection.",
+                "Be cautious of prices that seem unusually low or products that cannot be named and verified. A proper consultation covers your medical history, allergies, previous treatments and what you realistically want to change. Neither treatment stops ageing, both need maintenance, and anyone who suggests otherwise is selling rather than advising.",
+            ]),
+        ],
+        "faqs": [
+            ("Which lasts longer, Botox or fillers?",
+             "Fillers generally last longer, often six to eighteen months depending on the product and treatment area, while Botox typically lasts three to four months. Individual metabolism, the dose used and how much the area moves all influence duration."),
+            ("Is the treatment painful?",
+             "Both use very fine needles and most patients describe brief, mild discomfort rather than real pain. Numbing cream or ice is commonly used, the appointment is short, and there is no surgery or significant downtime for most people."),
+            ("Are there risks I should know about?",
+             "Yes. Bruising and temporary asymmetry are the common ones; rare but serious complications exist, including vascular occlusion with fillers, which is why the injector's training matters so much. A qualified doctor working in a proper clinical setting keeps these risks as low as they can be."),
+            ("Will I look frozen or unnatural?",
+             "That appearance comes from overtreatment, not from the products themselves. Conservative dosing, placed with an understanding of how your face moves, aims for a rested and natural look. If a frozen look is what you fear, say so at the consultation; it is useful information for planning."),
+        ],
+        "related_procedures": ["botox-treatment", "dermal-fillers"],
+    },
+    {
+        "slug": "hand-tendon-nerve-repair",
+        "guide": "hand-surgery",
+        "h1": "Hand Tendon & Nerve Repair in Karimnagar",
+        "title": "Hand Tendon & Nerve Repair in Karimnagar | AR Plastic",
+        "desc": "A cut tendon or nerve can steal hand function in seconds. Dr Ashok Reddy explains how microsurgical repair works, why timing matters, and what recovery involves.",
+        "lede": "Tendons move your fingers; nerves give them feeling. When either is cut, the clock starts, and the quality of the repair decides how much function comes back.",
+        "date": "14 October 2026",
+        "sections": [
+            ("What Tendons and Nerves Do in the Hand", [
+                "Tendons are the cables connecting forearm muscles to finger bones. Flexor tendons on the palm side curl the fingers; extensor tendons on the back straighten them. They glide through narrow sheaths, and that smooth gliding is what makes fine movement possible. Running alongside them are the digital nerves, each only a few millimetres wide, carrying sensation from the fingertips to the brain.",
+                "A deep cut, a crush injury or even a seemingly small kitchen accident can divide these structures. The signs are distinctive: a finger that will not bend or straighten, or an area of skin that has gone numb. These are not injuries that heal well on their own, because divided tendon ends retract and divided nerves cannot find each other across a gap.",
+            ]),
+            ("Why Timing Matters So Much", [
+                "Repairs done early do better, and the difference is not small. Within days, tendon ends are still where the surgeon expects them and the surrounding tissues are supple. With delay, tendon ends retract further, joints stiffen, and muscles begin to weaken from disuse. For nerves, delay risks permanent loss of sensation as the far segment of the nerve deteriorates.",
+                "This is why local availability matters. Hand injuries do not wait for a convenient appointment in another city. Full-time hand surgical care in Karimnagar means a cut tendon or suspected nerve injury can be assessed the same day, and the repair scheduled without the delay and disruption of travelling for every visit.",
+            ]),
+            ("How the Repair Is Done", [
+                "Tendon and nerve repair is microsurgery: it is performed under high magnification with sutures finer than a human hair. A tendon repair must be strong enough to hold during early movement yet smooth enough to glide through its sheath without catching. A nerve repair aligns the tiny internal bundles so regenerating fibres have the best chance of reaching the right destination; when a segment of nerve is missing, a graft bridges the gap.",
+                "This is demanding, unforgiving work where millimetres decide outcomes. It belongs with a surgeon trained in both hand surgery and microsurgery. At AR Plastic Surgery, Dr Ashok Reddy, MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist in Plastic & Reconstructive Surgery, brings microsurgical training to every such repair.",
+            ]),
+            ("Rehabilitation: Half the Treatment", [
+                "Surgery is only the first half. A repaired tendon that is left completely still will stick to everything around it; one moved too aggressively will rupture. Hand therapy walks this narrow path with protected, guided movement that starts early, custom splints that guard the repair while allowing safe motion, and progressive exercises over weeks.",
+                "Scar management, swelling control and gradual strengthening follow. The patient's commitment to the therapy programme influences the final result as much as the operation itself, which is why the surgeon and therapist plan rehabilitation together from the day of surgery rather than treating it as an afterthought.",
+            ]),
+            ("What Recovery Realistically Looks Like", [
+                "Honesty matters here. Nerves regrow slowly, roughly a millimetre a day, so sensation returns over months, not weeks. Tendon healing takes weeks of protected therapy before strength returns. Most patients regain useful, working hand function, but some residual numbness, stiffness or cold sensitivity can persist depending on the severity of the original injury.",
+                "The goal is a hand you can trust for daily life and work. A surgeon who maps this journey plainly at the start, including what may not fully return, is giving you the information you need to commit to the months of rehabilitation ahead.",
+            ]),
+        ],
+        "faqs": [
+            ("How soon must a cut tendon be repaired?",
+             "As soon as possible, ideally within days. Early repair finds the tendon ends where they are expected and the tissues still supple, which gives the best chance of restoring smooth gliding movement. Waiting weeks makes the surgery harder and the outcome less certain."),
+            ("Will I get full movement and feeling back?",
+             "Many patients achieve excellent function, but it depends on how severe the injury was, how quickly it was repaired, and how diligently rehabilitation is followed. An honest surgeon will outline your specific prospects rather than promising a perfect result."),
+            ("What does hand therapy involve?",
+             "Guided exercises that start early under protection, custom-made splints, scar and swelling management, and progressive strengthening over weeks to months. It is active treatment, not passive rest, and it continues well after the surgical wound has healed."),
+            ("Do I need to go to Hyderabad for this treatment?",
+             "No. Microsurgical tendon and nerve repair is available at AR Plastic Surgery in Karimnagar, with full-time local care. That means emergencies are assessed promptly and all follow-ups and therapy happen close to home, without repeated travel to another city."),
+        ],
+        "related_procedures": ["tendon-repair", "nerve-repair-microsurgery", "hand-trauma-surgery", "fingertip-replantation"],
+        "guide": "hand-surgery",
+    },
+    {
+        "slug": "diwali-firecracker-hand-injuries",
+        "guide": "hand-surgery",
+        "h1": "Diwali Firecracker Hand Injuries: Safety & First Aid",
+        "title": "Diwali Firecracker Hand Injuries: Safety & First Aid | AR Plastic",
+        "desc": "Hands are the commonest Diwali injury site. Learn firecracker safety, first aid in the first minutes, and when a hand surgeon should see the injury.",
+        "lede": "Every Diwali, emergency rooms see the same injuries: burnt hands, deep cuts from crackers, blast damage from duds picked up too soon. Most are preventable, and the first minutes after an injury matter enormously.",
+        "date": "15 October 2026",
+        "sections": [
+            ("Why Hands Take the Hit", [
+                "Hands are the commonest Diwali injury site because they hold, light and reach for crackers. The typical injuries are burns from sparklers and fountains, deep cuts from sharp cracker casings, and blast injuries when a dud explodes late or a cracker bursts in a closed fist.",
+                "Children are hurt most often, usually because they imitate adults without understanding the timing. Sparklers deserve special respect: they burn far hotter than most people expect and cause deep burns in small hands within a second of contact.",
+            ]),
+            ("How to Stay Safe", [
+                "Never hold a cracker in your hand after lighting it. Light at arm's length and step back immediately. Use an incense stick (agarbatti) rather than a matchstick held close to the fuse.",
+                "Keep a bucket of water and a basic first-aid box within reach before you start. Never pick up a dud, a cracker that failed to burst, because it can explode minutes later; pour water over it instead.",
+                "Supervise children constantly around fireworks, dress them in close-fitting cotton rather than loose synthetics, and keep them away from the lighting area. Wear closed footwear yourself; embers on bare feet cause surprisingly deep burns.",
+            ]),
+            ("First Aid in the First Minutes", [
+                "For a burn, hold it under clean running water for at least ten minutes. Do not apply toothpaste, oil, butter, ice or any ointment; they trap heat and worsen the injury. Remove rings and bangles near the burn before swelling begins.",
+                "Cover the area loosely with a clean cloth and do not press, rub or peel anything. For a deep cut that bleeds, press gently with a clean cloth and keep the hand raised above heart level.",
+                "If a fingertip or finger is cut off, wrap it in a clean damp cloth, seal it in a plastic bag, and rest that bag on ice. Bring it with the patient to the hospital; do not place the tissue directly on ice.",
+                "Reach a hospital the same evening. Hand injuries deteriorate with delay: swelling increases, tissues stiffen, and the window for the cleanest repair narrows.",
+            ]),
+            ("When a Hand Surgeon Should See It", [
+                "Get a hand surgeon's assessment the same day for: deep burns with white or charred skin; any numbness or inability to move a finger; cuts where a finger will not bend or straighten fully, which can mean a divided tendon; blast injuries with deformity or heavy bleeding; and any burn in a child.",
+                "These signs point to damage beneath the surface that needs specialist eyes. Tendons, nerves and vessels run millimetres apart in the hand, so an injury that looks small outside can be significant inside.",
+            ]),
+            ("Care Close to Home in Karimnagar", [
+                "Firecracker injuries do not wait for appointments in distant cities. AR Plastic Surgery in Karimnagar offers full-time hand surgical care, so Diwali injuries are assessed promptly and treatment, from wound care to microsurgical repair, happens close to home.",
+                "Dr Ashok Reddy, MBBS, DNB (Mumbai), M.Ch (Delhi), Gold Medalist in Plastic & Reconstructive Surgery, leads hand and microvascular care at the clinic, which stays open through the festival days.",
+            ]),
+        ],
+        "faqs": [
+            ("Should I put toothpaste on a cracker burn?",
+             "No. Toothpaste, oil, butter and ice all worsen burns by trapping heat or damaging tissue. Cool running water for at least ten minutes is the correct first aid, then a loose clean covering and a hospital visit."),
+            ("A cracker didn't burst. Can I pick it up?",
+             "No. Duds can explode minutes later and cause the worst blast injuries. Pour water over it and leave it alone."),
+            ("My child's finger is burnt but looks okay. Should we still go?",
+             "Yes, the same day. Children's skin is thinner, so burns go deeper than they appear, and hand burns in children deserve prompt specialist assessment."),
+            ("Is the clinic open during Diwali?",
+             "AR Plastic Surgery, Karimnagar is open daily 10 AM to 8 PM, including festival days. For a hand injury, come the same evening rather than waiting."),
+        ],
+        "related_procedures": ["hand-trauma-surgery", "tendon-repair", "nerve-repair-microsurgery"],
+    },
+]
+print("appended 2 posts")
