@@ -12,7 +12,7 @@ var AR_KB = (function () {
     phone: '+91 91826 56866',
     phoneDigits: '919182656866',
     hours: '10:00 AM – 8:00 PM, every day',
-    rating: '4.9 stars on Google, 245 patient reviews',
+    rating: '4.9 stars on Google, 246 patient reviews',
     bookingUrl: 'https://arstoragebackup-sketch.github.io/Booking/'
   };
 
