@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AR Website Admin</title>
+<style>
+  :root { --navy:#0B2447; --blue:#2563eb; --bg:#f5f7fa; --card:#ffffff; --line:#e2e8f0; --mut:#64748b; --ok:#15803d; --bad:#b91c1c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--bg); color:#0f172a; }
+  .wrap { max-width:860px; margin:0 auto; padding:1rem; }
+  header.bar { background:var(--navy); color:#fff; padding:.8rem 1rem; display:flex; align-items:center; gap:.7rem; }
+  header.bar img { width:38px; height:38px; border-radius:50%; background:#fff; }
+  header.bar .t { font-weight:700; font-size:1.05rem; }
+  header.bar .sp { flex:1; }
+  .lockbtn { background:transparent; color:#fff; border:1px solid #ffffff55; border-radius:.5rem; padding:.35rem .7rem; cursor:pointer; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:1rem; margin:1rem 0; }
+  h2 { font-size:1.05rem; margin:.1rem 0 .7rem; color:var(--navy); }
+  h3 { font-size:.98rem; margin:.2rem 0 .5rem; }
+  label { display:block; font-size:.85rem; font-weight:600; margin:.7rem 0 .25rem; }
+  input[type=text], input[type=password], textarea, select {
+    width:100%; padding:.6rem .7rem; border:1px solid var(--line); border-radius:.55rem; font:inherit; background:#fff;
+  }
+  textarea { min-height:170px; resize:vertical; }
+  textarea.small { min-height:90px; }
+  .hint { font-size:.8rem; color:var(--mut); margin-top:.3rem; line-height:1.45; }
+  .btn { background:var(--blue); color:#fff; border:0; border-radius:.55rem; padding:.6rem 1.1rem; font:inherit; font-weight:600; cursor:pointer; margin-top:.8rem; }
+  .btn:disabled { opacity:.55; cursor:wait; }
+  .btn.danger { background:var(--bad); padding:.35rem .7rem; font-size:.85rem; margin:0; }
+  .btn.ghost { background:#fff; color:var(--navy); border:1px solid var(--line); }
+  .tabs { display:flex; gap:.5rem; margin:1rem 0 0; flex-wrap:wrap; }
+  .tab { padding:.5rem 1rem; border-radius:2rem; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:600; }
+  .tab.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .row { display:flex; gap:1rem; flex-wrap:wrap; }
+  .grow { flex:1; min-width:230px; }
+  .thumb { width:100%; max-width:230px; height:auto; border:1px solid var(--line); border-radius:.6rem; background:#fff; display:block; }
+  .item { display:flex; align-items:center; gap:.6rem; padding:.5rem 0; border-bottom:1px solid var(--line); }
+  .item:last-child { border-bottom:0; }
+  .item .nm { flex:1; font-size:.92rem; word-break:break-all; }
+  #toast { position:fixed; left:50%; transform:translateX(-50%); bottom:18px; max-width:92vw; background:#0f172a; color:#fff; padding:.7rem 1rem; border-radius:.6rem; font-size:.92rem; display:none; z-index:50; box-shadow:0 8px 24px #0003; }
+  #toast.ok { background:var(--ok); } #toast.bad { background:var(--bad); }
+  .login { max-width:400px; margin:8vh auto 0; }
+  .err { color:var(--bad); font-size:.9rem; min-height:1.2em; }
+  a { color:var(--blue); }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="wrap" id="loginView">
+  <div class="card login">
+    <div style="text-align:center">
+      <img src="https://surgery.arplasticsurgery.co.in/assets/logo.png" alt="AR Plastic Surgery" style="width:64px;height:64px;border-radius:50%">
+      <h2 style="margin-top:.5rem">AR Website Admin</h2>
+      <p class="hint">Enter the admin password to manage the website.</p>
+    </div>
+    <label for="pw">Password</label>
+    <input type="password" id="pw" inputmode="numeric" autocomplete="off" placeholder="••••">
+    <div class="err" id="loginErr"></div>
+    <button class="btn" id="loginBtn" style="width:100%">Open admin</button>
+  </div>
+</div>
+
+<!-- ============ ADMIN ============ -->
+<div id="adminView" style="display:none">
+  <header class="bar">
+    <img src="https://surgery.arplasticsurgery.co.in/assets/logo.png" alt="">
+    <div class="t">AR Website Admin</div>
+    <div class="sp"></div>
+    <a href="https://surgery.arplasticsurgery.co.in/" target="_blank" rel="noopener" style="color:#fff;font-size:.9rem">View site ↗</a>
+    <button class="lockbtn" id="lockBtn">Lock</button>
+  </header>
+
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tab on" data-tab="blog">📝 Blog</button>
+      <button class="tab" data-tab="images">🖼️ Logo &amp; Photos</button>
+      <button class="tab" data-tab="services">🧾 Services</button>
+    </div>
+
+    <!-- ===== BLOG ===== -->
+    <section id="tab-blog">
+      <div class="card">
+        <h2>Write &amp; publish a blog</h2>
+        <label for="bTitle">Title</label>
+        <input type="text" id="bTitle" placeholder="e.g. Hair Transplant Recovery: Week by Week">
+        <label for="bSlug">Web address (auto — edit only if needed)</label>
+        <input type="text" id="bSlug" placeholder="hair-transplant-recovery-week-by-week">
+        <p class="hint">The blog will live at surgery.arplasticsurgery.co.in/blog/<span id="slugEcho">…</span>.html</p>
+        <label for="bDesc">Short description (one or two lines — shown on the blog list and Google)</label>
+        <textarea class="small" id="bDesc" placeholder="What this article helps the reader understand…"></textarea>
+        <label for="bBody">Write the blog</label>
+        <textarea id="bBody" placeholder="Write naturally. Leave a blank line between paragraphs."></textarea>
+        <p class="hint">Formatting: a line starting with <strong>##</strong> becomes a heading, <strong>###</strong> a smaller heading, lines starting with <strong>-</strong> become bullet points, and <strong>**words**</strong> become bold. A “Book a consultation” band is added at the end automatically.</p>
+        <button class="btn" id="publishBtn">Publish blog</button>
+      </div>
+      <div class="card">
+        <h2>Published blogs</h2>
+        <div id="blogList"><p class="hint">Loading…</p></div>
+        <button class="btn ghost" id="blogRefresh">Refresh list</button>
+      </div>
+    </section>
+
+    <!-- ===== IMAGES ===== -->
+    <section id="tab-images" style="display:none">
+      <div class="card">
+        <h2>Change images</h2>
+        <p class="hint">Pick a new image and press Replace. The whole website picks it up automatically — it can take about 10 minutes to show everywhere (site cache).</p>
+        <div class="row">
+          <div class="grow">
+            <h3>Clinic logo</h3>
+            <img class="thumb" id="imgLogo" alt="Current logo">
+            <input type="file" id="fileLogo" accept="image/*" style="margin-top:.6rem">
+            <button class="btn" data-replace="logo">Replace logo</button>
+          </div>
+          <div class="grow">
+            <h3>Doctor photo — main</h3>
+            <img class="thumb" id="imgDoctor" alt="Current doctor photo">
+            <input type="file" id="fileDoctor" accept="image/*" style="margin-top:.6rem">
+            <button class="btn" data-replace="doctor">Replace photo</button>
+            <p class="hint">Shown on the home page and the About page.</p>
+          </div>
+          <div class="grow">
+            <h3>Doctor photo — second (dark background)</h3>
+            <img class="thumb" id="imgDoctorAlt" alt="Current second doctor photo">
+            <input type="file" id="fileDoctorAlt" accept="image/*" style="margin-top:.6rem">
+            <button class="btn" data-replace="doctorAlt">Replace photo</button>
+            <p class="hint">Shown in the “Meet Dr Ashok Reddy” section of the About page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="tab-services" style="display:none">
+      <div class="card">
+        <h2>Add a service</h2>
+        <label for="sName">Service name</label>
+        <input type="text" id="sName" placeholder="e.g. Dimple Creation">
+        <label for="sCat">Section on the Services page</label>
+        <select id="sCat">
+          <option>Aesthetic Surgery</option>
+          <option>Reconstructive &amp; Hand Surgery</option>
+          <option>Non-Surgical Aesthetics</option>
+        </select>
+        <label for="sDesc">Short description (shown on the Services page card)</label>
+        <textarea class="small" id="sDesc" placeholder="Two or three honest lines about the treatment…"></textarea>
+        <label for="sBody">Details for the service's own page (optional)</label>
+        <textarea id="sBody" placeholder="Same formatting as the blog: blank line = new paragraph, ## heading, - bullets, **bold**."></textarea>
+        <button class="btn" id="addServiceBtn">Add service + page</button>
+        <p class="hint">This creates the service's own page and adds its card to the Services page.</p>
+      </div>
+      <div class="card">
+        <h2>Current services</h2>
+        <div id="svcList"><p class="hint">Loading…</p></div>
+        <button class="btn ghost" id="svcRefresh">Refresh list</button>
+        <p class="hint">Deleting removes the card from the Services page and deletes the service's own page. This is only the website — Google Business services are not touched.</p>
+      </div>
+    </section>
+
+    <p class="hint" style="text-align:center;margin:1.4rem 0">Changes go live after the site rebuilds itself — usually 1–3 minutes (images can take ~10 minutes because of caching).</p>
+  </div>
+</div>
+
+<iframe name="ar_sink" style="display:none" title=""></iframe>
+<div id="toast"></div>
+
+<script>
+/* ================= CONFIG — set at setup time ================= */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2JfBWepLputDEKadmPN8E5iqAZk6Y0LLQG4aV0QiRvHyXgQ-9X2ayEojOmaIwadt-/exec';
+const SITE = 'https://surgery.arplasticsurgery.co.in';
+/* ============================================================= */
+
+let PW = sessionStorage.getItem('arAdminPw') || '';
+const $ = id => document.getElementById(id);
+
+function toast(msg, kind) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = kind || '';
+  t.style.display = 'block';
+  clearTimeout(t._h);
+  t._h = setTimeout(() => { t.style.display = 'none'; }, 5200);
+}
+
+function slugify(s) {
+  return String(s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+}
+
+/* ---- transport: hidden-form POST + JSONP status poll (same pattern as the rep form) ---- */
+function postJob(payload) {
+  const jobId = 'j' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+  payload.jobId = jobId;
+  payload.pw = PW;
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SCRIPT_URL;
+  form.target = 'ar_sink';
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'payload';
+  input.value = JSON.stringify(payload);
+  form.appendChild(input);
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+  return jobId;
+}
+
+function pollStatus(jobId) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'ar_cb_' + jobId;
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+      if (tries > 50) { cleanup(); reject(new Error('The server took too long. The change may still have gone through — refresh the lists in a minute.')); return; }
+      const s = document.createElement('script');
+      s.src = SCRIPT_URL + '?action=status&job=' + encodeURIComponent(jobId) + '&pw=' + encodeURIComponent(PW) + '&callback=' + cbName + '&_=' + Date.now();
+      s.onerror = () => { s.remove(); };
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 2000);
+    }, 1500);
+    window[cbName] = data => {
+      if (!data || !data.done) return;           // not ready yet — keep polling
+      cleanup();
+      resolve(data);
+    };
+    function cleanup() { clearInterval(timer); try { delete window[cbName]; } catch (e) { window[cbName] = undefined; } }
+  });
+}
+
+async function api(action, data) {
+  if (SCRIPT_URL.indexOf('PASTE_') === 0) throw new Error('Admin is not connected yet (setup pending).');
+  const jobId = postJob(Object.assign({ action: action }, data || {}));
+  const res = await pollStatus(jobId);
+  if (!res.ok) throw new Error(res.error || 'Something went wrong.');
+  return res;
+}
+
+/* ---- login ---- */
+async function tryLogin() {
+  PW = $('pw').value.trim();
+  $('loginErr').textContent = '';
+  $('loginBtn').disabled = true;
+  try {
+    await api('ping');
+    sessionStorage.setItem('arAdminPw', PW);
+    showAdmin();
+  } catch (e) {
+    $('loginErr').textContent = e.message === 'Wrong password' ? 'Wrong password — try again.' : e.message;
+  }
+  $('loginBtn').disabled = false;
+}
+$('loginBtn').addEventListener('click', tryLogin);
+$('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+$('lockBtn').addEventListener('click', () => { sessionStorage.removeItem('arAdminPw'); location.reload(); });
+
+function showAdmin() {
+  $('loginView').style.display = 'none';
+  $('adminView').style.display = 'block';
+  refreshImages();
+  loadBlogs();
+  loadServices();
+}
+if (PW) { api('ping').then(showAdmin).catch(() => { sessionStorage.removeItem('arAdminPw'); }); }
+
+/* ---- tabs ---- */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    tab.classList.add('on');
+    ['blog', 'images', 'services'].forEach(k => { $('tab-' + k).style.display = (k === tab.dataset.tab) ? 'block' : 'none'; });
+  });
+});
+
+/* ---- blog ---- */
+let slugTouched = false;
+$('bTitle').addEventListener('input', () => {
+  if (!slugTouched) { $('bSlug').value = slugify($('bTitle').value); }
+  $('slugEcho').textContent = $('bSlug').value || '…';
+});
+$('bSlug').addEventListener('input', () => { slugTouched = true; $('slugEcho').textContent = $('bSlug').value || '…'; });
+
+$('publishBtn').addEventListener('click', async () => {
+  const btn = $('publishBtn');
+  btn.disabled = true; btn.textContent = 'Publishing… (about 20 seconds)';
+  try {
+    const res = await api('publishBlog', {
+      title: $('bTitle').value, slug: $('bSlug').value,
+      description: $('bDesc').value, body: $('bBody').value
+    });
+    toast('Blog published: ' + res.url, 'ok');
+    $('bTitle').value = ''; $('bSlug').value = ''; $('bDesc').value = ''; $('bBody').value = ''; slugTouched = false;
+    loadBlogs();
+  } catch (e) { toast(e.message, 'bad'); }
+  btn.disabled = false; btn.textContent = 'Publish blog';
+});
+
+async function loadBlogs() {
+  const box = $('blogList');
+  try {
+    const res = await api('listBlogs');
+    if (!res.blogs.length) { box.innerHTML = '<p class="hint">No blogs found.</p>'; return; }
+    box.innerHTML = '';
+    res.blogs.forEach(slug => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<div class="nm"><a target="_blank" rel="noopener" href="' + SITE + '/blog/' + slug + '.html">' + slug + '</a></div>';
+      const del = document.createElement('button');
+      del.className = 'btn danger'; del.textContent = 'Delete';
+      del.addEventListener('click', async () => {
+        if (!confirm('Delete the blog "' + slug + '"? This removes the page and its blog-list entry.')) return;
+        del.disabled = true;
+        try { await api('deleteBlog', { slug: slug }); toast('Blog deleted: ' + slug, 'ok'); loadBlogs(); }
+        catch (e) { toast(e.message, 'bad'); del.disabled = false; }
+      });
+      row.appendChild(del);
+      box.appendChild(row);
+    });
+  } catch (e) { box.innerHTML = '<p class="hint">' + e.message + '</p>'; }
+}
+$('blogRefresh').addEventListener('click', loadBlogs);
+
+/* ---- images ---- */
+function refreshImages() {
+  const v = '?v=' + Date.now();
+  $('imgLogo').src = SITE + '/assets/logo.png' + v;
+  $('imgDoctor').src = SITE + '/assets/dr-ashok-reddy.jpg' + v;
+  $('imgDoctorAlt').src = SITE + '/assets/dr-ashok-reddy-2.png' + v;
+}
+
+function fileToB64(file, maxDim, mime, quality) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const scale = Math.min(1, maxDim / Math.max(w, h));
+      w = Math.round(w * scale); h = Math.round(h * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = c.toDataURL(mime, quality);
+      resolve(dataUrl.split(',')[1]);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read that image file.')); };
+    img.src = url;
+  });
+}
+
+document.querySelectorAll('[data-replace]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const target = btn.dataset.replace;
+    const input = $('file' + target.charAt(0).toUpperCase() + target.slice(1));
+    if (!input.files || !input.files[0]) { toast('Choose an image file first.', 'bad'); return; }
+    btn.disabled = true; btn.textContent = 'Uploading…';
+    try {
+      const isLogo = target === 'logo';
+      const b64 = await fileToB64(input.files[0], isLogo ? 512 : 900, isLogo ? 'image/png' : 'image/jpeg', 0.87);
+      const res = await api('replaceImage', { target: target, b64: b64 });
+      toast(res.message, 'ok');
+      setTimeout(refreshImages, 1500);
+    } catch (e) { toast(e.message, 'bad'); }
+    btn.disabled = false; btn.textContent = 'Replace ' + (target === 'logo' ? 'logo' : 'photo');
+  });
+});
+
+/* ---- services ---- */
+$('addServiceBtn').addEventListener('click', async () => {
+  const btn = $('addServiceBtn');
+  btn.disabled = true; btn.textContent = 'Adding… (about 20 seconds)';
+  try {
+    const res = await api('addService', {
+      name: $('sName').value,
+      category: $('sCat').value,
+      description: $('sDesc').value, body: $('sBody').value
+    });
+    toast('Service added: ' + res.url, 'ok');
+    $('sName').value = ''; $('sDesc').value = ''; $('sBody').value = '';
+    loadServices();
+  } catch (e) { toast(e.message, 'bad'); }
+  btn.disabled = false; btn.textContent = 'Add service + page';
+});
+
+async function loadServices() {
+  const box = $('svcList');
+  try {
+    const res = await api('listServices');
+    if (!res.services.length) { box.innerHTML = '<p class="hint">No services found.</p>'; return; }
+    box.innerHTML = '';
+    res.services.forEach(svc => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<div class="nm">' + svc.name + '</div>';
+      const del = document.createElement('button');
+      del.className = 'btn danger'; del.textContent = 'Delete';
+      del.addEventListener('click', async () => {
+        if (!confirm('Remove the service "' + svc.name + '" from the website? Its page is deleted too. (Google Business services are NOT touched.)')) return;
+        del.disabled = true;
+        try { await api('deleteService', { id: svc.id }); toast('Service removed: ' + svc.name, 'ok'); loadServices(); }
+        catch (e) { toast(e.message, 'bad'); del.disabled = false; }
+      });
+      row.appendChild(del);
+      box.appendChild(row);
+    });
+  } catch (e) { box.innerHTML = '<p class="hint">' + e.message + '</p>'; }
+}
+$('svcRefresh').addEventListener('click', loadServices);
+</script>
+</body>
+</html>
