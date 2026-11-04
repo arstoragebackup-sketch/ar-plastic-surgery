@@ -311,9 +311,9 @@
     if (/(address|location|where|చిరునామ|ఎక్కడ|पता|कहां)/.test(tLow)) { say(t('location')); return; }
     if (/(doctor|ashok|డాక్టర్|అశోక్|डॉक्टर)/.test(tLow)) { say(t('doctor')); return; }
     if (/(review|rating|రేటింగ్|रेटिंग)/.test(tLow)) {
-      say(lang === 'te' ? 'గూగుల్‌లో మాకు 4.9 స్టార్ రేటింగ్, 245 సమీక్షలు ఉన్నాయి.' :
-          lang === 'hi' ? 'Google पर हमारी 4.9 स्टार रेटिंग है, 245 समीक्षाएं।' :
-          'We have a 4.9-star Google rating with 245 patient reviews.');
+      say(lang === 'te' ? 'గూగుల్‌లో మాకు 4.9 స్టార్ రేటింగ్, 246 సమీక్షలు ఉన్నాయి.' :
+          lang === 'hi' ? 'Google पर हमारी 4.9 स्टार रेटिंग है, 246 समीक्षाएं।' :
+          'We have a 4.9-star Google rating with 246 patient reviews.');
       return;
     }
     var svc = KB.findService(text);
