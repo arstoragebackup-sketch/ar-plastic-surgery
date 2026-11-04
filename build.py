@@ -364,7 +364,7 @@ def clinic_jsonld(page_url, description):
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
-            "reviewCount": "245",
+            "reviewCount": "246",
             "bestRating": "5",
         },
     }
@@ -1172,7 +1172,7 @@ els.forEach(function(e){{io.observe(e)}});}})();
     <span class="eyebrow">Patient reviews</span>
     <h2>Rated 4.9 by patients on Google</h2>
     <div class="stars" role="img" aria-label="Rated 4.9 out of 5 stars">★★★★★</div>
-    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>245 Google reviews</b><br>verified patient ratings</span></span></div>
+    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>246 Google reviews</b><br>verified patient ratings</span></span></div>
     <p class="lede" style="margin-top:1.1rem">Every single review is answered personally by our team — because every patient's experience matters.</p>
     <div class="btn-row" style="justify-content:center"><a class="btn btn-solid" href="https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar+Telangana" target="_blank" rel="noopener">Read all reviews on Google →</a></div>
   </div>
@@ -2652,9 +2652,9 @@ def page_te_index():
 <section class="reviews"><div class="wrap">
   <div class="reveal" style="text-align:center;max-width:660px;margin:0 auto">
     <span class="eyebrow">పేషెంట్ రివ్యూలు</span>
-    <h2>Google లో 4.9 రేటింగ్ — 245 రివ్యూలు</h2>
+    <h2>Google లో 4.9 రేటింగ్ — 246 రివ్యూలు</h2>
     <div class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</div>
-    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>245 Google రివ్యూలు</b><br>ధృవీకరించిన పేషెంట్ రేటింగ్‌లు</span></span></div>
+    <div><span class="g-badge"><span class="n" data-count="4.9" data-dec="1">4.9</span><span class="t"><b>246 Google రివ్యూలు</b><br>ధృవీకరించిన పేషెంట్ రేటింగ్‌లు</span></span></div>
     <div class="btn-row" style="justify-content:center"><a class="btn btn-solid" href="https://www.google.com/maps/search/?api=1&query=AR+Plastic+Surgery+Karimnagar+Telangana" target="_blank" rel="noopener">Google రివ్యూలు చదవండి →</a></div>
   </div>
 </div></section>
