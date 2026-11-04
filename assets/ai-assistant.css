@@ -161,6 +161,14 @@
 }
 #ar-ai-send:hover { transform: scale(1.08); }
 #ar-ai-send:active { transform: scale(.95); }
+#ar-ai-mic {
+  width: 42px; height: 42px; border-radius: 50%; border: 1px solid #dbe4ee;
+  background: #eef4fb; font-size: 17px; cursor: pointer; flex: 0 0 42px;
+  transition: transform .15s ease, background .15s ease;
+}
+#ar-ai-mic:hover { transform: scale(1.08); }
+#ar-ai-mic:active { transform: scale(.95); }
+#ar-ai-mic.off { background: #fdecec; border-color: #f3c2c2; opacity: .75; }
 
 /* Language */
 #ar-ai-lang { display: flex; padding: 8px 12px; background: #fff; border-top: 1px solid #f0ead8; gap: 8px; justify-content: center; }
