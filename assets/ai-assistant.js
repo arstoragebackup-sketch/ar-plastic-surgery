@@ -485,7 +485,13 @@
     if (inp) inp.placeholder = lang === 'te' ? 'మీ సందేశం టైప్ చేయండి...' : lang === 'hi' ? 'अपना संदेश लिखें...' : 'Type your message...';
   }
 
+  function isHomePage() {
+    var p = location.pathname.replace(/\/+$/, '');
+    return p === '' || p === '/index.html' || p === '/te' || p === '/te/index.html';
+  }
+
   function build() {
+    if (!isHomePage()) return;   // assistant lives on the home pages only (owner, 4 Nov 2026)
     if (document.getElementById('ar-ai-panel')) return;
     var depth = (location.pathname.match(/\//g) || []).length - 1;
     var root = depth > 1 ? '../'.repeat(depth - 1) : '';
