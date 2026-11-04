@@ -20,6 +20,13 @@
   var femaleVoice = null;
   var context = { service: null, name: '', mobile: '', datePref: '', apptStep: 0 };
   var greeted = false;
+  var sessionActive = false;  // panel open: voice session running
+  var recogActive = false;    // recognition engine currently started
+  var recogStarting = false;  // start() called, onstart not yet fired
+  var errStreak = 0;          // consecutive recognition errors (backoff)
+  var lastStartAt = 0;        // last recognition start timestamp
+  var resumeTimer = null;     // pending delayed resume
+  var micHintShown = false;
 
   /* ---------- STRINGS ---------- */
   var S = {
@@ -124,11 +131,14 @@
   }
 
   function speak(text) {
-    if (!voiceOn || !('speechSynthesis' in window)) return;
+    // Mic fully OFF while the assistant talks: the recogniser was hearing the
+    // assistant's own voice through the speakers and answering itself, and
+    // every restart beeped - the on/off cycling reported on 4 Nov 2026.
+    stopListening();
+    if (!voiceOn || !('speechSynthesis' in window)) { afterSpeech(); return; }
     try {
       speechSynthesis.cancel();
-      var clean = text.replace(/[🙏•]/g, '');
-      // keep spoken turns short: first 2 sentences
+      var clean = text.replace(/[\u{1F64F}\u2022]/gu, '');
       var short = clean.split(/(?<=[.!?।])/).slice(0, 2).join(' ').trim() || clean;
       var u = new SpeechSynthesisUtterance(short);
       u.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
@@ -139,13 +149,18 @@
         var av = document.getElementById('ar-ai-avatar');
         if (av) av.classList.add('talking');
       };
-      u.onend = function () {
+      u.onend = u.onerror = function () {
         var av = document.getElementById('ar-ai-avatar');
         if (av) av.classList.remove('talking');
-        if (state === 'speaking') setState('listening');
+        afterSpeech();
       };
       speechSynthesis.speak(u);
-    } catch (e) {}
+    } catch (e) { afterSpeech(); }
+  }
+
+  function afterSpeech() {
+    if (state === 'speaking') setState('listening');
+    if (sessionActive && wantListen) scheduleResume(450);
   }
 
   // Interruption: user speech stops assistant speech immediately
@@ -239,6 +254,7 @@
   /* ---------- CONVERSATION LOGIC ---------- */
   function handleUserText(text) {
     handleInterruption();
+    stopListening();
     if (!ensureKB()) { addMsg(t('dontKnow'), 'bot'); return; }
     addMsg(text, 'user');
     // auto-detect language from what they said
@@ -350,44 +366,114 @@
     defaultChips();
   }
 
-  /* ---------- SPEECH RECOGNITION ---------- */
-  function startListening() {
+  /* ---------- SPEECH RECOGNITION ----------
+     One persistent recogniser, started and stopped deliberately:
+     - never runs while the assistant is speaking or thinking
+     - restarts are debounced; repeated errors back off, then pause
+     - after 3 straight errors it waits for a tap on the mic button
+  */
+  function scheduleResume(ms) {
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(function () { resumeTimer = null; startListening(); }, ms || 350);
+  }
+
+  function stopListening() {
+    if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
+    if (recog && (recogActive || recogStarting)) {
+      try { recog.stop(); } catch (e) {}
+    }
+    recogActive = false; recogStarting = false;
+  }
+
+  function addMsgSilent(text) {
+    var box = document.getElementById('ar-ai-messages');
+    if (!box) return;
+    var div = document.createElement('div');
+    div.className = 'ar-msg bot';
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function pauseListening() {
+    wantListen = false;
+    stopListening();
+    setState('idle');
+    syncMicButton();
+    if (!micHintShown) {
+      micHintShown = true;
+      addMsgSilent(lang === 'te' ? '\u0C35\u0C3E\u0C2F\u0C3F\u0C38\u0C4D \u0C06\u0C17\u0C3F\u0C2A\u0C4B\u0C2F\u0C3F\u0C02\u0C26\u0C3F \u2014 \u0C2E\u0C33\u0C4D\u0C33\u0C40 \u0C2E\u0C3E\u0C1F\u0C4D\u0C32\u0C3E\u0C21\u0C3E\u0C32\u0C02\u0C1F\u0C47 \uD83C\uDFA4 \u0C28\u0C4A\u0C15\u0C4D\u0C15\u0C02\u0C21\u0C3F, \u0C32\u0C47\u0C26\u0C3E \u0C1F\u0C48\u0C2A\u0C4D \u0C1A\u0C47\u0C2F\u0C02\u0C21\u0C3F.' :
+             lang === 'hi' ? '\u0935\u0949\u0907\u0938 \u0930\u0941\u0915 \u0917\u0908 \u0939\u0948 \u2014 \u092B\u093F\u0930 \u0938\u0947 \u092C\u093E\u0924 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \uD83C\uDFA4 \u0926\u092C\u093E\u090F\u0902, \u092F\u093E \u091F\u093E\u0907\u092A \u0915\u0930\u0947\u0902\u0964' :
+             'Voice paused \u2014 tap the mic button to talk again, or type your message.');
+    }
+  }
+
+  function ensureRecog() {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-      addMsg(t('micDenied'), 'bot');
+    if (!SR) return null;
+    if (recog) return recog;
+    recog = new SR();
+    recog.continuous = true;
+    recog.interimResults = false;
+    recog.maxAlternatives = 1;
+    recog.onstart = function () { recogActive = true; recogStarting = false; };
+    recog.onresult = function (e) {
+      var txt = e.results[e.results.length - 1][0].transcript;
+      errStreak = 0;
+      stopListening();           // stop BEFORE processing and speaking
+      if (txt && txt.trim()) handleUserText(txt.trim());
+    };
+    recog.onerror = function (e) {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        wantListen = false;
+        syncMicButton();
+        addMsg(t('micDenied'), 'bot');
+      } else {
+        errStreak++;
+      }
+    };
+    recog.onend = function () {
+      recogActive = false; recogStarting = false;
+      if (!sessionActive || !wantListen) return;
+      if (state !== 'listening') return;   // speaking/thinking resume themselves
+      if (errStreak >= 3) { pauseListening(); return; }
+      scheduleResume(errStreak === 2 ? 2000 : errStreak === 1 ? 1000 : 400);
+    };
+    return recog;
+  }
+
+  function startListening() {
+    if (!sessionActive || !wantListen) return;
+    if (state !== 'listening' && state !== 'idle') return;
+    if (!ensureRecog()) {
+      if (!micHintShown) { micHintShown = true; addMsg(t('micDenied'), 'bot'); }
       return;
     }
-    if (!wantListen) return;
+    if (recogActive || recogStarting) return;
+    var wait = 700 - (Date.now() - lastStartAt);
+    if (wait > 0) { scheduleResume(wait); return; }
     try {
-      if (recog) { try { recog.abort(); } catch (e) {} }
-      recog = new SR();
       recog.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
-      recog.continuous = true;
-      recog.interimResults = false;
-      recog.maxAlternatives = 1;
-      var gotResult = false;
-      recog.onresult = function (e) {
-        gotResult = true;
-        handleInterruption(); // stop our speech the moment they speak
-        var txt = e.results[e.results.length - 1][0].transcript;
-        if (txt && txt.trim()) handleUserText(txt.trim());
-      };
-      recog.onerror = function (e) {
-        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-          wantListen = false;
-          addMsg(t('micDenied'), 'bot');
-        }
-      };
-      recog.onend = function () {
-        // auto-restart unless we got a result being processed
-        if (wantListen && state !== 'thinking') setTimeout(startListening, 300);
-        else if (wantListen) setTimeout(startListening, 2500);
-      };
+      recogStarting = true;
+      lastStartAt = Date.now();
       recog.start();
-      if (state === 'idle' || state === 'speaking') setState('listening');
     } catch (e) {
-      if (wantListen) setTimeout(startListening, 2000);
+      recogStarting = false;
+      scheduleResume(1200);
     }
+  }
+
+  function syncMicButton() {
+    var b = document.getElementById('ar-ai-mic');
+    if (b) { b.classList.toggle('off', !wantListen); b.textContent = wantListen ? '\uD83C\uDFA4' : '\uD83D\uDEAB'; }
+  }
+
+  function endSession() {
+    sessionActive = false; wantListen = false;
+    stopListening();
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    setState('idle');
+    syncMicButton();
   }
 
   /* ---------- BUILD UI ---------- */
@@ -435,7 +521,7 @@
       '<div id="ar-ai-messages"></div>' +
       '<div id="ar-ai-quick"></div>' +
       '<div id="ar-ai-privacy">🔒 Voice is processed in your browser. We don\'t record or store your conversations.</div>' +
-      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-send">➤</button></div>';
+      '<div id="ar-ai-input-row"><input id="ar-ai-input" placeholder="మీ సందేశం టైప్ చేయండి..."><button id="ar-ai-mic" title="Voice on/off">🎤</button><button id="ar-ai-send">➤</button></div>';
     document.body.appendChild(panel);
 
     // wait for knowledge base if needed
@@ -453,7 +539,8 @@
         var ping = launcher.querySelector('.ping');
         if (ping) ping.style.display = 'none';
         if (opening) {
-          wantListen = true;
+          sessionActive = true; wantListen = true; errStreak = 0; micHintShown = false;
+          syncMicButton();
           if (!greeted) {
             greeted = true;
             setTimeout(function () {
@@ -462,43 +549,45 @@
               setTimeout(showServiceCards, 2500);
             }, 500);
           } else {
+            setState('listening');
             startListening();
           }
         } else {
-          wantListen = false;
-          if ('speechSynthesis' in window) speechSynthesis.cancel();
-          try { recog && recog.abort(); } catch (e) {}
-          setState('idle');
+          endSession();
         }
       };
       document.getElementById('ar-ai-close').onclick = function () {
         document.getElementById('ar-ai-panel').classList.remove('open');
-        wantListen = false;
-        if ('speechSynthesis' in window) speechSynthesis.cancel();
-        try { recog && recog.abort(); } catch (e) {}
+        endSession();
       };
       document.getElementById('ar-ai-end').onclick = function () {
+        wantListen = false;
         say(t('endSession'));
         setTimeout(function () {
           document.getElementById('ar-ai-panel').classList.remove('open');
-          wantListen = false;
-          if ('speechSynthesis' in window) speechSynthesis.cancel();
-          try { recog && recog.abort(); } catch (e) {}
-          setState('idle');
+          endSession();
         }, 3000);
       };
       document.getElementById('ar-ai-mute').onclick = function () {
         voiceOn = !voiceOn;
         this.textContent = voiceOn ? '🔊' : '🔇';
-        if (!voiceOn && 'speechSynthesis' in window) speechSynthesis.cancel();
+        if (!voiceOn && 'speechSynthesis' in window) { speechSynthesis.cancel(); afterSpeech(); }
       };
       document.querySelectorAll('#ar-ai-lang button').forEach(function (b) {
         b.onclick = function () {
           lang = b.dataset.lang; pickVoice(); syncLangButtons();
-          try { recog && recog.abort(); } catch (e) {}
-          if (wantListen) startListening();
+          stopListening(); errStreak = 0;
+          if (sessionActive && wantListen && state === 'listening') scheduleResume(500);
         };
       });
+      var micBtn = document.getElementById('ar-ai-mic');
+      if (micBtn) micBtn.onclick = function () {
+        if (!sessionActive) return;
+        if (wantListen) { wantListen = false; stopListening(); setState('idle'); }
+        else { wantListen = true; errStreak = 0; micHintShown = false; setState('listening'); startListening(); }
+        syncMicButton();
+      };
+      syncMicButton();
       var input = document.getElementById('ar-ai-input');
       var send = function () {
         var v = input.value.trim();
@@ -509,12 +598,8 @@
       document.getElementById('ar-ai-send').onclick = send;
       input.onkeydown = function (e) { if (e.key === 'Enter') send(); };
 
-      // Auto-launch after 3 seconds
-      setTimeout(function () {
-        if (!document.getElementById('ar-ai-panel').classList.contains('open')) {
-          launcher.click();
-        }
-      }, 3000);
+      // No auto-launch: the panel and microphone start only on a user tap
+      // (auto-opening made the mic cycle on page load - fixed 4 Nov 2026).
     }
   }
 
